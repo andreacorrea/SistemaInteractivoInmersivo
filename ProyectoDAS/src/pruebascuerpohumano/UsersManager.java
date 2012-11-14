@@ -103,5 +103,8 @@ public class UsersManager {
         return _users;
     }
     
+    public int getUsersSize(){
+        return _users.size();
+    }
     
 }
