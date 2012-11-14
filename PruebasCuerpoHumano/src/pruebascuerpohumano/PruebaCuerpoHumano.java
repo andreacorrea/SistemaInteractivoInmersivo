@@ -24,7 +24,8 @@ public class PruebaCuerpoHumano extends PApplet {
     @Override
     public void setup() {
         // create a window the size of the scene
-        size(640, 480, OldP3D.NOSTALGIA);
+        //size(640, 480, OldP3D.NOSTALGIA);
+        size(640, 480, P3D);
 
         // instantiate a new context
         frameRate(24);
