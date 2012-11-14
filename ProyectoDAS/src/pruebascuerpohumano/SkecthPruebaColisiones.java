@@ -14,6 +14,7 @@ public class SkecthPruebaColisiones extends PApplet {
     protected int framerate = 30;
     protected float friction = 0.95f;
     protected float strengthCoef = 0.5f;
+    public boolean checar = false;
     
     GeometricFigure[] figs = {
         new Ball("b1", color(255,255,255), new PVector(0,0,0), 60f, new PVector(0,0,0), this),
@@ -58,12 +59,25 @@ public class SkecthPruebaColisiones extends PApplet {
             figs[i].paint();
             figs[i].checkBoundaryCollision();
             for(int j=0; j<figs.length; j++){
+                if(checar){
+                    int a =0;
+                }
                 if(j != i){
                     figs[i].checkCollision(figs[j]);
                 }
             }
         }
         figs[figs.length-1].setPos(new PVector(width/2, height/2, 0));
+    }
+    
+    @Override
+    public void keyPressed() {
+
+        switch (keyCode) {
+            case LEFT:
+                checar = true;
+                break;
+        }
     }
     
 }

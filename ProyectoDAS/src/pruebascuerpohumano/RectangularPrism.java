@@ -15,6 +15,7 @@ public class RectangularPrism extends GeometricFigure {
     private float rotationZ;
     private float rotationY;
     private PVector dimensions;
+    private boolean isCollided=false;
     
     public RectangularPrism(PApplet p, String name, int color) {
         super(name, color, p);
@@ -32,9 +33,15 @@ public class RectangularPrism extends GeometricFigure {
         _parent.translate(pos.x, pos.y, pos.z);
         _parent.rotateZ(rotationZ);
         _parent.rotateY(rotationY);
-        _parent.fill(_color);
+        if(isCollided){
+            _parent.fill(0,255,0);
+        }else{
+            _parent.fill(255,255,255);
+        }
+        
         _parent.box(getDimensions().x, getDimensions().y, getDimensions().z);
         _parent.popMatrix();
+        isCollided=false;
     }
 
     @Override
@@ -72,7 +79,8 @@ public class RectangularPrism extends GeometricFigure {
         float dymin = b.getRadius() + dimensions.y/2;
         
         if(dx < dxmin && dy < dymin){
-            this._color = _parent.color(0,255,0);
+            //this._color = _parent.color(0,255,0);
+            isCollided = true;
             /*
             //Calculate angle, sine, and cosine
             float angle = _parent.atan2(dy,dx);
@@ -120,7 +128,8 @@ public class RectangularPrism extends GeometricFigure {
             b.setVelX( vx1 * cosine - vy1 * sine );
             b.setVelY( vy1 * cosine + vx1 * sine );*/
         } else {
-            this._color = _parent.color(255,255,255);
+            //this._color = _parent.color(255,255,255);
+            //isCollided = false;
         } 
     }
     
