@@ -16,19 +16,24 @@ abstract class GeometricFigure {
     protected PApplet _parent;
     protected String _name;
     protected int _color;
-    protected float posX, posY, mass, velX , velY;
+    protected float mass;
+    protected PVector pos;
+    protected PVector vel;
     
+    public GeometricFigure(String pname, int pcolor, PApplet pparent){
+        _name   = pname;
+        _color  = pcolor;
+        _parent = pparent;
+    }
     
-    GeometricFigure(String name, int color, float x, float y, 
-                    float m, float vx, float vy, PApplet p) {
-        _parent= p;
-        _name = name;
-        _color = color;
-        posX = x;
-        posY = y;
-        mass = m;
-        velX = vx;
-        velY = vy;
+    public GeometricFigure(String name, int color, PVector ppos, 
+                    float m, PVector pvel, PApplet p) {
+        _parent = p;
+        _name   = name;
+        _color  = color;
+        pos     = ppos;
+        mass    = m;
+        vel     = pvel;
     }
 
     abstract void paint();
@@ -46,31 +51,31 @@ abstract class GeometricFigure {
     }  
 
     /**
-     * @return the posX
+     * @return the _name
      */
-    public float getPosX() {
-        return posX;
+    public String getName() {
+        return _name;
     }
 
     /**
-     * @param posX the posX to set
+     * @param name the _name to set
      */
-    public void setPosX(float posX) {
-        this.posX = posX;
+    public void setName(String name) {
+        this._name = name;
     }
 
     /**
-     * @return the posY
+     * @return the _color
      */
-    public float getPosY() {
-        return posY;
+    public int getColor() {
+        return _color;
     }
 
     /**
-     * @param posY the posY to set
+     * @param color the _color to set
      */
-    public void setPosY(float posY) {
-        this.posY = posY;
+    public void setColor(int color) {
+        this._color = color;
     }
 
     /**
@@ -88,31 +93,47 @@ abstract class GeometricFigure {
     }
 
     /**
-     * @return the velX
+     * @return the pos
      */
-    public float getVelX() {
-        return velX;
+    public PVector getPos() {
+        return pos;
     }
 
     /**
-     * @param velX the velX to set
+     * @param pos the pos to set
      */
-    public void setVelX(float velX) {
-        this.velX = velX;
+    public void setPos(PVector pos) {
+        this.pos = pos;
+    }
+    
+    public void setPosX(float x){
+        this.pos.x = x;
+    }
+    
+    public void setPosY(float y){
+        this.pos.y = y;
     }
 
     /**
-     * @return the velY
+     * @return the vel
      */
-    public float getVelY() {
-        return velY;
+    public PVector getVel() {
+        return vel;
     }
 
     /**
-     * @param velY the velY to set
+     * @param vel the vel to set
      */
-    public void setVelY(float velY) {
-        this.velY = velY;
+    public void setVel(PVector vel) {
+        this.vel = vel;
+    }
+    
+    public void setVelX(float vx){
+        this.vel.x = vx;
+    }
+    
+    public void setVelY(float vy){
+        this.vel.y = vy;
     }
     
 }
