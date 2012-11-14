@@ -95,7 +95,8 @@ public class PruebaCuerpoHumano extends PApplet {
 
         switch (keyCode) {
             case LEFT:
-                rotY += 0.1f;
+                int a =0;
+                //rotY += 0.1f;
                 break;
             case RIGHT:
                 // zoom out

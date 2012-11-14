@@ -203,7 +203,7 @@ public class Body {
         float memberWidth = (leftUpperJointPos.dist(rightUpperJointPos) + leftLowerJointPos.dist(rightLowerJointPos)) / 2;
         
         updatePrism(torso, position, rotationZ, rotationY, memberWidth);
-        torso.setMemberHeight(memberHeight);
+        //torso.setMemberHeight(memberHeight);
 
     }
     
@@ -335,7 +335,7 @@ public class Body {
         torso.setPos(position);
         torso.setRotationZ(rotationZ);
         torso.setRotationY(rotationY);
-        torso.setMemberWidth(memberWidth);
+        //torso.setMemberWidth(memberWidth);
     }
     
 

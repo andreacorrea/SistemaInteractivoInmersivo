@@ -16,12 +16,11 @@ public class SkecthPruebaColisiones extends PApplet {
     protected float strengthCoef = 0.5f;
     
     GeometricFigure[] figs = {
-        //String pname, int pcolor, PVector ppos, float pr, PVector pvel, PApplet pparent
-        new Ball("b1", 255, new PVector(0,0,0), 40f, new PVector(0,0,0), this),
-        new Ball("b2", 255, new PVector(100,100,0), 30f, new PVector(2,2,0), this),
-        new Ball("b3", 255, new PVector(400,400,0), 50f, new PVector(2,1,0), this),
-        new Ball("b4", 255, new PVector(600,100,0), 60f, new PVector(1,2,0), this),
-        new Ball("b5", 255, new PVector(700,500,0), 80f, new PVector(1,1,0), this),
+        new Ball("b1", color(255,255,255), new PVector(0,0,0), 60f, new PVector(0,0,0), this),
+        new Ball("b2", color(255,255,255), new PVector(100,100,0), 60f, new PVector(1,1,0), this),
+        new Ball("b3", color(255,0,0), new PVector(400,400,0), 60f, new PVector(1,1,0), this),
+        //new Ball("b4", color(255,0,0), new PVector(600,100,0), 60f, new PVector(1,1,0), this),
+        new RectangularPrism("c1", color(255,255,255), new PVector(0,0,0), new PVector(70,70,70), new PVector(0,0,0), this),
     };
     
     PVector[] vHistPos = {
@@ -60,10 +59,11 @@ public class SkecthPruebaColisiones extends PApplet {
             figs[i].checkBoundaryCollision();
             for(int j=0; j<figs.length; j++){
                 if(j != i){
-                    figs[i].checkCollision((Ball)figs[j]);
+                    figs[i].checkCollision(figs[j]);
                 }
             }
         }
+        figs[figs.length-1].setPos(new PVector(width/2, height/2, 0));
     }
     
 }

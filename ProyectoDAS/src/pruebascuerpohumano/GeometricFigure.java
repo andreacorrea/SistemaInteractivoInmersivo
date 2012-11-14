@@ -27,7 +27,7 @@ abstract class GeometricFigure {
     }
     
     public GeometricFigure(String name, int color, PVector ppos, 
-                    float m, PVector pvel, PApplet p) {
+                           float m, PVector pvel, PApplet p) {
         _parent = p;
         _name   = name;
         _color  = color;
@@ -40,6 +40,15 @@ abstract class GeometricFigure {
     abstract void update(float friction);
     abstract void checkBoundaryCollision();
     abstract void checkCollision(Ball b);
+    abstract void checkCollision(RectangularPrism p);
+    
+    void checkCollision(GeometricFigure fig) {
+        if (fig instanceof Ball){
+            checkCollision((Ball)fig);
+        } else {
+            checkCollision((RectangularPrism)fig);
+        }
+    }
     
     public PVector calculateMiddlePoint(PVector p1, PVector p2) {
         PVector auxP1 = p1.get();
