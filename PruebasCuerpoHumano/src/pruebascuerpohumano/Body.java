@@ -14,34 +14,31 @@ public class Body {
     private PApplet _parent;
     private User _user;
     private SimpleOpenNI _context;
-    private Map<String, BodyMember> _bodyMembers;
+    private Map<String, GeometricFigure> _bodyMembers;
     private int _bodyColor;
     private float positionOffset;
-
-    
 
     public Body(PApplet p, User user, int bodyColor) {
         _parent = p;
         _user = user;
         _context = user.getContext();
         _bodyColor = bodyColor;
-        _bodyMembers = new HashMap<String, BodyMember>();
+        _bodyMembers = new HashMap<String, GeometricFigure>();
 
         createSkeleton();
     }
 
     public void createSkeleton() {
         //_bodyMembers.put("HEAD", new Limb(_parent, "HEAD", _bodyColor));
-        _bodyMembers.put("TORSO", new Torso(_parent, "TORSO", _bodyColor));
-        _bodyMembers.put("LEFT_FOREARM", new Limb(_parent, "LEFT_FOREARM", _bodyColor, this));
-        _bodyMembers.put("LEFT_ARM", new Limb(_parent, "LEFT_ARM", _bodyColor, this));
-        _bodyMembers.put("RIGHT_FOREARM", new Limb(_parent, "RIGHT_FOREARM", _bodyColor, this));
-        _bodyMembers.put("RIGHT_ARM", new Limb(_parent, "RIGHT_ARM", _bodyColor, this));
-        _bodyMembers.put("LEFT_THIGH", new Limb(_parent, "LEFT_THIGH", _bodyColor, this));
-        _bodyMembers.put("LEFT_LEG", new Limb(_parent, "LEFT_LEG", _bodyColor, this));
-        _bodyMembers.put("RIGHT_THIGH", new Limb(_parent, "RIGHT_THIGH", _bodyColor, this));
-        _bodyMembers.put("RIGHT_LEG", new Limb(_parent, "RIGHT_LEG", _bodyColor, this));
-        
+        _bodyMembers.put("TORSO", new RectangularPrism(_parent, "TORSO", _bodyColor));
+        _bodyMembers.put("LEFT_FOREARM", new RectangularPrism(_parent, "LEFT_FOREARM", _bodyColor));
+        _bodyMembers.put("LEFT_ARM", new RectangularPrism(_parent, "LEFT_ARM", _bodyColor));
+        _bodyMembers.put("RIGHT_FOREARM", new RectangularPrism(_parent, "RIGHT_FOREARM", _bodyColor));
+        _bodyMembers.put("RIGHT_ARM", new RectangularPrism(_parent, "RIGHT_ARM", _bodyColor));
+        _bodyMembers.put("LEFT_THIGH", new RectangularPrism(_parent, "LEFT_THIGH", _bodyColor));
+        _bodyMembers.put("LEFT_LEG", new RectangularPrism(_parent, "LEFT_LEG", _bodyColor));
+        _bodyMembers.put("RIGHT_THIGH", new RectangularPrism(_parent, "RIGHT_THIGH", _bodyColor));
+        _bodyMembers.put("RIGHT_LEG", new RectangularPrism(_parent, "RIGHT_LEG", _bodyColor));
 
     }
 
@@ -113,16 +110,11 @@ public class Body {
 
     public void drawSkeletonMembers() {
 
-        /*BodyMember member = (BodyMember) _bodyMembers.get("TORSO");
-         member.drawBodyMember();
-         member = (BodyMember) _bodyMembers.get("LEFT_FOREARM");
-         member.drawBodyMember();*/
-
-        BodyMember currentMember;
+        GeometricFigure currentMember;
         Iterator member = _bodyMembers.values().iterator();
 
         while (member.hasNext()) {
-            currentMember = ((BodyMember) member.next());
+            currentMember = ((GeometricFigure) member.next());
             currentMember.drawBodyMember();
         }
     }
@@ -149,68 +141,155 @@ public class Body {
         updateRightThighMember();
         updateRightLegMember();
 
-
     }
 
     private void updateTorsoMember() {
-        Torso torso = (Torso) _bodyMembers.get("TORSO");
+        RectangularPrism torso = (RectangularPrism) _bodyMembers.get("TORSO");
         positionOffset = getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER).z;
-        torso.update(getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER), getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER), getJointPos(SimpleOpenNI.SKEL_LEFT_HIP), getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP));
+        PVector leftUpperJointPos = getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER);
+        PVector rightUpperJointPos = getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER);
+        PVector leftLowerJointPos = getJointPos(SimpleOpenNI.SKEL_LEFT_HIP);
+        PVector rightLowerJointPos = getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP);
+
+        //Calculate Middle Points
+        leftLowerJointPos.z = leftUpperJointPos.z;
+        rightLowerJointPos.z = rightUpperJointPos.z;
+        PVector upperMiddlePoint = torso.calculateMiddlePoint(leftUpperJointPos, rightUpperJointPos);
+        PVector lowerMiddlePoint = torso.calculateMiddlePoint(leftLowerJointPos, rightLowerJointPos);
+
+        PVector leftMiddlePoint = torso.calculateMiddlePoint(leftUpperJointPos, leftLowerJointPos);
+
+        PVector rightMiddlePoint = torso.calculateMiddlePoint(rightUpperJointPos, rightLowerJointPos);
+
+        //Calculate Position
+        PVector position = new PVector();
+        PVector middlePoint1 = torso.calculateMiddlePoint(leftUpperJointPos, rightLowerJointPos);
+        PVector middlePoint2 = torso.calculateMiddlePoint(rightUpperJointPos, leftLowerJointPos);
+
+        position.set((middlePoint1.x + middlePoint2.x) / 2, (middlePoint1.y + middlePoint2.y) / 2, 0);
+
+        //Calculate rotationZ
+
+        float rotationZ;
+
+        PVector aux = new PVector(upperMiddlePoint.x - lowerMiddlePoint.x, -(upperMiddlePoint.y - lowerMiddlePoint.y), 0);
+        //_parent.println("aux = " + aux);
+        rotationZ = _parent.atan2(aux.x, aux.y);
+        /*_parent.println("rotationZ ini = " + rotationZ);
+         _parent.println("rotationZ ini degrees = " + degrees(rotationZ));*/
+        if (rotationZ < 0) {
+            rotationZ = _parent.TWO_PI + rotationZ;
+        }
+
+        //Calculate rotationY
+        float rotationY;
+        PVector nearVector;
+        PVector farVector;
+        if (_parent.abs(leftMiddlePoint.z) <= _parent.abs(rightMiddlePoint.z)) {
+            nearVector = leftMiddlePoint;
+            farVector = rightMiddlePoint;
+        } else {
+            nearVector = rightMiddlePoint;
+            farVector = leftMiddlePoint;
+        }
+        PVector aux2 = new PVector(farVector.x - nearVector.x, 0, farVector.z - nearVector.z);
+        rotationY = _parent.atan2(aux2.z, aux2.x);
+        if (rotationY < 0) {
+            rotationY = _parent.TWO_PI + rotationZ;
+        }
+
+        //Calculate Member Dimensions
+        float memberHeight = upperMiddlePoint.dist(lowerMiddlePoint);
+        float memberWidth = (leftUpperJointPos.dist(rightUpperJointPos) + leftLowerJointPos.dist(rightLowerJointPos)) / 2;
+        
+        updatePrism(torso, position, rotationZ, rotationY, memberWidth);
+        torso.setMemberHeight(memberHeight);
+
+    }
+    
+    private void updateLimb(RectangularPrism limb, PVector upperJointPos, PVector lowerJointPos){
+        //Calculate position
+        PVector position = new PVector();
+        position.set(limb.calculateMiddlePoint(lowerJointPos, upperJointPos));
+        position.z=-(position.z-this.positionOffset);
+        
+        //Calculate rotationZ
+        float rotationZ;
+        PVector aux = new PVector(upperJointPos.x - lowerJointPos.x, -(upperJointPos.y - lowerJointPos.y), 0);
+        rotationZ = _parent.atan2(aux.y, -aux.x);
+        if (rotationZ < 0) {
+            rotationZ = _parent.TWO_PI + rotationZ;
+        }
+        
+        //Calculate rotationY
+        float rotationY;
+        PVector aux2 = new PVector(upperJointPos.x - lowerJointPos.x, 0, upperJointPos.z - lowerJointPos.z);
+        
+        rotationY = _parent.atan2(aux2.z, aux2.x);
+        
+        if (rotationY < 0) {
+            rotationY = _parent.TWO_PI + rotationY;
+        }
+        if(rotationZ > _parent.radians(90) && rotationZ < _parent.radians(270)){
+            //_rotationY+=_parent.radians(90);
+            rotationY=-rotationY;
+        }
+        
+        //Calculate Height
+        float memberWidth = upperJointPos.dist(lowerJointPos);
+        
+        updatePrism(limb, position, rotationZ, rotationY, memberWidth);
         
     }
 
     private void updateHeadMember() {
-        Limb aux = (Limb) _bodyMembers.get("HEAD");
-        aux.update(getJointPos(SimpleOpenNI.SKEL_HEAD), getJointPos(SimpleOpenNI.SKEL_NECK));
+        RectangularPrism limb = (RectangularPrism) _bodyMembers.get("HEAD");
+        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_HEAD), getJointPos(SimpleOpenNI.SKEL_NECK));
     }
 
     private void updateLeftForearmMember() {
-        Limb aux = (Limb) _bodyMembers.get("LEFT_FOREARM");
-        aux.update(getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW), getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER));
+        RectangularPrism limb = (RectangularPrism) _bodyMembers.get("LEFT_FOREARM");
+        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW), getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER));
     }
 
     private void updateLeftArmMember() {
-        Limb aux = (Limb) _bodyMembers.get("LEFT_ARM");
-        aux.update(getJointPos(SimpleOpenNI.SKEL_LEFT_HAND), getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW));
+        RectangularPrism limb = (RectangularPrism) _bodyMembers.get("LEFT_ARM");
+        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_HAND), getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW));
     }
 
     private void updateRightForearmMember() {
-        Limb aux = (Limb) _bodyMembers.get("RIGHT_FOREARM");
-        aux.update(getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW), getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER));
+        RectangularPrism limb = (RectangularPrism) _bodyMembers.get("RIGHT_FOREARM");
+        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW), getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER));
     }
 
     private void updateRightArmMember() {
-        Limb aux = (Limb) _bodyMembers.get("RIGHT_ARM");
-        aux.update(getJointPos(SimpleOpenNI.SKEL_RIGHT_HAND), getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW));
+        RectangularPrism limb = (RectangularPrism) _bodyMembers.get("RIGHT_ARM");
+        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_HAND), getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW));
 
     }
 
     private void updateLeftThighMember() {
-        Limb aux = (Limb) _bodyMembers.get("LEFT_THIGH");
-        aux.update(getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE), getJointPos(SimpleOpenNI.SKEL_LEFT_HIP));
+        RectangularPrism limb = (RectangularPrism) _bodyMembers.get("LEFT_THIGH");
+        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE), getJointPos(SimpleOpenNI.SKEL_LEFT_HIP));
 
     }
 
     private void updateLeftLegMember() {
-        Limb aux = (Limb) _bodyMembers.get("LEFT_LEG");
-        aux.update(getJointPos(SimpleOpenNI.SKEL_LEFT_FOOT), getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE));
+        RectangularPrism limb = (RectangularPrism) _bodyMembers.get("LEFT_LEG");
+        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_FOOT), getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE));
 
     }
 
     private void updateRightThighMember() {
-        Limb aux = (Limb) _bodyMembers.get("RIGHT_THIGH");
-        aux.update(getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE), getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP));
+        RectangularPrism limb = (RectangularPrism) _bodyMembers.get("RIGHT_THIGH");
+        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE), getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP));
     }
 
     private void updateRightLegMember() {
-        Limb aux = (Limb) _bodyMembers.get("RIGHT_LEG");
-        aux.update(getJointPos(SimpleOpenNI.SKEL_RIGHT_FOOT), getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE));
+        RectangularPrism limb = (RectangularPrism) _bodyMembers.get("RIGHT_LEG");
+        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_FOOT), getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE));
     }
 
-    /**
-     *
-     * @param point
-     */
     public Limb isPointInsideBody(PVector point) {
         return null;
     }
@@ -240,8 +319,17 @@ public class Body {
         _parent.sphere(10);
         _parent.popMatrix();
     }
-    
+
     public float getPositionOffset() {
         return positionOffset;
     }
+
+    private void updatePrism(RectangularPrism torso, PVector position, float rotationZ, float rotationY, float memberWidth) {
+        torso.setPosition(position);
+        torso.setRotationZ(rotationZ);
+        torso.setRotationY(rotationY);
+        torso.setMemberWidth(memberWidth);
+    }
+    
+
 }
