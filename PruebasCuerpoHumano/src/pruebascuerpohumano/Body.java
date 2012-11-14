@@ -29,7 +29,7 @@ public class Body {
     }
 
     public void createSkeleton() {
-        //_bodyMembers.put("HEAD", new Limb(_parent, "HEAD", _bodyColor));
+        _bodyMembers.put("HEAD", new Ball("HEAD", _bodyColor, 0, 0, 0, 0, 5, _parent));
         _bodyMembers.put("TORSO", new RectangularPrism(_parent, "TORSO", _bodyColor));
         _bodyMembers.put("LEFT_FOREARM", new RectangularPrism(_parent, "LEFT_FOREARM", _bodyColor));
         _bodyMembers.put("LEFT_ARM", new RectangularPrism(_parent, "LEFT_ARM", _bodyColor));
@@ -130,7 +130,7 @@ public class Body {
     }
 
     private void updateMembers() {
-        //updateHeadMember();
+        updateHeadMember();
         updateTorsoMember();
         updateLeftForearmMember();
         updateLeftArmMember();
@@ -207,6 +207,13 @@ public class Body {
 
     }
     
+    private void updateHeadMember() {
+        Ball head = (Ball) _bodyMembers.get("HEAD");
+        head.setPosX(getJointPos(SimpleOpenNI.SKEL_HEAD).x);
+        head.setPosY(getJointPos(SimpleOpenNI.SKEL_HEAD).y);
+        
+    }
+    
     private void updateLimb(RectangularPrism limb, PVector upperJointPos, PVector lowerJointPos){
         //Calculate position
         PVector position = new PVector();
@@ -240,11 +247,6 @@ public class Body {
         
         updatePrism(limb, position, rotationZ, rotationY, memberWidth);
         
-    }
-
-    private void updateHeadMember() {
-        RectangularPrism limb = (RectangularPrism) _bodyMembers.get("HEAD");
-        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_HEAD), getJointPos(SimpleOpenNI.SKEL_NECK));
     }
 
     private void updateLeftForearmMember() {

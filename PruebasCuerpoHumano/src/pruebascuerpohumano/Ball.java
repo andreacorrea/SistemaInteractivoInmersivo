@@ -13,11 +13,13 @@ import processing.core.PApplet;
 public class Ball extends GeometricFigure{
     
     private float radius;
+    private float posZ;
     
-    public Ball(String name, int color, float x, float y, 
+    public Ball(String name, int color, float x, float y,
                 float vx, float vy, float r, PApplet p){
         super(name, color, x, y, r*0.1f, vx, vy, p);
         radius = r;
+        posZ=0;
     }
     
     @Override
