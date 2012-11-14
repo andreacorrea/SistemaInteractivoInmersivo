@@ -16,10 +16,9 @@ public class RectangularPrism extends GeometricFigure {
     private float _memberDepth = 20;
     private float rotationZ;
     private float rotationY;
-    private float posZ;
     
     public RectangularPrism(PApplet p, String name, int color) {
-        super(name, color, 0,0,0,0, 0, p);
+        super(name, color, p);
     }
 
     public void setMemberHeight(float _memberHeight) {
@@ -42,15 +41,11 @@ public class RectangularPrism extends GeometricFigure {
         this.rotationY = rotationY;
     }
 
-    public void setPosZ(float posZ) {
-        this.posZ = posZ;
-    }
-
     @Override
     void paint() {
         _parent.pushMatrix();
         _parent.fill(_color);
-        _parent.translate(posX, posY, posZ);
+        _parent.translate(pos.x, pos.y, pos.z);
         _parent.rotateZ(rotationZ);
         _parent.rotateY(rotationY);
         _parent.box(_memberWidth, _memberHeight, _memberDepth);

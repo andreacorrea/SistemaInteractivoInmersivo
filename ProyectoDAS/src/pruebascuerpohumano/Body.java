@@ -29,7 +29,7 @@ public class Body {
     }
 
     public void createSkeleton() {
-        _bodyMembers.put("HEAD", new Ball("HEAD", _bodyColor, 0, 0, 0, 0, 20, _parent));
+        _bodyMembers.put("HEAD", new Ball("HEAD", _bodyColor, _parent));
         _bodyMembers.put("TORSO", new RectangularPrism(_parent, "TORSO", _bodyColor));
         _bodyMembers.put("LEFT_FOREARM", new RectangularPrism(_parent, "LEFT_FOREARM", _bodyColor));
         _bodyMembers.put("LEFT_ARM", new RectangularPrism(_parent, "LEFT_ARM", _bodyColor));
@@ -216,8 +216,8 @@ public class Body {
         // create a distance scalar related to the depth (z dimension)
         float distanceScalar = (525 / headPosition.z);
         
-        head.setPosX(headPosition.x);
-        head.setPosY(headPosition.y);
+        headPosition.z=0;
+        head.setPos(headPosition);
         head.setRadius(distanceScalar * headsize);
         
     }
@@ -336,9 +336,7 @@ public class Body {
 
     private void updatePrism(RectangularPrism torso, PVector position, float rotationZ, float rotationY, float memberWidth) {
         //torso.setPosition(position);
-        torso.setPosX(position.x);
-        torso.setPosY(position.y);
-        torso.setPosZ(position.z);
+        torso.setPos(position);
         torso.setRotationZ(rotationZ);
         torso.setRotationY(rotationY);
         torso.setMemberWidth(memberWidth);

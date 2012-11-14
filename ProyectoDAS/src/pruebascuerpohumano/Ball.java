@@ -15,6 +15,10 @@ public class Ball extends GeometricFigure{
     
     private float radius;
     
+    public Ball(String pname, int pcolor, PApplet pparent){
+        super(pname, pcolor, pparent);
+    }
+    
     public Ball(String pname, int pcolor, PVector ppos, float pr, PVector pvel, PApplet pparent){
         super(pname, pcolor, ppos, pr*0.1f, pvel, pparent);
         radius = pr;
