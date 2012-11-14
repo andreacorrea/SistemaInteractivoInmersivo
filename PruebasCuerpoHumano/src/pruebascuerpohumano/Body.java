@@ -115,7 +115,7 @@ public class Body {
 
         while (member.hasNext()) {
             currentMember = ((GeometricFigure) member.next());
-            currentMember.drawBodyMember();
+            currentMember.paint();
         }
     }
 
@@ -325,7 +325,10 @@ public class Body {
     }
 
     private void updatePrism(RectangularPrism torso, PVector position, float rotationZ, float rotationY, float memberWidth) {
-        torso.setPosition(position);
+        //torso.setPosition(position);
+        torso.setPosX(position.x);
+        torso.setPosY(position.y);
+        torso.setPosZ(position.z);
         torso.setRotationZ(rotationZ);
         torso.setRotationY(rotationY);
         torso.setMemberWidth(memberWidth);

@@ -1,0 +1,15 @@
+build
+dist
+classes
+/PruebasCuerpoHumano/build/classes/proyectodas
+/PruebasCuerpoHumano/build/classes/pruebascuerpohumano
+/PruebasCuerpoHumano/build/classes/pruebascuerpohumano/*.class
+/PruebasCuerpoHumano/build/classes/pruebascuerpohumano/BodyMember.class
+/PruebasCuerpoHumano/build/classes/pruebascuerpohumano/Limb.class
+/PruebasCuerpoHumano/build/classes/pruebascuerpohumano/PruebaCuerpoHumano.class
+/PruebasCuerpoHumano/build/classes/pruebascuerpohumano/RectangularPrism.class
+/PruebasCuerpoHumano/build/classes/pruebascuerpohumano/RunCuerpoHumano.class
+/PruebasCuerpoHumano/build/classes/pruebascuerpohumano/Torso.class
+/PruebasCuerpoHumano/build/classes/pruebascuerpohumano/User.class
+/PruebasCuerpoHumano/build/classes/pruebascuerpohumano/UsersManager.class
+/PruebasCuerpoHumano/nbproject/private/private.properties

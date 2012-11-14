@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package proyectodas;
+package pruebascuerpohumano;
 
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -18,6 +18,7 @@ abstract class GeometricFigure {
     protected int _color;
     protected float posX, posY, mass, velX , velY;
     
+    
     GeometricFigure(String name, int color, float x, float y, 
                     float m, float vx, float vy, PApplet p) {
         _parent= p;
@@ -28,10 +29,6 @@ abstract class GeometricFigure {
         mass = m;
         velX = vx;
         velY = vy;
-    }
-
-    void drawBodyMember() {
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     abstract void paint();

@@ -4,7 +4,7 @@
  */
 package pruebascuerpohumano;
 
-import processing.core.PApplet;
+import processing.core.*;
 
 /**
  *
