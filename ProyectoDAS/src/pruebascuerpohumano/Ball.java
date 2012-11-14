@@ -5,6 +5,7 @@
 package pruebascuerpohumano;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
 /**
  *
@@ -14,53 +15,51 @@ public class Ball extends GeometricFigure{
     
     private float radius;
     
-    public Ball(String name, int color, float x, float y,
-                float vx, float vy, float r, PApplet p){
-        super(name, color, x, y, r*0.1f, vx, vy, p);
-        radius = r;
-        posZ=0;
+    public Ball(String pname, int pcolor, PVector ppos, float pr, PVector pvel, PApplet pparent){
+        super(pname, pcolor, ppos, pr*0.1f, pvel, pparent);
+        radius = pr;
     }
     
     @Override
     public void paint(){
         _parent.pushMatrix();
-        _parent.translate(posX, posY, 0);
+        _parent.translate(pos.x, pos.y, pos.z);
         _parent.sphere(radius);
         _parent.popMatrix();
     }
     
     @Override
     public void update(float friction){
-        velX *= friction;
-        velY *= friction;
-        posX += velX;
-        posY += velY;
+        vel.x *= friction;
+        vel.y *= friction;
+        pos.x += vel.x;
+        pos.y += vel.y;
     }
     
     @Override
     void checkBoundaryCollision() {
-        if (posX > _parent.width-radius) {
-            posX  = _parent.width-radius;
-            velX *= -1;
+        if (pos.x > _parent.width-radius) {
+            pos.x  = _parent.width-radius;
+            vel.x *= -1;
         } 
-        else if (posX < radius) {
-            posX  = radius;
-            velX *= -1;
+        else if (pos.x < radius) {
+            pos.x  = radius;
+            vel.x *= -1;
         } 
-        else if (posY > _parent.height-radius) {
-            posY  = _parent.height-radius;
-            velY *= -1;
+        else if (pos.y > _parent.height-radius) {
+            pos.y  = _parent.height-radius;
+            vel.y *= -1;
         } 
-        else if (posY < radius) {
-            posY  = radius;
-            velY *= -1;
+        else if (pos.y < radius) {
+            pos.y  = radius;
+            vel.y *= -1;
         }
     }
     
     @Override
     void checkCollision(Ball b){
-        float dx = b.getPosX() - posX;
-        float dy = b.getPosY() - posY;
+        float dx = b.getPos().x - pos.x;
+        float dy = b.getPos().y - pos.y;
         float dist = _parent.sqrt(dx*dx + dy*dy);
         
         if(dist < radius + b.getRadius()){
@@ -78,16 +77,16 @@ public class Ball extends GeometricFigure{
             float y1 = dy * cosine - dx * sine;
             
             //rotate b0's velocity
-            float vx0 = velX * cosine + velY * sine;
-            float vy0 = velY * cosine - velX * sine;
+            float vx0 = vel.x * cosine + vel.y * sine;
+            float vy0 = vel.y * cosine - vel.x * sine;
             
             //rotate b1's velocity
-            float vx1 = b.getVelX() * cosine + b.getVelY() * sine;
-            float vy1 = b.getVelY() * cosine - b.getVelX() * sine;
+            float vx1 = b.getVel().x * cosine + b.getVel().y * sine;
+            float vy1 = b.getVel().y * cosine - b.getVel().x * sine;
             
             //collision reaction
             float vxTotal = vx0 - vx1;
-            vx0 = ((mass - b.getMass()) * vx0 + 2 * b.getMass() * vx1) / (mass + b.getMass());
+            vx0 = ((getMass() - b.getMass()) * vx0 + 2 * b.getMass() * vx1) / (getMass() + b.getMass());
             vx1 = vxTotal  + vx0;
             x0 += vx0;
             x1 += vx1;
@@ -99,14 +98,14 @@ public class Ball extends GeometricFigure{
             float y1f = y1 * cosine + x1 * sine;
             
             //adjust positions to actual screen positions
-            b.setPosX(posX + x1f);
-            b.setPosY(posY + y1f);
-            posX += x0f;
-            posY += y0f;
+            b.setPosX(pos.x + x1f);
+            b.setPosY(pos.y + y1f);
+            pos.x += x0f;
+            pos.y += y0f;
             
             //rotate velocities back
-            velX = vx0 * cosine - vy0 * sine;
-            velY = vy0 * cosine + vx0 * sine;
+            vel.x = vx0 * cosine - vy0 * sine;
+            vel.y = vy0 * cosine + vx0 * sine;
             b.setVelX( vx1 * cosine - vy1 * sine );
             b.setVelY( vy1 * cosine + vx1 * sine );
         }
