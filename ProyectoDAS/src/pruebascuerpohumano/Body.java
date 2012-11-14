@@ -300,10 +300,6 @@ public class Body {
         updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_FOOT), getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE));
     }
 
-    public Limb isPointInsideBody(PVector point) {
-        return null;
-    }
-
     public void circleForAHead() {
         // get 3D position of a joint
         PVector jointPos = new PVector();
