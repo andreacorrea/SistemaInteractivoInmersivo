@@ -29,7 +29,7 @@ public class Body {
     }
 
     public void createSkeleton() {
-        _bodyMembers.put("HEAD", new Ball("HEAD", _bodyColor, 0, 0, 0, 0, 5, _parent));
+        _bodyMembers.put("HEAD", new Ball("HEAD", _bodyColor, 0, 0, 0, 0, 20, _parent));
         _bodyMembers.put("TORSO", new RectangularPrism(_parent, "TORSO", _bodyColor));
         _bodyMembers.put("LEFT_FOREARM", new RectangularPrism(_parent, "LEFT_FOREARM", _bodyColor));
         _bodyMembers.put("LEFT_ARM", new RectangularPrism(_parent, "LEFT_ARM", _bodyColor));
@@ -145,7 +145,7 @@ public class Body {
 
     private void updateTorsoMember() {
         RectangularPrism torso = (RectangularPrism) _bodyMembers.get("TORSO");
-        positionOffset = getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER).z;
+        this.positionOffset = getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER).z;
         PVector leftUpperJointPos = getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER);
         PVector rightUpperJointPos = getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER);
         PVector leftLowerJointPos = getJointPos(SimpleOpenNI.SKEL_LEFT_HIP);
@@ -209,8 +209,16 @@ public class Body {
     
     private void updateHeadMember() {
         Ball head = (Ball) _bodyMembers.get("HEAD");
-        head.setPosX(getJointPos(SimpleOpenNI.SKEL_HEAD).x);
-        head.setPosY(getJointPos(SimpleOpenNI.SKEL_HEAD).y);
+        PVector headPosition = getJointPos(SimpleOpenNI.SKEL_HEAD);
+        // a 200 pixel diameter head
+        float headsize = 150;
+
+        // create a distance scalar related to the depth (z dimension)
+        float distanceScalar = (525 / headPosition.z);
+        
+        head.setPosX(headPosition.x);
+        head.setPosY(headPosition.y);
+        head.setRadius(distanceScalar * headsize);
         
     }
     
@@ -318,7 +326,7 @@ public class Body {
         _parent.ellipse(jointPos_Proj.x, jointPos_Proj.y, distanceScalar * headsize, distanceScalar * headsize);
         _parent.pushMatrix();
         _parent.translate(jointPos_Proj.x, jointPos_Proj.y, 0);
-        _parent.sphere(10);
+        //_parent.sphere(10);
         _parent.popMatrix();
     }
 
