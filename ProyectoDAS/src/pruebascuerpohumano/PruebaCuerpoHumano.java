@@ -33,9 +33,6 @@ public class PruebaCuerpoHumano extends PApplet {
         context = new SimpleOpenNI(this);
         
         scene = new Scene(this);
-        
-        // disable mirror
-        context.setMirror(true);
 
         scene.activateUsersManager(context);
 

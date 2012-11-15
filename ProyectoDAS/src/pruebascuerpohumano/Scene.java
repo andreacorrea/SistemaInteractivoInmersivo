@@ -19,6 +19,7 @@ public class Scene {
     
     public void activateUsersManager(SimpleOpenNI context){
         this.context = context;
+        context.setMirror(true);
         // setup the callback helper class
         usersManager = new UsersManager(pApplet, context);
         // enable depthMap generation 
