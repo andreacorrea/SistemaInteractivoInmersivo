@@ -17,7 +17,9 @@ public class Body {
     private Map<String, GeometricFigure> _bodyMembers;
     private int _bodyColor;
     private float positionOffset;
-
+    private PVector defaultDimensionsLimb=new PVector(0,20,20);
+    private PVector defaultDimensionsTorso=new PVector(0, 0,20);
+    
     public Body(PApplet p, User user, int bodyColor) {
         _parent = p;
         _user = user;
@@ -203,7 +205,10 @@ public class Body {
         float memberWidth = (leftUpperJointPos.dist(rightUpperJointPos) + leftLowerJointPos.dist(rightLowerJointPos)) / 2;
         
         updatePrism(torso, position, rotationZ, rotationY, memberWidth);
-        //torso.setMemberHeight(memberHeight);
+        defaultDimensionsTorso.x= memberWidth;
+        defaultDimensionsTorso.y= memberHeight;
+        
+        torso.setDimensions(defaultDimensionsTorso);
 
     }
     
@@ -331,11 +336,11 @@ public class Body {
     }
 
     private void updatePrism(RectangularPrism torso, PVector position, float rotationZ, float rotationY, float memberWidth) {
-        //torso.setPosition(position);
         torso.setPos(position);
         torso.setRotationZ(rotationZ);
         torso.setRotationY(rotationY);
-        //torso.setMemberWidth(memberWidth);
+        defaultDimensionsLimb.x=memberWidth;
+        torso.setDimensions(defaultDimensionsLimb);
     }
     
 
