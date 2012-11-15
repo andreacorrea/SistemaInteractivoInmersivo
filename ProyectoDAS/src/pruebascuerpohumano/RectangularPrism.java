@@ -14,7 +14,7 @@ import processing.core.PVector;
 public class RectangularPrism extends GeometricFigure {
     private float rotationZ;
     private float rotationY;
-    private PVector dimensions;
+    private PVector dimensions = new PVector();
     private boolean isCollided=false;
     
     public RectangularPrism(PApplet p, String name, int color) {
