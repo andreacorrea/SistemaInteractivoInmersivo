@@ -22,24 +22,15 @@ public class Scene {
         context.setMirror(true);
         // setup the callback helper class
         usersManager = new UsersManager(pApplet, context);
+        
         // enable depthMap generation 
-        if (context.enableDepth() == false) {
-            pApplet.println("Can't open the depthMap, maybe the camera is not connected!");
-            pApplet.exit();
-            return;
-        }
+        CheckKinect.checkDepthCam(pApplet, context);
 
         // enable scene analyser
-        if (context.enableScene() == false) {
-            pApplet.println("Can't setup scene");
-            pApplet.exit();
-            return;
-        }
+        CheckKinect.checkScene(pApplet, context);
         
         // enable skeleton generation for all joints, direct all callback to the helper class
         context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL, usersManager);
-        
-        
         
         
     }

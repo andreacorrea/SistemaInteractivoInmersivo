@@ -19,8 +19,7 @@ public class PruebaVisualRepresentation extends PApplet {
         
         context = new SimpleOpenNI(this);
         
-        visualRepresentation = new VisualRepresentation(this);
-        visualRepresentation.activateVisualRepresentation(context);
+        visualRepresentation = new VisualRepresentation(this, context);
 
     }
 

@@ -22,7 +22,7 @@ public class VisualRepresentation {
     private PImage resRGB = new PImage();
     private boolean[] constrainedImg;
 
-    public VisualRepresentation(PApplet pApplet) {
+    public VisualRepresentation(PApplet pApplet, SimpleOpenNI context) {
         this.pApplet = pApplet;
         resolution = 2;
         zmin = 0;
@@ -31,29 +31,21 @@ public class VisualRepresentation {
         rotX = pApplet.PI;
         rotY = 0;
         realColor = false;
-    }
 
-    public void activateVisualRepresentation(SimpleOpenNI context) {
         this.context = context;
 
         context.setMirror(true);
 
         // enable depthMap generation 
-        if (this.context.enableDepth() == false) {
-            pApplet.println("Can't open the depthMap, maybe the camera is not connected!");
-            pApplet.exit();
-            return;
-        }
+        CheckKinect.checkDepthCam(pApplet, context);
 
-        // enable scene analyser
-        if (this.context.enableRGB() == false) {
-            pApplet.println("Can't setup RGB");
-            pApplet.exit();
-            return;
-        }
+        // enable RGB generation
+        CheckKinect.checkRGBCam(pApplet, context);
     }
 
     public void update() {
+
+
         depthMap = context.depthMap();
         realWorldMap = context.depthMapRealWorld();
         rgbImage = context.rgbImage();
@@ -78,10 +70,10 @@ public class VisualRepresentation {
         if (realColor) {
             drawAsBands(resRGB, resMap3D, constrainedImg);
         } else {
-            defaultColor=pApplet.color(50, 50, 255);
+            defaultColor = pApplet.color(50, 50, 255);
             drawAsBands(defaultColor, resRGB, resMap3D, constrainedImg);
         }
-        
+
         pApplet.popMatrix();
 
 
@@ -95,7 +87,7 @@ public class VisualRepresentation {
         pApplet.rotateY(rotY);
         pApplet.scale(zoom);
         pApplet.translate(0, 0, -1500);
-        
+
     }
 
     private int[] resizeDepth(int[] depthMap, int resolution) {
@@ -113,7 +105,7 @@ public class VisualRepresentation {
         return resDepthImg;
     }
 
-    public PVector[] resizeMap3D(PVector[] map3D, int resolution) {
+    private PVector[] resizeMap3D(PVector[] map3D, int resolution) {
         int xSizeOrig = context.depthWidth();
         int ySizeOrig = context.depthHeight();
         int xSize = xSizeOrig / resolution;
@@ -128,7 +120,7 @@ public class VisualRepresentation {
         return resMap3D;
     }
 
-    PImage resizeRGB(PImage rgbImg, int resolution) {
+    private PImage resizeRGB(PImage rgbImg, int resolution) {
         int xSizeOrig = context.depthWidth();
         int ySizeOrig = context.depthHeight();
         int xSize = xSizeOrig / resolution;
@@ -143,7 +135,7 @@ public class VisualRepresentation {
         return resRGB;
     }
 
-    boolean[] constrainImg(int[] depthImg, PVector[] map3D, float zMin, float zMax) {
+    private boolean[] constrainImg(int[] depthImg, PVector[] map3D, float zMin, float zMax) {
         boolean[] consImg = new boolean[depthImg.length];
 
         for (int i = 0; i < consImg.length; i++) {
@@ -154,7 +146,7 @@ public class VisualRepresentation {
         return consImg;
     }
 
-    void drawAsBands(PImage rgbImg, PVector[] map3D, boolean[] consImg) {
+    private void drawAsBands(PImage rgbImg, PVector[] map3D, boolean[] consImg) {
         pApplet.noStroke();
 
         int xSize = rgbImg.width;
@@ -289,6 +281,4 @@ public class VisualRepresentation {
     public void setDefaultColor(int defaultColor) {
         this.defaultColor = defaultColor;
     }
-    
-    
 }
