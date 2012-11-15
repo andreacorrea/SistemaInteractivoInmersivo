@@ -38,7 +38,6 @@ public class RectangularPrism extends GeometricFigure {
         }else{
             _parent.fill(255,255,255);
         }
-        
         _parent.box(getDimensions().x, getDimensions().y, getDimensions().z);
         _parent.popMatrix();
         isCollided=false;
@@ -81,55 +80,28 @@ public class RectangularPrism extends GeometricFigure {
         if(dx < dxmin && dy < dymin){
             //this._color = _parent.color(0,255,0);
             isCollided = true;
-            /*
-            //Calculate angle, sine, and cosine
+
             float angle = _parent.atan2(dy,dx);
-            float sine = _parent.sin(angle);
-            float cosine = _parent.cos(angle);
+            float vx0 = vel.x;
+            float vy0 = vel.y;
+            float vx1 = b.getVel().x;
+            float vy1 = b.getVel().y;
             
-            //rotate b0's position
-            float x0 = 0;
-            float y0 = 0;
+            if(angle >= -_parent.PI/4 && angle <= _parent.PI/4) {
+                //collision reaction
+                float vxTotal = vx0 - vx1;
+                vx0 = ((getMass() - b.getMass()) * vx0 + 2 * b.getMass() * vx1) / (getMass() + b.getMass());
+                vx1 = vxTotal  + vx0;
+                pos.x += vx0;
+                b.setPosX( b.getPos().x + vx1 );
+            } else {
+                float vyTotal = vy0 - vy1;
+                vy0 = ((getMass() - b.getMass()) * vy0 + 2 * b.getMass() * vy1) / (getMass() + b.getMass());
+                vy1 = vyTotal  + vy0;
+                pos.y += vy0;
+                b.setPosY( b.getPos().y + vy1 );            
+            }  
             
-            //rotate b1's position
-            float x1 = dx * cosine + dy * sine;
-            float y1 = dy * cosine - dx * sine;
-            
-            //rotate b0's velocity
-            float vx0 = vel.x * cosine + vel.y * sine;
-            float vy0 = vel.y * cosine - vel.x * sine;
-            
-            //rotate b1's velocity
-            float vx1 = b.getVel().x * cosine + b.getVel().y * sine;
-            float vy1 = b.getVel().y * cosine - b.getVel().x * sine;
-            
-            //collision reaction
-            float vxTotal = vx0 - vx1;
-            vx0 = ((getMass() - b.getMass()) * vx0 + 2 * b.getMass() * vx1) / (getMass() + b.getMass());
-            vx1 = vxTotal  + vx0;
-            x0 += vx0;
-            x1 += vx1;
-            
-            //rotate positions back
-            float x0f = x0 * cosine - y0 * sine;
-            float y0f = y0 * cosine + x0 * sine;
-            float x1f = x1 * cosine - y1 * sine;
-            float y1f = y1 * cosine + x1 * sine;
-            
-            //adjust positions to actual screen positions
-            b.setPosX(pos.x + x1f);
-            b.setPosY(pos.y + y1f);
-            pos.x += x0f;
-            pos.y += y0f;
-            
-            //rotate velocities back
-            vel.x = vx0 * cosine - vy0 * sine;
-            vel.y = vy0 * cosine + vx0 * sine;
-            b.setVelX( vx1 * cosine - vy1 * sine );
-            b.setVelY( vy1 * cosine + vx1 * sine );*/
-        } else {
-            //this._color = _parent.color(255,255,255);
-            //isCollided = false;
         } 
     }
     

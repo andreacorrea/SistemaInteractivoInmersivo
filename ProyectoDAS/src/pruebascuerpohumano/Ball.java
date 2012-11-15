@@ -14,6 +14,7 @@ import processing.core.PVector;
 public class Ball extends GeometricFigure{
     
     private float radius;
+    private boolean isCollided = false;
     
     public Ball(String pname, int pcolor, PApplet pparent){
         super(pname, pcolor, pparent);
@@ -28,9 +29,14 @@ public class Ball extends GeometricFigure{
     public void paint(){
         _parent.pushMatrix();
         _parent.translate(pos.x, pos.y, pos.z);
-        _parent.fill(_color);
+        if(isCollided){
+            _parent.fill(0,255,0);
+        }else{
+            _parent.fill(255,255,255);
+        }
         _parent.sphere(radius);
         _parent.popMatrix();
+        isCollided=false;
     }
     
     @Override
@@ -123,7 +129,7 @@ public class Ball extends GeometricFigure{
         float dymin = radius + p.getDimensions().y/2;
         
         if(dx < dxmin && dy < dymin){
-            this._color = _parent.color(0,255,0);
+            isCollided = true;
             /*
             //Calculate angle, sine, and cosine
             float angle = _parent.atan2(dy,dx);
@@ -169,9 +175,12 @@ public class Ball extends GeometricFigure{
             vel.x = vx0 * cosine - vy0 * sine;
             vel.y = vy0 * cosine + vx0 * sine;
             p.setVelX( vx1 * cosine - vy1 * sine );
-            p.setVelY( vy1 * cosine + vx1 * sine );*/
-        } else {
-            this._color = _parent.color(255,255,255);
+            p.setVelY( vy1 * cosine + vx1 * sine );
+            */
+            /*vel.x *= -1;
+            vel.y *= -1;
+            p.setVelX( p.getVel().x * (-1) );
+            p.setVelY( p.getVel().y * (-1) );*/
         } 
     }
 
