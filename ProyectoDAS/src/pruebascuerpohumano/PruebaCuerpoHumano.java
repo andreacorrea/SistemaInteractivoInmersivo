@@ -64,21 +64,8 @@ public class PruebaCuerpoHumano extends PApplet {
         stroke(255, 200, 0);
         line(width / 2, height / 2, 200, width / 2, height / 2, -200);
         popStyle();
-
-        if (scene.getUsersManager().getUsersSize()> 0) {
-
-            // draw the skeleton of user1
-            Iterator user = scene.getUsersManager().getUsers().values().iterator();
-
-            while (user.hasNext()) {
-                currentUser = ((User) user.next());
-                //currentUser.getBody().drawSkeletonLines();
-                //currentUser.getBody().drawJoints();
-                currentUser.getBody().update();
-                //currentUser.getBody().circleForAHead();
-            }
-        } else {
-
+        
+        if(!scene.paint()){
             // draw scene Image
             image(context.sceneImage(), 0, 0);
         }

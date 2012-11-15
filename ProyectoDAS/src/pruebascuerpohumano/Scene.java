@@ -47,4 +47,13 @@ public class Scene {
         return geometricFiguresManager;
     }
 
+    public boolean paint() {
+        boolean paintSomething = false;
+        if(usersManager != null && usersManager.getUsersSize()>0){
+            usersManager.paintUsers();
+            paintSomething = true;
+        }
+        return paintSomething;
+    }
+
 }

@@ -2,6 +2,7 @@ package pruebascuerpohumano;
 
 import SimpleOpenNI.SimpleOpenNI;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import processing.core.*;
 
@@ -11,13 +12,13 @@ import processing.core.*;
 public class UsersManager {
 
     private SimpleOpenNI _context;
-    private Map<Integer, User> _users;
+    private Map<Integer, User> users;
     private PApplet _parent;
 
     public UsersManager(PApplet p, SimpleOpenNI context) {
         _parent = p;
         _context = context;
-        _users = new HashMap<Integer, User>();
+        users = new HashMap<Integer, User>();
     }
 
     // when a person ('user') enters the field of view
@@ -82,17 +83,17 @@ public class UsersManager {
     }
 
     public void addUser(int userId) {
-        _users.put(userId, new User(_parent, userId, _context, _parent.color(0,255,0)));
+        users.put(userId, new User(_parent, userId, _context, _parent.color(0,255,0)));
     }
 
     public void removeUser(int userId) {
-        _users.remove(userId);
+        users.remove(userId);
     }
 
     public User getUser(int userId) {
         User user;
-        if (_users.containsKey(userId)) {
-            user = _users.get(userId);
+        if (users.containsKey(userId)) {
+            user = users.get(userId);
         } else {
             user = null;
         }
@@ -100,11 +101,28 @@ public class UsersManager {
     }
 
     public Map<Integer, User> getUsers() {
-        return _users;
+        return users;
     }
     
     public int getUsersSize(){
-        return _users.size();
+        return users.size();
+    }
+    
+    public void paintUsers(){
+        User currentUser;
+        if (users.size()> 0) {
+
+            // draw the skeleton of user1
+            Iterator user = users.values().iterator();
+
+            while (user.hasNext()) {
+                currentUser = ((User) user.next());
+                //currentUser.getBody().drawSkeletonLines();
+                //currentUser.getBody().drawJoints();
+                currentUser.getBody().update();
+                //currentUser.getBody().circleForAHead();
+            }
+        }
     }
     
 }
