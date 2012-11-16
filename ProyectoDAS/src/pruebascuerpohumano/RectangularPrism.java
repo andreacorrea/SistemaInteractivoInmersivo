@@ -81,33 +81,51 @@ public class RectangularPrism extends GeometricFigure {
         if(dx < dxmin && dy < dymin){
             //this._color = _parent.color(0,255,0);
             isCollided = true;
-
             float angle = _parent.atan2(dy,dx);
-            float vx0 = vel.x;
-            float vy0 = vel.y;
-            float vx1 = b.getVel().x;
-            float vy1 = b.getVel().y;
             
+            //collision reaction
             if(angle >= -_parent.PI/4 && angle <= _parent.PI/4) {
-                //collision reaction
-                float vxTotal = vx0 - vx1;
-                vx0 = ((getMass() - b.getMass()) * vx0 + 2 * b.getMass() * vx1) / (getMass() + b.getMass());
-                vx1 = vxTotal  + vx0;
-                pos.x += vx0;
-                b.setPosX( b.getPos().x + vx1 );
+                float vxTotal = vel.x - b.getVel().x;
+                vel.x = ((getMass() - b.getMass()) * vel.x + 2 * b.getMass() * b.getVel().x) / (getMass() + b.getMass());
+                b.setVelX( vxTotal  + vel.x );
+                pos.x += vel.x;
+                b.setPosX( b.getPos().x + b.getVel().x );
             } else {
-                float vyTotal = vy0 - vy1;
-                vy0 = ((getMass() - b.getMass()) * vy0 + 2 * b.getMass() * vy1) / (getMass() + b.getMass());
-                vy1 = vyTotal  + vy0;
-                pos.y += vy0;
-                b.setPosY( b.getPos().y + vy1 );            
+                float vyTotal = vel.y - b.getVel().y;
+                vel.y = ((getMass() - b.getMass()) * vel.y + 2 * b.getMass() * b.getVel().y) / (getMass() + b.getMass());
+                b.setVelY( vyTotal  + vel.y );
+                pos.y += vel.y;
+                b.setPosY( b.getPos().y + b.getVel().y );            
             }  
-            
         } 
     }
     
     void checkCollision(RectangularPrism p){
-    
+        float dx = _parent.abs( p.getPos().x - pos.x );
+        float dy = _parent.abs( p.getPos().y - pos.y );
+        float dxmin = p.getDimensions().x/2 + dimensions.x/2;
+        float dymin = p.getDimensions().y/2 + dimensions.y/2;
+        
+        if(dx < dxmin && dy < dymin){
+            //this._color = _parent.color(0,255,0);
+            isCollided = true;
+            float angle = _parent.atan2(dy,dx);
+            
+            //collision reaction
+            if(angle >= -_parent.PI/4 && angle <= _parent.PI/4) {
+                float vxTotal = vel.x - p.getVel().x;
+                vel.x = ((getMass() - p.getMass()) * vel.x + 2 * p.getMass() * p.getVel().x) / (getMass() + p.getMass());
+                p.setVelX( vxTotal  + vel.x );
+                pos.x += vel.x;
+                p.setPosX( p.getPos().x + p.getVel().x );
+            } else {
+                float vyTotal = vel.y - p.getVel().y;
+                vel.y = ((getMass() - p.getMass()) * vel.y + 2 * p.getMass() * p.getVel().y) / (getMass() + p.getMass());
+                p.setVelY( vyTotal  + vel.y );
+                pos.y += vel.y;
+                p.setPosY( p.getPos().y + p.getVel().y );            
+            }  
+        } 
     }
     
     public void setDimensionX(float y) {
