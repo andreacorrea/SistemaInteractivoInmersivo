@@ -1,39 +1,40 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package pruebascuerpohumano;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-/**
- *
- * @author Samuel
- */
-abstract class GeometricFigure {
+abstract class GeometricFigure implements ObservableGeometricFigure {
 
-    protected PApplet _parent;
-    protected String _name;
-    protected int _color;
+    protected PApplet parent;
+    protected String name;
+    protected int color;
     protected float mass;
     protected PVector pos;
     protected PVector vel;
+    protected PVector posRef=new PVector(0,0,0);
+    protected float deltaPosMax = 10;
+    protected Map<String, Object>observers;
     
-    public GeometricFigure(String pname, int pcolor, PApplet pparent){
-        _name   = pname;
-        _color  = pcolor;
-        _parent = pparent;
+    public GeometricFigure(String name, int color, PApplet parent){
+        this.name   = name;
+        this.color  = color;
+        this.parent = parent;
+        observers = new HashMap<String, Object>();
     }
     
-    public GeometricFigure(String name, int color, PVector ppos, 
-                           float m, PVector pvel, PApplet p) {
-        _parent = p;
-        _name   = name;
-        _color  = color;
-        pos     = ppos;
-        mass    = m;
-        vel     = pvel;
+    public GeometricFigure(String name, int color, PVector pos, 
+                           float m, PVector vel, PApplet parent) {
+        this.parent = parent;
+        this.name   = name;
+        this.color  = color;
+        this.pos     = pos;
+        this.posRef = new PVector(pos.x,pos.y, pos.z);
+        this.mass    = m;
+        this.vel     = vel;
+        observers = new HashMap<String, Object>();
     }
 
     abstract void paint();
@@ -63,28 +64,28 @@ abstract class GeometricFigure {
      * @return the _name
      */
     public String getName() {
-        return _name;
+        return name;
     }
 
     /**
      * @param name the _name to set
      */
     public void setName(String name) {
-        this._name = name;
+        this.name = name;
     }
 
     /**
      * @return the _color
      */
     public int getColor() {
-        return _color;
+        return color;
     }
 
     /**
      * @param color the _color to set
      */
     public void setColor(int color) {
-        this._color = color;
+        this.color = color;
     }
 
     /**
@@ -130,9 +131,6 @@ abstract class GeometricFigure {
         return vel;
     }
 
-    /**
-     * @param vel the vel to set
-     */
     public void setVel(PVector vel) {
         this.vel = vel;
     }
@@ -143,6 +141,38 @@ abstract class GeometricFigure {
     
     public void setVelY(float vy){
         this.vel.y = vy;
+    }
+
+    @Override
+    public void addObserver(Object obj) {
+        observers.put(((GeometricFigure)obj).getName(), obj);
+    }
+
+    @Override
+    public void removeObserver(Object obj) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+ 
+    protected void checkChangeState() {
+        checkBoundaryCollision();
+        if(posRef.dist(pos) >= deltaPosMax){
+            posRef.set(pos);
+            notifyAllObservers();
+        }
+    }
+
+    private void notifyAllObservers() {
+        GeometricFigure currentObserver;
+        Iterator observer = observers.values().iterator();
+
+        while (observer.hasNext()) {
+            currentObserver = ((GeometricFigure) observer.next());
+            currentObserver.inform(this);
+        }
+    }
+
+    public void inform(GeometricFigure gf){
+        checkCollision(gf);
     }
     
 }

@@ -2,28 +2,68 @@ package pruebascuerpohumano;
 
 import SimpleOpenNI.SimpleOpenNI;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class GeometricFiguresManager {
+
     private Map<Integer, GeometricFigure> geometricFigures;
-    
-    public GeometricFiguresManager() {
+    private Scene scene;
+    protected float friction = 1f;
+
+    public GeometricFiguresManager(Scene scene) {
         geometricFigures = new HashMap<Integer, GeometricFigure>();
+        this.scene = scene;
     }
-    
-    public void addGeometricFigure(GeometricFigure gf){
+
+    public void addGeometricFigure(GeometricFigure gf) {
         geometricFigures.put(geometricFigures.size(), gf);
+        scene.addGeometricFigure(gf);
     }
-    
-    public GeometricFigure getGeometricFigure(int i){
+
+    public GeometricFigure getGeometricFigure(int i) {
         return geometricFigures.get(i);
     }
-    
-    public GeometricFigure removeGeometricFigure(int i){
+
+    public GeometricFigure removeGeometricFigure(int i) {
         return geometricFigures.remove(i);
     }
-    
-    public int getGeometricFiguresSize(){
+
+    public int getGeometricFiguresSize() {
         return geometricFigures.size();
+    }
+
+    void addObserverGFMap(GeometricFigure gf) {
+        GeometricFigure currentGeometricFigure;
+        Iterator geometricFigure = geometricFigures.values().iterator();
+
+        while (geometricFigure.hasNext()) {
+            currentGeometricFigure = ((GeometricFigure) geometricFigure.next());
+            if (!currentGeometricFigure.equals(gf)) {
+                currentGeometricFigure.addObserver(gf);
+                gf.addObserver(currentGeometricFigure);
+            }
+        }
+    }
+
+    void addObserverUserMap(User user) {
+        GeometricFigure currentGeometricFigure;
+        Iterator geometricFigure = geometricFigures.values().iterator();
+
+        while (geometricFigure.hasNext()) {
+            currentGeometricFigure = ((GeometricFigure) geometricFigure.next());
+            user.getBody().addObserverGFBody(currentGeometricFigure);
+        }
+    }
+
+    void updateAndPaintGeometricFigures() {
+        GeometricFigure currentGeometricFigure;
+        Iterator geometricFigure = geometricFigures.values().iterator();
+
+        while (geometricFigure.hasNext()) {
+            currentGeometricFigure = ((GeometricFigure) geometricFigure.next());
+            currentGeometricFigure.update(friction);
+            currentGeometricFigure.paint();
+        }
     }
 }

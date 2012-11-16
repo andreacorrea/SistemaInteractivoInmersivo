@@ -28,19 +28,20 @@ public class RectangularPrism extends GeometricFigure {
 
     @Override
     void paint() {
-        _parent.pushMatrix();
-        _parent.stroke(0,0,0);
-        _parent.fill(_color);
-        _parent.translate(pos.x, pos.y, pos.z);
-        _parent.rotateZ(rotationZ);
-        _parent.rotateY(rotationY);
+        checkChangeState();
+        parent.pushMatrix();
+        parent.stroke(0,0,0);
+        parent.fill(color);
+        parent.translate(pos.x, pos.y, pos.z);
+        parent.rotateZ(rotationZ);
+        parent.rotateY(rotationY);
         if(isCollided){
-            _parent.fill(0,255,0);
+            parent.fill(0,255,0);
         }else{
-            _parent.fill(255,255,255);
+            parent.fill(255,255,255);
         }
-        _parent.box(getDimensions().x, getDimensions().y, getDimensions().z);
-        _parent.popMatrix();
+        parent.box(getDimensions().x, getDimensions().y, getDimensions().z);
+        parent.popMatrix();
         isCollided=false;
     }
 
@@ -54,16 +55,16 @@ public class RectangularPrism extends GeometricFigure {
 
     @Override
     void checkBoundaryCollision() {
-        if (pos.x > _parent.width-getDimensions().x) {
-            pos.x  = _parent.width-getDimensions().x;
+        if (pos.x > parent.width-getDimensions().x) {
+            pos.x  = parent.width-getDimensions().x;
             vel.x *= -1;
         } 
         else if (pos.x < getDimensions().x) {
             pos.x  = getDimensions().x;
             vel.x *= -1;
         } 
-        else if (pos.y > _parent.height-getDimensions().y) {
-            pos.y  = _parent.height-getDimensions().y;
+        else if (pos.y > parent.height-getDimensions().y) {
+            pos.y  = parent.height-getDimensions().y;
             vel.y *= -1;
         } 
         else if (pos.y < getDimensions().y) {
@@ -73,18 +74,18 @@ public class RectangularPrism extends GeometricFigure {
     }
     
     void checkCollision(Ball b){
-        float dx = _parent.abs( b.getPos().x - pos.x );
-        float dy = _parent.abs( b.getPos().y - pos.y );
+        float dx = parent.abs( b.getPos().x - pos.x );
+        float dy = parent.abs( b.getPos().y - pos.y );
         float dxmin = b.getRadius() + dimensions.x/2;
         float dymin = b.getRadius() + dimensions.y/2;
         
         if(dx < dxmin && dy < dymin){
             //this._color = _parent.color(0,255,0);
             isCollided = true;
-            float angle = _parent.atan2(dy,dx);
+            float angle = parent.atan2(dy,dx);
             
             //collision reaction
-            if(angle >= -_parent.PI/4 && angle <= _parent.PI/4) {
+            if(angle >= -parent.PI/4 && angle <= parent.PI/4) {
                 float vxTotal = vel.x - b.getVel().x;
                 vel.x = ((getMass() - b.getMass()) * vel.x + 2 * b.getMass() * b.getVel().x) / (getMass() + b.getMass());
                 b.setVelX( vxTotal  + vel.x );
@@ -101,18 +102,18 @@ public class RectangularPrism extends GeometricFigure {
     }
     
     void checkCollision(RectangularPrism p){
-        float dx = _parent.abs( p.getPos().x - pos.x );
-        float dy = _parent.abs( p.getPos().y - pos.y );
+        float dx = parent.abs( p.getPos().x - pos.x );
+        float dy = parent.abs( p.getPos().y - pos.y );
         float dxmin = p.getDimensions().x/2 + dimensions.x/2;
         float dymin = p.getDimensions().y/2 + dimensions.y/2;
         
         if(dx < dxmin && dy < dymin){
             //this._color = _parent.color(0,255,0);
             isCollided = true;
-            float angle = _parent.atan2(dy,dx);
+            float angle = parent.atan2(dy,dx);
             
             //collision reaction
-            if(angle >= -_parent.PI/4 && angle <= _parent.PI/4) {
+            if(angle >= -parent.PI/4 && angle <= parent.PI/4) {
                 float vxTotal = vel.x - p.getVel().x;
                 vel.x = ((getMass() - p.getMass()) * vel.x + 2 * p.getMass() * p.getVel().x) / (getMass() + p.getMass());
                 p.setVelX( vxTotal  + vel.x );
@@ -161,5 +162,4 @@ public class RectangularPrism extends GeometricFigure {
     public void setDimensions(PVector dimensions) {
         this.dimensions = dimensions;
     }
-
 }

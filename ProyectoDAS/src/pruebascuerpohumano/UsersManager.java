@@ -11,79 +11,83 @@ import processing.core.*;
  */
 public class UsersManager {
 
-    private SimpleOpenNI _context;
+    private SimpleOpenNI context;
     private Map<Integer, User> users;
-    private PApplet _parent;
+    private Scene scene;
+    private PApplet parent;
 
-    public UsersManager(PApplet p, SimpleOpenNI context) {
-        _parent = p;
-        _context = context;
+    public UsersManager(PApplet p, SimpleOpenNI context, Scene scene) {
+        this.parent = p;
+        this.context = context;
+        this.scene = scene;
         users = new HashMap<Integer, User>();
     }
 
     // when a person ('user') enters the field of view
     public void onNewUser(int userId) {
-        _parent.println("New User Detected - userId: " + userId);
-        _parent.println("Start pose detection");
+        parent.println("New User Detected - userId: " + userId);
+        parent.println("Start pose detection");
 
         // start pose detection
-        _context.startPoseDetection("Psi", userId);
+        context.startPoseDetection("Psi", userId);
     }
 
     // when a person ('user') leaves the field of view 
     public void onLostUser(int userId) {
-        _parent.println("User Lost - userId: " + userId);
+        parent.println("User Lost - userId: " + userId);
         removeUser(userId);
     }
 
     public void onExitUser(int userId) {
-        _parent.println("onExitUser - userId: " + userId);
+        parent.println("onExitUser - userId: " + userId);
     }
 
     public void onReEnterUser(int userId) {
-        _parent.println("onReEnterUser - userId: " + userId);
+        parent.println("onReEnterUser - userId: " + userId);
     }
 
     // when a user begins a pose
     public void onStartPose(String pose, int userId) {
-        _parent.println("Start of Pose Detected  - userId: " + userId + ", pose: " + pose);
-        _parent.println("Stop pose detection");
+        parent.println("Start of Pose Detected  - userId: " + userId + ", pose: " + pose);
+        parent.println("Stop pose detection");
 
         // stop pose detection
-        _context.stopPoseDetection(userId);
+        context.stopPoseDetection(userId);
 
         // start attempting to calibrate the skeleton
-        _context.requestCalibrationSkeleton(userId, true);
+        context.requestCalibrationSkeleton(userId, true);
     }
 
     public void onEndPose(String pose, int userId) {
-        _parent.println("onEndPose - userId: " + userId + ", pose: " + pose);
+        parent.println("onEndPose - userId: " + userId + ", pose: " + pose);
     }
 
     // when calibration begins
     public void onStartCalibration(int userId) {
-        _parent.println("Beginning Calibration - userId: " + userId);
+        parent.println("Beginning Calibration - userId: " + userId);
     }
 
     // when calibaration ends - successfully or unsucessfully
     public void onEndCalibration(int userId, boolean successfull) {
-        _parent.println("Calibration of userId: " + userId + ", successfull: " + successfull);
+        parent.println("Calibration of userId: " + userId + ", successfull: " + successfull);
 
         if (successfull) {
-            _parent.println("  User calibrated !!!");
+            parent.println("  User calibrated !!!");
             addUser(userId);
-            _parent.println("  User added to usersManager !!!");
-            _context.startTrackingSkeleton(userId);
+            parent.println("  User added to usersManager !!!");
+            context.startTrackingSkeleton(userId);
 
         } else {
-            _parent.println("  Failed to calibrate user !!!");
-            _parent.println("  Start pose detection");
-            _context.startPoseDetection("Psi", userId);
+            parent.println("  Failed to calibrate user !!!");
+            parent.println("  Start pose detection");
+            context.startPoseDetection("Psi", userId);
         }
     }
 
     public void addUser(int userId) {
-        users.put(userId, new User(_parent, userId, _context, _parent.color(0,255,0)));
+        User user = new User(parent, userId, context, parent.color(0, 255, 0));
+        users.put(userId, user);
+        scene.addUser(user);
     }
 
     public void removeUser(int userId) {
@@ -103,28 +107,35 @@ public class UsersManager {
     public Map<Integer, User> getUsers() {
         return users;
     }
-    
-    public int getUsersSize(){
+
+    public int getUsersSize() {
         return users.size();
     }
-    
-    public void paintUsers(){
-        _parent.camera(_parent.width/2.0f, _parent.height/2.0f, 750, _parent.width/2.0f, _parent.height/2.0f, 0, 0, 1, 0);
+
+    public void updateAndPaintUsers() {
+        parent.camera(parent.width / 2.0f, parent.height / 2.0f, 750, parent.width / 2.0f, parent.height / 2.0f, 0, 0, 1, 0);
         //_parent.scale(0.35f);
         User currentUser;
-        if (users.size()> 0) {
 
-            // draw the skeleton of user1
-            Iterator user = users.values().iterator();
+        // draw the skeleton of user1
+        Iterator user = users.values().iterator();
 
-            while (user.hasNext()) {
-                currentUser = ((User) user.next());
-                //currentUser.getBody().drawSkeletonLines();
-                //currentUser.getBody().drawJoints();
-                currentUser.getBody().update();
-                //currentUser.getBody().circleForAHead();
-            }
+        while (user.hasNext()) {
+            currentUser = ((User) user.next());
+            //currentUser.getBody().drawSkeletonLines();
+            //currentUser.getBody().drawJoints();
+            currentUser.getBody().update();
+            //currentUser.getBody().circleForAHead();
         }
     }
-    
+
+    public void addObserverGFUsers(GeometricFigure gf) {
+        User currentUser;
+        Iterator user = users.values().iterator();
+
+        while (user.hasNext()) {
+            currentUser = ((User) user.next());
+            currentUser.getBody().addObserverGFBody(gf);
+        }
+    }
 }

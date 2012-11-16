@@ -21,7 +21,7 @@ public class Scene {
         this.context = context;
         context.setMirror(true);
         // setup the callback helper class
-        usersManager = new UsersManager(pApplet, context);
+        usersManager = new UsersManager(pApplet, context, this);
         
         // enable depthMap generation 
         CheckKinect.checkDepthCam(pApplet, context);
@@ -35,8 +35,8 @@ public class Scene {
         
     }
     
-    public void activateGeometricFiguresManager(SimpleOpenNI context){
-        geometricFiguresManager = new GeometricFiguresManager();
+    public void activateGeometricFiguresManager(){
+        geometricFiguresManager = new GeometricFiguresManager(this);
     }
 
     public UsersManager getUsersManager() {
@@ -51,12 +51,11 @@ public class Scene {
         
         if(hasElements()){
             if(hasUsers()){
-                usersManager.paintUsers();
+                usersManager.updateAndPaintUsers();
             }
             if(hasGeometricFigures()){
-                //geometricFiguresManager.paintGeometricFigures();
+                geometricFiguresManager.updateAndPaintGeometricFigures();
             }
-            
         }
         
     }
@@ -77,6 +76,19 @@ public class Scene {
             hasElements = true;
         }
         return hasElements;
+    }
+
+    void addGeometricFigure(GeometricFigure gf) {
+        geometricFiguresManager.addObserverGFMap(gf);
+        if(hasUsers()){
+            usersManager.addObserverGFUsers(gf);
+        }
+    }
+
+    void addUser(User user) {
+        if(hasGeometricFigures()){
+            geometricFiguresManager.addObserverUserMap(user);
+        }
     }
 
 }

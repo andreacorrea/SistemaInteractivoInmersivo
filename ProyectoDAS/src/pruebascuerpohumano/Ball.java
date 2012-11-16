@@ -16,50 +16,53 @@ public class Ball extends GeometricFigure{
     private float radius;
     private boolean isCollided = false;
     
-    public Ball(String pname, int pcolor, PApplet pparent){
-        super(pname, pcolor, pparent);
+    public Ball(PApplet parent, String pname, int pcolor){
+        super(pname, pcolor, parent);
     }
     
-    public Ball(String pname, int pcolor, PVector ppos, float pr, PVector pvel, PApplet pparent){
-        super(pname, pcolor, ppos, pr*0.1f, pvel, pparent);
-        radius = pr;
+    public Ball(String name, int pcolor, PVector pos, float r, PVector vel, PApplet parent){
+        super(name, pcolor, pos, r*0.1f, vel, parent);
+        radius = r;
     }
     
     @Override
     public void paint(){
-        _parent.pushMatrix();
-        _parent.stroke(0,0,0);
-        _parent.translate(pos.x, pos.y, pos.z);
+        checkChangeState();
+        parent.noStroke();
+        parent.pushMatrix();
+        parent.translate(pos.x, pos.y, pos.z);
         if(isCollided){
-            _parent.fill(0,255,0);
+            parent.fill(0,255,0);
         }else{
-            _parent.fill(255,255,255);
+            parent.fill(255,255,255);
         }
-        _parent.sphere(radius);
-        _parent.popMatrix();
+        parent.sphere(radius);
+        parent.popMatrix();
         isCollided=false;
     }
     
     @Override
     public void update(float friction){
+        parent.println(posRef);
         vel.x *= friction;
         vel.y *= friction;
         pos.x += vel.x;
         pos.y += vel.y;
+        parent.println(posRef);
     }
     
     @Override
     void checkBoundaryCollision() {
-        if (pos.x > _parent.width-radius) {
-            pos.x  = _parent.width-radius;
+        if (pos.x > parent.width-radius) {
+            pos.x  = parent.width-radius;
             vel.x *= -1;
         } 
         else if (pos.x < radius) {
             pos.x  = radius;
             vel.x *= -1;
         } 
-        else if (pos.y > _parent.height-radius) {
-            pos.y  = _parent.height-radius;
+        else if (pos.y > parent.height-radius) {
+            pos.y  = parent.height-radius;
             vel.y *= -1;
         } 
         else if (pos.y < radius) {
@@ -72,15 +75,15 @@ public class Ball extends GeometricFigure{
     void checkCollision(Ball b){
         float dx = b.getPos().x - pos.x;
         float dy = b.getPos().y - pos.y;
-        float dist = _parent.sqrt(dx*dx + dy*dy);
+        float dist = parent.sqrt(dx*dx + dy*dy);
         float minDist = radius + b.getRadius();
         
         if(dist < minDist){
             isCollided = true;
             //Calculate angle, sine, and cosine
-            float angle = _parent.atan2(dy,dx);
-            float sine = _parent.sin(angle);
-            float cosine = _parent.cos(angle);
+            float angle = parent.atan2(dy,dx);
+            float sine = parent.sin(angle);
+            float cosine = parent.cos(angle);
             
             //rotate b0's position
             float x0 = 0;
@@ -142,18 +145,18 @@ public class Ball extends GeometricFigure{
     }
     
     void checkCollision(RectangularPrism p){
-        float dx = _parent.abs( p.getPos().x - pos.x );
-        float dy = _parent.abs( p.getPos().y - pos.y );
+        float dx = parent.abs( p.getPos().x - pos.x );
+        float dy = parent.abs( p.getPos().y - pos.y );
         float dxmin = radius + p.getDimensions().x/2;
         float dymin = radius + p.getDimensions().y/2;
         
         if(dx < dxmin && dy < dymin){
             //this._color = _parent.color(0,255,0);
             isCollided = true;
-            float angle = _parent.atan2(dy,dx);
+            float angle = parent.atan2(dy,dx);
             
             //collision reaction
-            if(angle >= -_parent.PI/4 && angle <= _parent.PI/4) {
+            if(angle >= -parent.PI/4 && angle <= parent.PI/4) {
                 float vxTotal = vel.x - p.getVel().x;
                 vel.x = ((getMass() - p.getMass()) * vel.x + 2 * p.getMass() * p.getVel().x) / (getMass() + p.getMass());
                 p.setVelX( vxTotal  + vel.x );
