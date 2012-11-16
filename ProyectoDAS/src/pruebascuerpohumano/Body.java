@@ -216,7 +216,7 @@ public class Body {
         Ball head = (Ball) _bodyMembers.get("HEAD");
         PVector headPosition = getJointPos(SimpleOpenNI.SKEL_HEAD);
         // a 200 pixel diameter head
-        float headsize = 150;
+        float headsize = 100;
 
         // create a distance scalar related to the depth (z dimension)
         float distanceScalar = (525 / headPosition.z);

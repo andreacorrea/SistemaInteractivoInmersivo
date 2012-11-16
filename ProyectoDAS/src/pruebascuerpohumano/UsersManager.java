@@ -109,6 +109,8 @@ public class UsersManager {
     }
     
     public void paintUsers(){
+        _parent.camera(_parent.width/2.0f, _parent.height/2.0f, 750, _parent.width/2.0f, _parent.height/2.0f, 0, 0, 1, 0);
+        //_parent.scale(0.35f);
         User currentUser;
         if (users.size()> 0) {
 

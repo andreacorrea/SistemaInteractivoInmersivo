@@ -4,23 +4,19 @@
  */
 package pruebascuerpohumano;
 
-//import ixagon.renderer.*;
-import SimpleOpenNI.*;
-import java.util.Iterator;
-import java.util.Map;
-import processing.core.*;
+import SimpleOpenNI.SimpleOpenNI;
+import processing.core.PApplet;
 
-public class PruebaCuerpoHumano extends PApplet {
+/**
+ *
+ * @author Andrea
+ */
+public class PruebaUsuarioVolumetrico extends PApplet {
 
+    SimpleOpenNI context;
+    VisualRepresentation visualRepresentation;
     Scene scene;
 
-    User currentUser;
-    /*float rotX;  // by default rotate the hole scene 180deg around the x-axis, 
-    // the data from openni comes upside down
-    float rotY;*/
-    
-    SimpleOpenNI context;
-    
     @Override
     public void setup() {
         // create a window the size of the scene
@@ -29,20 +25,21 @@ public class PruebaCuerpoHumano extends PApplet {
 
         // instantiate a new context
         frameRate(24);
-        
+
         context = new SimpleOpenNI(this);
-        
+
         scene = new Scene(this);
 
         scene.activateUsersManager(context);
+        
+        visualRepresentation = new VisualRepresentation(this, context);
 
     }
-
+    
     @Override
     public void draw() {
         background(200);
-        /*rotateX(rotX);
-        rotateY(rotY);*/
+        //pushMatrix();
         // update the camera
         context.update();
 
@@ -65,37 +62,13 @@ public class PruebaCuerpoHumano extends PApplet {
         line(width / 2, height / 2, 200, width / 2, height / 2, -200);
         popStyle();
         
-        if(scene.hasElements()){
+        if(scene.hasUsers()){
+            visualRepresentation.update();
+            scene.paint();
+        }else{
             // draw scene Image
             image(context.sceneImage(), 0, 0);
         }
-        
-    }
 
-
-
-    @Override
-    public void keyPressed() {
-
-        switch (keyCode) {
-            case LEFT:
-                int a =0;
-                //rotY += 0.1f;
-                break;
-            case RIGHT:
-                // zoom out
-                //rotY -= 0.1f;
-                break;
-            case UP:
-                //rotX += 0.1f;
-                break;
-            case DOWN:
-                // zoom out
-                //rotX -= 0.1f;
-                break;  
-            
-            case '0':
-                exit();
-        }
     }
 }

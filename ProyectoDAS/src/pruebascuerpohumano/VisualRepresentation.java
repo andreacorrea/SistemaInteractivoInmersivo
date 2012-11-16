@@ -26,11 +26,11 @@ public class VisualRepresentation {
         this.pApplet = pApplet;
         resolution = 2;
         zmin = 0;
-        zmax = 1000;
-        zoom = 0.35f;
+        zmax = 2000;
+        zoom = 0.5f;
         rotX = pApplet.PI;
         rotY = 0;
-        realColor = false;
+        realColor = true;
 
         this.context = context;
 
@@ -45,7 +45,6 @@ public class VisualRepresentation {
 
     public void update() {
 
-
         depthMap = context.depthMap();
         realWorldMap = context.depthMapRealWorld();
         rgbImage = context.rgbImage();
@@ -55,7 +54,7 @@ public class VisualRepresentation {
         resRGB = resizeRGB(rgbImage, resolution);
 
         constrainedImg = constrainImg(resDepth, resMap3D, zmin, zmax);
-        pApplet.pushMatrix();
+        //pApplet.pushMatrix();
 
         positionVisualRepresentation();
 
@@ -74,14 +73,14 @@ public class VisualRepresentation {
             drawAsBands(defaultColor, resRGB, resMap3D, constrainedImg);
         }
 
-        pApplet.popMatrix();
+        //pApplet.popMatrix();
 
 
     }
 
     private void positionVisualRepresentation() {
         // Position the scene
-        pApplet.background(10);
+        //pApplet.background(10);
         pApplet.translate(pApplet.width / 2, pApplet.height / 2, 0);
         pApplet.rotateX(rotX);
         pApplet.rotateY(rotY);

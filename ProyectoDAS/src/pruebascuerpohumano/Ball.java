@@ -28,6 +28,7 @@ public class Ball extends GeometricFigure{
     @Override
     public void paint(){
         _parent.pushMatrix();
+        _parent.stroke(0,0,0);
         _parent.translate(pos.x, pos.y, pos.z);
         if(isCollided){
             _parent.fill(0,255,0);

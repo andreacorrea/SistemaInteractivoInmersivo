@@ -22,4 +22,8 @@ public class GeometricFiguresManager {
     public GeometricFigure removeGeometricFigure(int i){
         return geometricFigures.remove(i);
     }
+    
+    public int getGeometricFiguresSize(){
+        return geometricFigures.size();
+    }
 }

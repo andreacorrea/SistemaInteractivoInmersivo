@@ -29,6 +29,7 @@ public class RectangularPrism extends GeometricFigure {
     @Override
     void paint() {
         _parent.pushMatrix();
+        _parent.stroke(0,0,0);
         _parent.fill(_color);
         _parent.translate(pos.x, pos.y, pos.z);
         _parent.rotateZ(rotationZ);

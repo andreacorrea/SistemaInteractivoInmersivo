@@ -47,13 +47,36 @@ public class Scene {
         return geometricFiguresManager;
     }
 
-    public boolean paint() {
-        boolean paintSomething = false;
-        if(usersManager != null && usersManager.getUsersSize()>0){
-            usersManager.paintUsers();
-            paintSomething = true;
+    public void paint() {
+        
+        if(hasElements()){
+            if(hasUsers()){
+                usersManager.paintUsers();
+            }
+            if(hasGeometricFigures()){
+                //geometricFiguresManager.paintGeometricFigures();
+            }
+            
         }
-        return paintSomething;
+        
+    }
+    
+    public boolean hasUsers(){
+        return usersManager != null && usersManager.getUsersSize()>0;
+    }
+    
+    public boolean hasGeometricFigures(){
+        return geometricFiguresManager != null && geometricFiguresManager.getGeometricFiguresSize()>0;
+    }
+    
+    public boolean hasElements(){
+        boolean hasElements = false;
+        if(usersManager != null && usersManager.getUsersSize()>0){
+            hasElements = true;
+        }else if(geometricFiguresManager != null && geometricFiguresManager.getGeometricFiguresSize()>0){
+            hasElements = true;
+        }
+        return hasElements;
     }
 
 }
