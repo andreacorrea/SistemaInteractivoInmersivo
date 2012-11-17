@@ -48,7 +48,7 @@ public class Scene {
     }
 
     public void paint() {
-        
+        pApplet.background(pApplet.color(255,0,0));
         if(hasElements()){
             if(hasUsers()){
                 usersManager.updateAndPaintUsers();

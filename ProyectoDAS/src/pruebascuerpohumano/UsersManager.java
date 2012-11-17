@@ -125,6 +125,7 @@ public class UsersManager {
             //currentUser.getBody().drawSkeletonLines();
             //currentUser.getBody().drawJoints();
             currentUser.getBody().update();
+            currentUser.getBody().paintSkeletonMembers();
             //currentUser.getBody().circleForAHead();
         }
     }

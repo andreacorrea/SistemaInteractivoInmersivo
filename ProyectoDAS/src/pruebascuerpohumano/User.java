@@ -16,6 +16,7 @@ public class User {
     public User(PApplet p, int userId, SimpleOpenNI context, int userColor) {
         this.userId = userId;
         this.context = context;
+        this.userColor = userColor;
         this.body = new Body(p, this, userColor);
     }
     

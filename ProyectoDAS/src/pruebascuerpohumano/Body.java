@@ -17,36 +17,38 @@ public class Body {
     private Map<String, GeometricFigure> bodyMembers;
     private int bodyColor;
     private float positionOffset;
-    private PVector defaultDimensionsLimb = new PVector(0, 20, 20);
-    private PVector defaultDimensionsTorso = new PVector(0, 0, 20);
+    private float defaultHeight = 20;
+    private float defaultDepth = 20;
+    private float defaultMass = 5;
+    
+    
 
     public Body(PApplet p, User user, int bodyColor) {
-        parent = p;
-        user = user;
-        context = user.getContext();
-        bodyColor = bodyColor;
-        bodyMembers = new HashMap<String, GeometricFigure>();
+        this.parent = p;
+        this.user = user;
+        this.context = user.getContext();
+        this.bodyColor = bodyColor;
+        this.bodyMembers = new HashMap<String, GeometricFigure>();
 
         createSkeleton();
     }
 
     public void createSkeleton() {
-        bodyMembers.put("HEAD", new Ball(parent, "HEAD", bodyColor));
-        bodyMembers.put("TORSO", new RectangularPrism(parent, "TORSO", bodyColor));
-        bodyMembers.put("LEFT_FOREARM", new RectangularPrism(parent, "LEFT_FOREARM", bodyColor));
-        bodyMembers.put("LEFT_ARM", new RectangularPrism(parent, "LEFT_ARM", bodyColor));
-        bodyMembers.put("RIGHT_FOREARM", new RectangularPrism(parent, "RIGHT_FOREARM", bodyColor));
-        bodyMembers.put("RIGHT_ARM", new RectangularPrism(parent, "RIGHT_ARM", bodyColor));
-        bodyMembers.put("LEFT_THIGH", new RectangularPrism(parent, "LEFT_THIGH", bodyColor));
-        bodyMembers.put("LEFT_LEG", new RectangularPrism(parent, "LEFT_LEG", bodyColor));
-        bodyMembers.put("RIGHT_THIGH", new RectangularPrism(parent, "RIGHT_THIGH", bodyColor));
-        bodyMembers.put("RIGHT_LEG", new RectangularPrism(parent, "RIGHT_LEG", bodyColor));
+        bodyMembers.put("HEAD", new Ball(parent, "HEAD", bodyColor, defaultMass));
+        bodyMembers.put("TORSO", new RectangularPrism(parent, "TORSO", bodyColor, defaultMass));
+        bodyMembers.put("LEFT_FOREARM", new RectangularPrism(parent, "LEFT_FOREARM", bodyColor, defaultMass));
+        bodyMembers.put("LEFT_ARM", new RectangularPrism(parent, "LEFT_ARM", bodyColor, defaultMass));
+        bodyMembers.put("RIGHT_FOREARM", new RectangularPrism(parent, "RIGHT_FOREARM", bodyColor, defaultMass));
+        bodyMembers.put("RIGHT_ARM", new RectangularPrism(parent, "RIGHT_ARM", bodyColor, defaultMass));
+        bodyMembers.put("LEFT_THIGH", new RectangularPrism(parent, "LEFT_THIGH", bodyColor, defaultMass));
+        bodyMembers.put("LEFT_LEG", new RectangularPrism(parent, "LEFT_LEG", bodyColor, defaultMass));
+        bodyMembers.put("RIGHT_THIGH", new RectangularPrism(parent, "RIGHT_THIGH", bodyColor, defaultMass));
+        bodyMembers.put("RIGHT_LEG", new RectangularPrism(parent, "RIGHT_LEG", bodyColor, defaultMass));
 
     }
 
     public void update() {
         updateMembers();
-        paintSkeletonMembers();
     }
 
     public void drawSkeletonLines() {
@@ -145,6 +147,21 @@ public class Body {
 
     }
 
+    private void updateHeadMember() {
+        Ball head = (Ball) bodyMembers.get("HEAD");
+        PVector headPosition = getJointPos(SimpleOpenNI.SKEL_HEAD);
+        // a 200 pixel diameter head
+        float headsize = 100;
+
+        // create a distance scalar related to the depth (z dimension)
+        float distanceScalar = (525 / headPosition.z);
+
+        headPosition.z = 0;
+        head.setPos(headPosition);
+        head.setRadius(distanceScalar * headsize);
+
+    }
+
     private void updateTorsoMember() {
         RectangularPrism torso = (RectangularPrism) bodyMembers.get("TORSO");
         this.positionOffset = getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER).z;
@@ -204,30 +221,18 @@ public class Body {
         float memberHeight = upperMiddlePoint.dist(lowerMiddlePoint);
         float memberWidth = (leftUpperJointPos.dist(rightUpperJointPos) + leftLowerJointPos.dist(rightLowerJointPos)) / 2;
 
-        updatePrism(torso, position, rotationZ, rotationY, memberWidth);
-        defaultDimensionsTorso.x = memberWidth;
-        defaultDimensionsTorso.y = memberHeight;
 
-        torso.setDimensions(defaultDimensionsTorso);
 
-    }
 
-    private void updateHeadMember() {
-        Ball head = (Ball) bodyMembers.get("HEAD");
-        PVector headPosition = getJointPos(SimpleOpenNI.SKEL_HEAD);
-        // a 200 pixel diameter head
-        float headsize = 100;
+        updateTorsoGeometricFigure(torso, position, rotationZ, rotationY, memberWidth, memberHeight);
+        /*defaultDimensionsTorso.x = memberWidth;
+         defaultDimensionsTorso.y = memberHeight;*/
 
-        // create a distance scalar related to the depth (z dimension)
-        float distanceScalar = (525 / headPosition.z);
-
-        headPosition.z = 0;
-        head.setPos(headPosition);
-        head.setRadius(distanceScalar * headsize);
+        //torso.setDimensions(defaultDimensionsTorso);
 
     }
 
-    private void updateLimb(RectangularPrism limb, PVector upperJointPos, PVector lowerJointPos) {
+    private void updateLimbMember(RectangularPrism limb, PVector upperJointPos, PVector lowerJointPos) {
         //Calculate position
         PVector position = new PVector();
         position.set(limb.calculateMiddlePoint(lowerJointPos, upperJointPos));
@@ -258,51 +263,87 @@ public class Body {
         //Calculate Height
         float memberWidth = upperJointPos.dist(lowerJointPos);
 
-        updatePrism(limb, position, rotationZ, rotationY, memberWidth);
+       updateLimbGeometricFigure(limb, position, rotationZ, rotationY, memberWidth);
 
+    }
+
+    private void updateTorsoGeometricFigure(RectangularPrism torso, PVector position, float rotationZ, float rotationY, float memberWidth, float memberHeight) {
+        torso.setPos(position);
+        torso.setRotationZ(rotationZ);
+        torso.setRotationY(rotationY);
+        torso.setDimensionX(memberWidth);
+        torso.setDimensionY(memberHeight);
+        torso.setDimensionZ(rotationY);
+
+    }
+
+    private void updateLimbGeometricFigure(RectangularPrism limb, PVector position, float rotationZ, float rotationY, float memberWidth) {
+         //update features
+        limb.setPos(position);
+        limb.setRotationZ(rotationZ);
+        limb.setRotationY(rotationY);
+        limb.setDimensionX(memberWidth);
+        limb.setDimensionY(defaultHeight);
+        limb.setDimensionZ(defaultDepth);
     }
 
     private void updateLeftForearmMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("LEFT_FOREARM");
-        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW), getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER));
+        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW), getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER));
     }
 
     private void updateLeftArmMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("LEFT_ARM");
-        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_HAND), getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW));
+        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_HAND), getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW));
     }
 
     private void updateRightForearmMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("RIGHT_FOREARM");
-        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW), getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER));
+        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW), getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER));
     }
 
     private void updateRightArmMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("RIGHT_ARM");
-        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_HAND), getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW));
+        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_HAND), getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW));
 
     }
 
     private void updateLeftThighMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("LEFT_THIGH");
-        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE), getJointPos(SimpleOpenNI.SKEL_LEFT_HIP));
+        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE), getJointPos(SimpleOpenNI.SKEL_LEFT_HIP));
 
     }
 
     private void updateLeftLegMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("LEFT_LEG");
-        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_FOOT), getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE));
+        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_FOOT), getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE));
 
     }
 
     private void updateRightThighMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("RIGHT_THIGH");
-        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE), getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP));
+        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE), getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP));
     }
 
     private void updateRightLegMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("RIGHT_LEG");
-        updateLimb(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_FOOT), getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE));
+        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_FOOT), getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE));
+    }
+
+    public float getPositionOffset() {
+        return positionOffset;
+    }
+
+    void addObserverGFBody(GeometricFigure gf) {
+        GeometricFigure currentGeometricFigure;
+
+        Iterator bodyMember = bodyMembers.values().iterator();
+
+        while (bodyMember.hasNext()) {
+            currentGeometricFigure = ((GeometricFigure) bodyMember.next());
+            currentGeometricFigure.addObserver(gf);
+            gf.addObserver(currentGeometricFigure);
+        }
     }
 
     public void circleForAHead() {
@@ -329,29 +370,5 @@ public class Body {
         parent.translate(jointPos_Proj.x, jointPos_Proj.y, 0);
         //_parent.sphere(10);
         parent.popMatrix();
-    }
-
-    public float getPositionOffset() {
-        return positionOffset;
-    }
-
-    private void updatePrism(RectangularPrism torso, PVector position, float rotationZ, float rotationY, float memberWidth) {
-        torso.setPos(position);
-        torso.setRotationZ(rotationZ);
-        torso.setRotationY(rotationY);
-        defaultDimensionsLimb.x = memberWidth;
-        torso.setDimensions(defaultDimensionsLimb);
-    }
-
-    void addObserverGFBody(GeometricFigure gf) {
-        GeometricFigure currentGeometricFigure;
-
-        Iterator bodyMember = bodyMembers.values().iterator();
-
-        while (bodyMember.hasNext()) {
-            currentGeometricFigure = ((GeometricFigure) bodyMember.next());
-            currentGeometricFigure.addObserver(gf);
-            gf.addObserver(currentGeometricFigure);
-        }
     }
 }

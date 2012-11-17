@@ -16,8 +16,8 @@ public class Ball extends GeometricFigure{
     private float radius;
     private boolean isCollided = false;
     
-    public Ball(PApplet parent, String pname, int pcolor){
-        super(pname, pcolor, parent);
+    public Ball(PApplet parent, String pname, int pcolor, float mass){
+        super(pname, pcolor, parent, mass);
     }
     
     public Ball(String name, int pcolor, PVector pos, float r, PVector vel, PApplet parent){
@@ -43,12 +43,10 @@ public class Ball extends GeometricFigure{
     
     @Override
     public void update(float friction){
-        parent.println(posRef);
         vel.x *= friction;
         vel.y *= friction;
         pos.x += vel.x;
         pos.y += vel.y;
-        parent.println(posRef);
     }
     
     @Override
@@ -130,17 +128,19 @@ public class Ball extends GeometricFigure{
             float x1f = x1 * cosine - y1 * sine;
             float y1f = y1 * cosine + x1 * sine;
             
-            //adjust positions to actual screen positions
-            b.setPosX(pos.x + x1f);
-            b.setPosY(pos.y + y1f);
-            pos.x += x0f;
-            pos.y += y0f;
-            
-            //rotate velocities back
-            vel.x = vx0 * cosine - vy0 * sine;
-            vel.y = vy0 * cosine + vx0 * sine;
-            b.setVelX( vx1 * cosine - vy1 * sine );
-            b.setVelY( vy1 * cosine + vx1 * sine );
+            if(!b.getBelongsUser()){
+                //adjust positions to actual screen positions
+                b.setPosX(pos.x + x1f);
+                b.setPosY(pos.y + y1f);
+                pos.x += x0f;
+                pos.y += y0f;
+
+                //rotate velocities back
+                vel.x = vx0 * cosine - vy0 * sine;
+                vel.y = vy0 * cosine + vx0 * sine;
+                b.setVelX( vx1 * cosine - vy1 * sine );
+                b.setVelY( vy1 * cosine + vx1 * sine );
+            }
         }
     }
     
@@ -155,20 +155,22 @@ public class Ball extends GeometricFigure{
             isCollided = true;
             float angle = parent.atan2(dy,dx);
             
-            //collision reaction
-            if(angle >= -parent.PI/4 && angle <= parent.PI/4) {
-                float vxTotal = vel.x - p.getVel().x;
-                vel.x = ((getMass() - p.getMass()) * vel.x + 2 * p.getMass() * p.getVel().x) / (getMass() + p.getMass());
-                p.setVelX( vxTotal  + vel.x );
-                pos.x += vel.x;
-                p.setPosX( p.getPos().x + p.getVel().x );
-            } else {
-                float vyTotal = vel.y - p.getVel().y;
-                vel.y = ((getMass() - p.getMass()) * vel.y + 2 * p.getMass() * p.getVel().y) / (getMass() + p.getMass());
-                p.setVelY( vyTotal  + vel.y );
-                pos.y += vel.y;
-                p.setPosY( p.getPos().y + p.getVel().y );            
-            }  
+            if(!p.getBelongsUser()){
+                //collision reaction
+                if(angle >= -parent.PI/4 && angle <= parent.PI/4) {
+                    float vxTotal = vel.x - p.getVel().x;
+                    vel.x = ((getMass() - p.getMass()) * vel.x + 2 * p.getMass() * p.getVel().x) / (getMass() + p.getMass());
+                    p.setVelX( vxTotal  + vel.x );
+                    pos.x += vel.x;
+                    p.setPosX( p.getPos().x + p.getVel().x );
+                } else {
+                    float vyTotal = vel.y - p.getVel().y;
+                    vel.y = ((getMass() - p.getMass()) * vel.y + 2 * p.getMass() * p.getVel().y) / (getMass() + p.getMass());
+                    p.setVelY( vyTotal  + vel.y );
+                    pos.y += vel.y;
+                    p.setPosY( p.getPos().y + p.getVel().y );            
+                }  
+            }
         } 
     }
 

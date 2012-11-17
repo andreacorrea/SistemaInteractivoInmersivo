@@ -40,7 +40,7 @@ public class PruebaCuerpoHumano extends PApplet {
 
     @Override
     public void draw() {
-        background(200);
+        //background(200);
         /*rotateX(rotX);
         rotateY(rotY);*/
         // update the camera
@@ -52,7 +52,7 @@ public class PruebaCuerpoHumano extends PApplet {
         // draw depth image
         //image(context.depthImage(), 0, 0);
 
-        pushStyle();
+        /*pushStyle();
         strokeWeight(10);
         stroke(0, 0, 255);
         //eje horizontal
@@ -63,9 +63,11 @@ public class PruebaCuerpoHumano extends PApplet {
         //eje Z
         stroke(255, 200, 0);
         line(width / 2, height / 2, 200, width / 2, height / 2, -200);
-        popStyle();
+        popStyle();*/
         
         if(scene.hasElements()){
+            scene.paint();
+        }else{
             // draw scene Image
             image(context.sceneImage(), 0, 0);
         }

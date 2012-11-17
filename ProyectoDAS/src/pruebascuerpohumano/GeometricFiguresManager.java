@@ -9,7 +9,7 @@ public class GeometricFiguresManager {
 
     private Map<Integer, GeometricFigure> geometricFigures;
     private Scene scene;
-    protected float friction = 1f;
+    protected float friction = 0.95f;
 
     public GeometricFiguresManager(Scene scene) {
         geometricFigures = new HashMap<Integer, GeometricFigure>();

@@ -12,18 +12,23 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
     protected String name;
     protected int color;
     protected float mass;
-    protected PVector pos;
-    protected PVector vel;
+    protected PVector pos = new PVector();
+    protected PVector vel = new PVector();
     protected PVector posRef=new PVector(0,0,0);
     protected float deltaPosMax = 10;
     protected Map<String, Object>observers;
+    protected boolean belongsUser=false;
     
-    public GeometricFigure(String name, int color, PApplet parent){
+    public GeometricFigure(String name, int color,PApplet parent, float mass){
+        this.parent = parent;
         this.name   = name;
         this.color  = color;
-        this.parent = parent;
-        observers = new HashMap<String, Object>();
+        this.mass = mass;
+        this.observers = new HashMap<String, Object>();
+        this.belongsUser=true;
     }
+
+    
     
     public GeometricFigure(String name, int color, PVector pos, 
                            float m, PVector vel, PApplet parent) {
@@ -34,7 +39,8 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
         this.posRef = new PVector(pos.x,pos.y, pos.z);
         this.mass    = m;
         this.vel     = vel;
-        observers = new HashMap<String, Object>();
+        this.observers = new HashMap<String, Object>();
+        this.belongsUser = false;
     }
 
     abstract void paint();
@@ -42,6 +48,13 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
     abstract void checkBoundaryCollision();
     abstract void checkCollision(Ball b);
     abstract void checkCollision(RectangularPrism p);
+    
+    public void calculateVel(PVector finalPos){
+        PVector auxFinalPos= new PVector();
+        auxFinalPos.set(finalPos);
+        auxFinalPos.sub(this.pos);
+        this.vel = auxFinalPos;
+    }
     
     void checkCollision(GeometricFigure fig) {
         if (fig instanceof Ball){
@@ -113,6 +126,7 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
      * @param pos the pos to set
      */
     public void setPos(PVector pos) {
+        calculateVel(pos);
         this.pos = pos;
     }
     
@@ -155,10 +169,10 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
  
     protected void checkChangeState() {
         checkBoundaryCollision();
-        if(posRef.dist(pos) >= deltaPosMax){
-            posRef.set(pos);
+        //if(posRef.dist(pos) >= deltaPosMax){
+            //posRef.set(pos);
             notifyAllObservers();
-        }
+        //}
     }
 
     private void notifyAllObservers() {
@@ -173,6 +187,10 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
 
     public void inform(GeometricFigure gf){
         checkCollision(gf);
+    }
+    
+    public boolean getBelongsUser() {
+        return belongsUser;
     }
     
 }
