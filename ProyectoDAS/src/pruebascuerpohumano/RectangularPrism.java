@@ -4,6 +4,10 @@
  */
 package pruebascuerpohumano;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -28,7 +32,7 @@ public class RectangularPrism extends GeometricFigure {
 
     @Override
     void paint() {
-        checkChangeState();
+        //checkChangeState();
         parent.pushMatrix();
         parent.stroke(0,0,0);
         parent.fill(color);
@@ -73,11 +77,12 @@ public class RectangularPrism extends GeometricFigure {
         }
     }
     
+    @Override
     void checkCollision(Ball b){
         float dx = parent.abs( b.getPos().x - pos.x );
         float dy = parent.abs( b.getPos().y - pos.y );
-        float dxmin = b.getRadius() + dimensions.x/2;
-        float dymin = b.getRadius() + dimensions.y/2;
+        float dxmin = b.getRadius() + getDimensions().x/2;
+        float dymin = b.getRadius() + getDimensions().y/2;
         
         if(dx < dxmin && dy < dymin){
             //this._color = _parent.color(0,255,0);
@@ -101,11 +106,12 @@ public class RectangularPrism extends GeometricFigure {
         } 
     }
     
+    @Override
     void checkCollision(RectangularPrism p){
         float dx = parent.abs( p.getPos().x - pos.x );
         float dy = parent.abs( p.getPos().y - pos.y );
-        float dxmin = p.getDimensions().x/2 + dimensions.x/2;
-        float dymin = p.getDimensions().y/2 + dimensions.y/2;
+        float dxmin = p.getDimensions().x/2 + getDimensions().x/2;
+        float dymin = p.getDimensions().y/2 + getDimensions().y/2;
         
         if(dx < dxmin && dy < dymin){
             //this._color = _parent.color(0,255,0);
@@ -127,6 +133,29 @@ public class RectangularPrism extends GeometricFigure {
                 p.setPosY( p.getPos().y + p.getVel().y );            
             }  
         } 
+    }
+    
+    @Override
+    public GeometricFigure cloneFig(){
+        PVector cvel = new PVector(vel.x, vel.y, vel.z);
+        PVector cpos = new PVector(pos.x, pos.y, pos.z);
+        PVector cPosRef = new PVector(getPosRef().x, getPosRef().y, getPosRef().y);
+        PVector cDimensions = new PVector(getDimensions().x, getDimensions().y, getDimensions().z);
+        Map<String,Object> cObservers = new HashMap<String,Object>();
+        cObservers.putAll(getObservers());
+                
+        GeometricFigure clonedFig = null;
+        try {
+            clonedFig = (GeometricFigure)super.clone();
+            clonedFig.setVel(cvel);
+            clonedFig.setPos(cpos);
+            clonedFig.setPosRef(cPosRef);
+            ((RectangularPrism)clonedFig).setDimensions(cDimensions);
+            clonedFig.setObservers(cObservers);
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return clonedFig;
     }
     
     public void setDimensionX(float y) {

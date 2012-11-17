@@ -6,7 +6,7 @@ import java.util.Map;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-abstract class GeometricFigure implements ObservableGeometricFigure {
+abstract class GeometricFigure implements ObservableGeometricFigure, Cloneable{
 
     protected PApplet parent;
     protected String name;
@@ -14,9 +14,9 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
     protected float mass;
     protected PVector pos;
     protected PVector vel;
-    protected PVector posRef=new PVector(0,0,0);
+    private PVector posRef=new PVector(0,0,0);
     protected float deltaPosMax = 10;
-    protected Map<String, Object>observers;
+    private Map<String, Object>observers;
     
     public GeometricFigure(String name, int color, PApplet parent){
         this.name   = name;
@@ -42,6 +42,7 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
     abstract void checkBoundaryCollision();
     abstract void checkCollision(Ball b);
     abstract void checkCollision(RectangularPrism p);
+    abstract GeometricFigure cloneFig();
     
     void checkCollision(GeometricFigure fig) {
         if (fig instanceof Ball){
@@ -58,8 +59,8 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
         auxP1.div(2);
         auxP2.add(auxP1);
         return auxP2;
-    }  
-
+    } 
+    
     /**
      * @return the _name
      */
@@ -145,7 +146,7 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
 
     @Override
     public void addObserver(Object obj) {
-        observers.put(((GeometricFigure)obj).getName(), obj);
+        getObservers().put(((GeometricFigure)obj).getName(), obj);
     }
 
     @Override
@@ -155,15 +156,15 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
  
     protected void checkChangeState() {
         checkBoundaryCollision();
-        if(posRef.dist(pos) >= deltaPosMax){
-            posRef.set(pos);
+        if(getPosRef().dist(pos) >= deltaPosMax){
+            getPosRef().set(pos);
             notifyAllObservers();
         }
     }
 
     private void notifyAllObservers() {
         GeometricFigure currentObserver;
-        Iterator observer = observers.values().iterator();
+        Iterator observer = getObservers().values().iterator();
 
         while (observer.hasNext()) {
             currentObserver = ((GeometricFigure) observer.next());
@@ -173,6 +174,34 @@ abstract class GeometricFigure implements ObservableGeometricFigure {
 
     public void inform(GeometricFigure gf){
         checkCollision(gf);
+    }
+
+    /**
+     * @return the posRef
+     */
+    public PVector getPosRef() {
+        return posRef;
+    }
+
+    /**
+     * @param posRef the posRef to set
+     */
+    public void setPosRef(PVector posRef) {
+        this.posRef = posRef;
+    }
+
+    /**
+     * @return the observers
+     */
+    public Map<String, Object> getObservers() {
+        return observers;
+    }
+
+    /**
+     * @param observers the observers to set
+     */
+    public void setObservers(Map<String, Object> observers) {
+        this.observers = observers;
     }
     
 }

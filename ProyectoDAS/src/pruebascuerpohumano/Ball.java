@@ -4,6 +4,10 @@
  */
 package pruebascuerpohumano;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -43,12 +47,10 @@ public class Ball extends GeometricFigure{
     
     @Override
     public void update(float friction){
-        parent.println(posRef);
         vel.x *= friction;
         vel.y *= friction;
         pos.x += vel.x;
         pos.y += vel.y;
-        parent.println(posRef);
     }
     
     @Override
@@ -144,7 +146,9 @@ public class Ball extends GeometricFigure{
         }
     }
     
+    @Override
     void checkCollision(RectangularPrism p){
+        @SuppressWarnings("static-access")
         float dx = parent.abs( p.getPos().x - pos.x );
         float dy = parent.abs( p.getPos().y - pos.y );
         float dxmin = radius + p.getDimensions().x/2;
@@ -170,6 +174,27 @@ public class Ball extends GeometricFigure{
                 p.setPosY( p.getPos().y + p.getVel().y );            
             }  
         } 
+    }
+    
+    @Override
+    public GeometricFigure cloneFig(){
+        PVector cvel = new PVector(vel.x, vel.y, vel.z);
+        PVector cpos = new PVector(pos.x, pos.y, pos.z);
+        PVector cPosRef = new PVector(getPosRef().x, getPosRef().y, getPosRef().y);
+        Map<String,Object> cObservers = new HashMap<String,Object>();
+        cObservers.putAll(getObservers());
+                
+        GeometricFigure clonedFig = null;
+        try {
+            clonedFig = (GeometricFigure)super.clone();
+            clonedFig.setVel(cvel);
+            clonedFig.setPos(cpos);
+            clonedFig.setPosRef(cPosRef);
+            clonedFig.setObservers(cObservers);
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return clonedFig;
     }
 
     /**
