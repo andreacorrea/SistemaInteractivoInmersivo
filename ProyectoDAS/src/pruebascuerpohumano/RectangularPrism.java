@@ -76,84 +76,48 @@ public class RectangularPrism extends GeometricFigure {
     }
 
     @Override
-    void checkCollision(Ball b){
-        float dx = parent.abs( b.getPos().x - pos.x );
-        float dy = parent.abs( b.getPos().y - pos.y );
+    boolean checkCollision(Ball b) {
+        float dx = parent.abs(b.getPos().x - pos.x);
+        float dy = parent.abs(b.getPos().y - pos.y);
         float dxmin = b.getRadius() + dimensions.x / 2;
         float dymin = b.getRadius() + dimensions.y / 2;
-        
-        if(dx < dxmin && dy < dymin){
-            //this._color = _parent.color(0,255,0);
-            isCollided = true;
-            float angle = parent.atan2(dy, dx);
 
-            if (!b.getBelongsUser()) {
-                //collision reaction
-                if (angle >= -parent.PI / 4 && angle <= parent.PI / 4) {
-                    float vxTotal = vel.x - b.getVel().x;
-                    vel.x = ((getMass() - b.getMass()) * vel.x + 2 * b.getMass() * b.getVel().x) / (getMass() + b.getMass());
-                    b.setVelX(vxTotal + vel.x);
-                    pos.x += vel.x;
-                    b.setPosX(b.getPos().x + b.getVel().x);
-                } else {
-                    float vyTotal = vel.y - b.getVel().y;
-                    vel.y = ((getMass() - b.getMass()) * vel.y + 2 * b.getMass() * b.getVel().y) / (getMass() + b.getMass());
-                    b.setVelY(vyTotal + vel.y);
-                    pos.y += vel.y;
-                    b.setPosY(b.getPos().y + b.getVel().y);
-                }
-            }
-        }
+        return dx < dxmin && dy < dymin;
+        /*if(dx < dxmin && dy < dymin){
+         bounceBall(dy, dx, b);
+         }*/
     }
 
-	@Override
-    void checkCollision(RectangularPrism p) {
+    @Override
+    boolean checkCollision(RectangularPrism p) {
         float dx = parent.abs(p.getPos().x - pos.x);
         float dy = parent.abs(p.getPos().y - pos.y);
         float dxmin = p.getDimensions().x / 2 + dimensions.x / 2;
         float dymin = p.getDimensions().y / 2 + dimensions.y / 2;
 
-        if (dx < dxmin && dy < dymin) {
-            //this._color = _parent.color(0,255,0);
-            isCollided = true;
-            float angle = parent.atan2(dy, dx);
+        return dx < dxmin && dy < dymin;
+        
+        /*if (dx < dxmin && dy < dymin) {
+            bounceRectangularPrism(dy, dx, p);
+        }*/
+    }
 
-            if (!p.getBelongsUser()) {
-                //collision reaction
-                if (angle >= -parent.PI / 4 && angle <= parent.PI / 4) {
-                    float vxTotal = vel.x - p.getVel().x;
-                    vel.x = ((getMass() - p.getMass()) * vel.x + 2 * p.getMass() * p.getVel().x) / (getMass() + p.getMass());
-                    p.setVelX(vxTotal + vel.x);
-                    pos.x += vel.x;
-                    p.setPosX(p.getPos().x + p.getVel().x);
-                } else {
-                    float vyTotal = vel.y - p.getVel().y;
-                    vel.y = ((getMass() - p.getMass()) * vel.y + 2 * p.getMass() * p.getVel().y) / (getMass() + p.getMass());
-                    p.setVelY(vyTotal + vel.y);
-                    pos.y += vel.y;
-                    p.setPosY(p.getPos().y + p.getVel().y);
-                }
-
-            }
-        }
-        }
-    
     @Override
-    public GeometricFigure cloneFig(){
+    public GeometricFigure cloneFig() {
         PVector cvel = new PVector(vel.x, vel.y, vel.z);
         PVector cpos = new PVector(pos.x, pos.y, pos.z);
         PVector cPosRef = new PVector(getPosRef().x, getPosRef().y, getPosRef().y);
         PVector cDimensions = new PVector(getDimensions().x, getDimensions().y, getDimensions().z);
-        Map<String,Object> cObservers = new HashMap<String,Object>();
+        Map<String, Object> cObservers = new HashMap<String, Object>();
         cObservers.putAll(getObservers());
-                
+
         GeometricFigure clonedFig = null;
         try {
-            clonedFig = (GeometricFigure)super.clone();
+            clonedFig = (GeometricFigure) super.clone();
             clonedFig.setVel(cvel);
             clonedFig.setPos(cpos);
             clonedFig.setPosRef(cPosRef);
-            ((RectangularPrism)clonedFig).setDimensions(cDimensions);
+            ((RectangularPrism) clonedFig).setDimensions(cDimensions);
             clonedFig.setObservers(cObservers);
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
@@ -193,6 +157,67 @@ public class RectangularPrism extends GeometricFigure {
      */
     public void setDimensions(PVector dimensions) {
         this.dimensions = dimensions;
+    }
+    
+    @Override
+    public void bounce(GeometricFigure gf){
+        if (gf instanceof Ball) {
+            bounceBall((Ball)gf);
+                
+        } else {
+            bounceRectangularPrism((RectangularPrism) gf);
+        }
+    }
+
+    public void bounceBall(Ball b) {
+        //this._color = _parent.color(0,255,0);
+        float dx = parent.abs(b.getPos().x - pos.x);
+        float dy = parent.abs(b.getPos().y - pos.y);
+        isCollided = true;
+        float angle = parent.atan2(dy, dx);
+
+        if (!b.getBelongsUser()) {
+            //collision reaction
+            if (angle >= -parent.PI / 4 && angle <= parent.PI / 4) {
+                float vxTotal = vel.x - b.getVel().x;
+                vel.x = ((getMass() - b.getMass()) * vel.x + 2 * b.getMass() * b.getVel().x) / (getMass() + b.getMass());
+                b.setVelX(vxTotal + vel.x);
+                pos.x += vel.x;
+                b.setPosX(b.getPos().x + b.getVel().x);
+            } else {
+                float vyTotal = vel.y - b.getVel().y;
+                vel.y = ((getMass() - b.getMass()) * vel.y + 2 * b.getMass() * b.getVel().y) / (getMass() + b.getMass());
+                b.setVelY(vyTotal + vel.y);
+                pos.y += vel.y;
+                b.setPosY(b.getPos().y + b.getVel().y);
+            }
+        }
+    }
+
+    public void bounceRectangularPrism(RectangularPrism p) {
+        //this._color = _parent.color(0,255,0);
+        float dx = parent.abs(p.getPos().x - pos.x);
+        float dy = parent.abs(p.getPos().y - pos.y);
+        isCollided = true;
+        float angle = parent.atan2(dy, dx);
+
+        if (!p.getBelongsUser()) {
+            //collision reaction
+            if (angle >= -parent.PI / 4 && angle <= parent.PI / 4) {
+                float vxTotal = vel.x - p.getVel().x;
+                vel.x = ((getMass() - p.getMass()) * vel.x + 2 * p.getMass() * p.getVel().x) / (getMass() + p.getMass());
+                p.setVelX(vxTotal + vel.x);
+                pos.x += vel.x;
+                p.setPosX(p.getPos().x + p.getVel().x);
+            } else {
+                float vyTotal = vel.y - p.getVel().y;
+                vel.y = ((getMass() - p.getMass()) * vel.y + 2 * p.getMass() * p.getVel().y) / (getMass() + p.getMass());
+                p.setVelY(vyTotal + vel.y);
+                pos.y += vel.y;
+                p.setPosY(p.getPos().y + p.getVel().y);
+            }
+
+        }
     }
 
 }

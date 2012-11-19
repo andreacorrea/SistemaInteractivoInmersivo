@@ -13,6 +13,8 @@ public class Scene {
     private UsersManager usersManager;
     private GeometricFiguresManager geometricFiguresManager;
     
+    private Command command = new BounceCommand();
+    
     private Scene(PApplet pApplet){
         this.pApplet = pApplet;
     }
@@ -31,7 +33,7 @@ public class Scene {
         this.context.setMirror(true);
         // setup the callback helper class
         usersManager = UsersManager.getInstance(pApplet, this.context, this);
-        
+        usersManager.setCommand(command);
         // enable depthMap generation 
         CheckKinect.checkDepthCam(pApplet, this.context);
 
@@ -46,6 +48,7 @@ public class Scene {
     
     public void activateGeometricFiguresManager(){
         geometricFiguresManager = GeometricFiguresManager.getInstance(this);
+        geometricFiguresManager.setCommand(command);
     }
 
     public UsersManager getUsersManager() {
@@ -98,6 +101,20 @@ public class Scene {
         if(hasGeometricFigures()){
             geometricFiguresManager.addObserverUserMap(user);
         }
+    }
+
+    public void setCommand(Command command) {
+        this.command = command;
+        if(hasElements()){
+            if(hasUsers()){
+                this.usersManager.setCommand(command);
+            }
+            if(hasGeometricFigures()){
+                this.geometricFiguresManager.setCommand(command);
+            }
+        }
+        
+        
     }
 
 }

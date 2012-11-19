@@ -16,6 +16,7 @@ public class UsersManager {
     private Scene scene;
     private PApplet parent;
     private static UsersManager instance = null;
+    private Command command;
 
     private UsersManager(PApplet p, SimpleOpenNI context, Scene scene) {
         this.parent = p;
@@ -137,7 +138,7 @@ public class UsersManager {
             //currentUser.getBody().drawSkeletonLines();
             //currentUser.getBody().drawJoints();
             currentUser.getBody().update();
-            currentUser.getBody().paintSkeletonMembers();
+            currentUser.getBody().paintSkeletonMembers(command);
             //currentUser.getBody().circleForAHead();
         }
     }
@@ -152,4 +153,9 @@ public class UsersManager {
         }
     }
 
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    
 }

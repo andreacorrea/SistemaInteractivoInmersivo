@@ -9,8 +9,9 @@ public class GeometricFiguresManager {
 
     private Map<Integer, GeometricFigure> geometricFigures;
     private Scene scene;
-    protected float friction = 0.95f;
+    protected float friction = 1f;
     private static GeometricFiguresManager instance = null;
+    private Command command;
 
     private GeometricFiguresManager(Scene scene) {
         geometricFigures = new HashMap<Integer, GeometricFigure>();
@@ -73,7 +74,12 @@ public class GeometricFiguresManager {
         while (geometricFigure.hasNext()) {
             currentGeometricFigure = ((GeometricFigure) geometricFigure.next());
             currentGeometricFigure.update(friction);
+            currentGeometricFigure.checkChangeState(command);
             currentGeometricFigure.paint();
         }
+    }
+
+    public void setCommand(Command command) {
+        this.command = command;
     }
 }

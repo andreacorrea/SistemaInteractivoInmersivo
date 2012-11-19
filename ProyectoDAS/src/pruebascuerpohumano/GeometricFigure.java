@@ -6,7 +6,7 @@ import java.util.Map;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-abstract class GeometricFigure implements ObservableGeometricFigure, Cloneable{
+abstract class GeometricFigure implements ObservableGeometricFigure, Cloneable {
 
     protected PApplet parent;
     protected String name;
@@ -14,58 +14,66 @@ abstract class GeometricFigure implements ObservableGeometricFigure, Cloneable{
     protected float mass;
     protected PVector pos = new PVector();
     protected PVector vel = new PVector();
-    protected PVector posRef=new PVector(0,0,0);
+    protected PVector posRef = new PVector(0, 0, 0);
     protected float deltaPosMax = 10;
-    protected Map<String, Object>observers;
-    protected boolean belongsUser=false;
-
+    protected Map<String, Object> observers;
+    protected boolean belongsUser = false;
     
-    public GeometricFigure(String name, int color,PApplet parent, float mass){
+    
+    
+
+    public GeometricFigure(String name, int color, PApplet parent, float mass) {
         this.parent = parent;
-        this.name   = name;
-        this.color  = color;
+        this.name = name;
+        this.color = color;
         this.mass = mass;
         this.observers = new HashMap<String, Object>();
-        this.belongsUser=true;
+        this.belongsUser = true;
     }
 
-    
-    
-    public GeometricFigure(String name, int color, PVector pos, 
-                           float m, PVector vel, PApplet parent) {
+    public GeometricFigure(String name, int color, PVector pos,
+            float m, PVector vel, PApplet parent) {
         this.parent = parent;
-        this.name   = name;
-        this.color  = color;
-        this.pos     = pos;
-        this.posRef = new PVector(pos.x,pos.y, pos.z);
-        this.mass    = m;
-        this.vel     = vel;
+        this.name = name;
+        this.color = color;
+        this.pos = pos;
+        this.posRef = new PVector(pos.x, pos.y, pos.z);
+        this.mass = m;
+        this.vel = vel;
         this.observers = new HashMap<String, Object>();
         this.belongsUser = false;
     }
 
     abstract void paint();
+
     abstract void update(float friction);
+
     abstract void checkBoundaryCollision();
-    abstract void checkCollision(Ball b);
-    abstract void checkCollision(RectangularPrism p);
-    abstract GeometricFigure cloneFig();
+
+    abstract boolean checkCollision(Ball b);
+
+    abstract boolean checkCollision(RectangularPrism p);
     
-    public void calculateVel(PVector finalPos){
-        PVector auxFinalPos= new PVector();
+    abstract void bounce(GeometricFigure gf);
+
+    abstract GeometricFigure cloneFig();
+
+    public void calculateVel(PVector finalPos) {
+        PVector auxFinalPos = new PVector();
         auxFinalPos.set(finalPos);
         auxFinalPos.sub(this.pos);
         this.vel = auxFinalPos;
     }
-    
-    void checkCollision(GeometricFigure fig) {
-        if (fig instanceof Ball){
-            checkCollision((Ball)fig);
+
+    boolean checkCollision(GeometricFigure fig) {
+        if (fig instanceof Ball) {
+            return checkCollision((Ball) fig);
+                
         } else {
-            checkCollision((RectangularPrism)fig);
+            return checkCollision((RectangularPrism) fig);
         }
     }
-    
+
     public PVector calculateMiddlePoint(PVector p1, PVector p2) {
         PVector auxP1 = p1.get();
         PVector auxP2 = p2.get();
@@ -73,8 +81,8 @@ abstract class GeometricFigure implements ObservableGeometricFigure, Cloneable{
         auxP1.div(2);
         auxP2.add(auxP1);
         return auxP2;
-    } 
-    
+    }
+
     /**
      * @return the _name
      */
@@ -131,12 +139,12 @@ abstract class GeometricFigure implements ObservableGeometricFigure, Cloneable{
         calculateVel(pos);
         this.pos = pos;
     }
-    
-    public void setPosX(float x){
+
+    public void setPosX(float x) {
         this.pos.x = x;
     }
-    
-    public void setPosY(float y){
+
+    public void setPosY(float y) {
         this.pos.y = y;
     }
 
@@ -150,46 +158,50 @@ abstract class GeometricFigure implements ObservableGeometricFigure, Cloneable{
     public void setVel(PVector vel) {
         this.vel = vel;
     }
-    
-    public void setVelX(float vx){
+
+    public void setVelX(float vx) {
         this.vel.x = vx;
     }
-    
-    public void setVelY(float vy){
+
+    public void setVelY(float vy) {
         this.vel.y = vy;
     }
 
     @Override
     public void addObserver(Object obj) {
-        getObservers().put(((GeometricFigure)obj).getName(), obj);
+        getObservers().put(((GeometricFigure) obj).getName(), obj);
     }
 
     @Override
     public void removeObserver(Object obj) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
- 
-    protected void checkChangeState() {
-        checkBoundaryCollision();
 
+    protected void checkChangeState(Command command) {
+        checkBoundaryCollision();
         //if(posRef.dist(pos) >= deltaPosMax){
-            //posRef.set(pos);
-            notifyAllObservers();
+        //posRef.set(pos);
+        notifyAllObservers(command);
         //}
     }
 
-    private void notifyAllObservers() {
+    private void notifyAllObservers(Command command) {
         GeometricFigure currentObserver;
         Iterator observer = getObservers().values().iterator();
 
         while (observer.hasNext()) {
             currentObserver = ((GeometricFigure) observer.next());
-            currentObserver.inform(this);
+            currentObserver.inform(this, command);
         }
     }
 
-    public void inform(GeometricFigure gf){
-        checkCollision(gf);
+    public void inform(GeometricFigure gf, Command command) {
+        if(checkCollision(gf) && command != null){
+            command.setReceiver(this);
+            command.setReceived(gf);
+            command.execute();
+        }
+        
     }
 
     /**
@@ -219,9 +231,8 @@ abstract class GeometricFigure implements ObservableGeometricFigure, Cloneable{
     public void setObservers(Map<String, Object> observers) {
         this.observers = observers;
     }
-    
+
     public boolean getBelongsUser() {
         return belongsUser;
     }
-    
 }

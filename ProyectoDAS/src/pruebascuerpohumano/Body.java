@@ -19,7 +19,7 @@ public class Body {
     private float positionOffset;
     private float defaultHeight = 20;
     private float defaultDepth = 20;
-    private float defaultMass = 5;
+    private float defaultMass = 1;
     
     BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy;
     
@@ -115,13 +115,14 @@ public class Body {
         parent.popStyle();
     }
 
-    public void paintSkeletonMembers() {
+    public void paintSkeletonMembers(Command command) {
 
         GeometricFigure currentMember;
         Iterator member = bodyMembers.values().iterator();
 
         while (member.hasNext()) {
             currentMember = ((GeometricFigure) member.next());
+            currentMember.checkChangeState(command);
             currentMember.paint();
         }
     }
