@@ -15,7 +15,7 @@ public class PruebaUsuarioInteractivo extends PApplet{
         frameRate(15);
         context = new SimpleOpenNI(this);
         
-        scene = new Scene(this);
+        scene = Scene.getInstance(this);
         scene.activateGeometricFiguresManager();
         scene.activateUsersManager(context);
         

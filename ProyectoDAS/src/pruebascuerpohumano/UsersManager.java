@@ -15,12 +15,24 @@ public class UsersManager {
     private Map<Integer, User> users;
     private Scene scene;
     private PApplet parent;
+    private static UsersManager instance = null;
 
-    public UsersManager(PApplet p, SimpleOpenNI context, Scene scene) {
+    private UsersManager(PApplet p, SimpleOpenNI context, Scene scene) {
         this.parent = p;
         this.context = context;
         this.scene = scene;
         users = new HashMap<Integer, User>();
+    }
+    
+    public static UsersManager getInstance(PApplet p, SimpleOpenNI context, Scene scene){
+        if(instance == null){
+            instance = new UsersManager(p, context, scene);
+        } else {
+            instance.parent = p;
+            instance.context = context;
+            instance.scene = scene;
+        }
+        return instance;
     }
 
     // when a person ('user') enters the field of view
@@ -139,4 +151,5 @@ public class UsersManager {
             currentUser.getBody().addObserverGFBody(gf);
         }
     }
+
 }

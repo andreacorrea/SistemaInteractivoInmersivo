@@ -5,23 +5,32 @@ import processing.core.PApplet;
 
 public class Scene {
     
-    PApplet pApplet;
-    SimpleOpenNI context;
-    
+    private PApplet pApplet;
+    private SimpleOpenNI context;
+    private static Scene instance = null;   
     
     // this object deals with the user callbacks
-    UsersManager usersManager;
-    GeometricFiguresManager geometricFiguresManager;
+    private UsersManager usersManager;
+    private GeometricFiguresManager geometricFiguresManager;
     
-    public Scene(PApplet pApplet){
+    private Scene(PApplet pApplet){
         this.pApplet = pApplet;
+    }
+    
+    public static Scene getInstance(PApplet p){
+        if(instance == null){
+            instance = new Scene(p);
+        } else {
+            instance.pApplet = p;
+        }
+        return instance;
     }
     
     public void activateUsersManager(SimpleOpenNI context){
         this.context = context;
         this.context.setMirror(true);
         // setup the callback helper class
-        usersManager = new UsersManager(pApplet, this.context, this);
+        usersManager = UsersManager.getInstance(pApplet, this.context, this);
         
         // enable depthMap generation 
         CheckKinect.checkDepthCam(pApplet, this.context);
@@ -36,7 +45,7 @@ public class Scene {
     }
     
     public void activateGeometricFiguresManager(){
-        geometricFiguresManager = new GeometricFiguresManager(this);
+        geometricFiguresManager = GeometricFiguresManager.getInstance(this);
     }
 
     public UsersManager getUsersManager() {

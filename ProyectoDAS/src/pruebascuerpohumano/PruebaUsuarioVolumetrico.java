@@ -28,7 +28,7 @@ public class PruebaUsuarioVolumetrico extends PApplet {
 
         context = new SimpleOpenNI(this);
 
-        scene = new Scene(this);
+        scene = Scene.getInstance(this);
 
         scene.activateUsersManager(context);
         

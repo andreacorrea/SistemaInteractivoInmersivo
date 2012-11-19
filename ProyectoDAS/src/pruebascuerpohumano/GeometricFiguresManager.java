@@ -10,10 +10,20 @@ public class GeometricFiguresManager {
     private Map<Integer, GeometricFigure> geometricFigures;
     private Scene scene;
     protected float friction = 0.95f;
+    private static GeometricFiguresManager instance = null;
 
-    public GeometricFiguresManager(Scene scene) {
+    private GeometricFiguresManager(Scene scene) {
         geometricFigures = new HashMap<Integer, GeometricFigure>();
         this.scene = scene;
+    }
+    
+    public static GeometricFiguresManager getInstance(Scene scene) {
+        if(instance == null){
+            instance = new GeometricFiguresManager(scene);
+        } else {
+            instance.scene = scene;
+        }
+        return instance;
     }
 
     public void addGeometricFigure(GeometricFigure gf) {
