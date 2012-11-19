@@ -19,18 +19,18 @@ public class Scene {
     
     public void activateUsersManager(SimpleOpenNI context){
         this.context = context;
-        context.setMirror(true);
+        this.context.setMirror(true);
         // setup the callback helper class
-        usersManager = new UsersManager(pApplet, context, this);
+        usersManager = new UsersManager(pApplet, this.context, this);
         
         // enable depthMap generation 
-        CheckKinect.checkDepthCam(pApplet, context);
+        CheckKinect.checkDepthCam(pApplet, this.context);
 
         // enable scene analyser
-        CheckKinect.checkScene(pApplet, context);
+        CheckKinect.checkScene(pApplet, this.context);
         
         // enable skeleton generation for all joints, direct all callback to the helper class
-        context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL, usersManager);
+        this.context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL, usersManager);
         
         
     }

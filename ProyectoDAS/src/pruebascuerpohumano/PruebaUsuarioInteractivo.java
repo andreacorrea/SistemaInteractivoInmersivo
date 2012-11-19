@@ -21,7 +21,7 @@ public class PruebaUsuarioInteractivo extends PApplet{
         
         float speedX= 3;
         float positionX;
-        float radio=7;
+        float radio=15;
         for(int i=0; i< 2; i++){
             //speed.mult(i+1);
             positionX = width/5*i;
@@ -40,7 +40,7 @@ public class PruebaUsuarioInteractivo extends PApplet{
     
     @Override
     public void draw(){
-        background(color(100));
+        background(color(255, 0, 0));
         // update the camera
         context.update();
         scene.paint();

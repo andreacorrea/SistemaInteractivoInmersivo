@@ -21,6 +21,7 @@ public class Body {
     private float defaultDepth = 20;
     private float defaultMass = 5;
     
+    BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy;
     
 
     public Body(PApplet p, User user, int bodyColor) {
@@ -29,12 +30,13 @@ public class Body {
         this.context = user.getContext();
         this.bodyColor = bodyColor;
         this.bodyMembers = new HashMap<String, GeometricFigure>();
-
+        this.buildingSkeletonVolumeStrategy = new CubesSkeletonVolume();
+        //this.buildingSkeletonVolumeStrategy = new SpheresSkeletonVolume();
         createSkeleton();
     }
 
     public void createSkeleton() {
-        bodyMembers.put("HEAD", new Ball(parent, "HEAD", bodyColor, defaultMass));
+        /*bodyMembers.put("HEAD", new Ball(parent, "HEAD", bodyColor, defaultMass));
         bodyMembers.put("TORSO", new RectangularPrism(parent, "TORSO", bodyColor, defaultMass));
         bodyMembers.put("LEFT_FOREARM", new RectangularPrism(parent, "LEFT_FOREARM", bodyColor, defaultMass));
         bodyMembers.put("LEFT_ARM", new RectangularPrism(parent, "LEFT_ARM", bodyColor, defaultMass));
@@ -43,11 +45,12 @@ public class Body {
         bodyMembers.put("LEFT_THIGH", new RectangularPrism(parent, "LEFT_THIGH", bodyColor, defaultMass));
         bodyMembers.put("LEFT_LEG", new RectangularPrism(parent, "LEFT_LEG", bodyColor, defaultMass));
         bodyMembers.put("RIGHT_THIGH", new RectangularPrism(parent, "RIGHT_THIGH", bodyColor, defaultMass));
-        bodyMembers.put("RIGHT_LEG", new RectangularPrism(parent, "RIGHT_LEG", bodyColor, defaultMass));
-
+        bodyMembers.put("RIGHT_LEG", new RectangularPrism(parent, "RIGHT_LEG", bodyColor, defaultMass));*/
+        this.buildingSkeletonVolumeStrategy.createSkeleton(this);
     }
 
     public void update() {
+        calculatePositionOffset();
         updateMembers();
     }
 
@@ -79,35 +82,35 @@ public class Body {
         parent.pushStyle();
         parent.strokeWeight(10);
         PVector currentJoint = new PVector();
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_HEAD);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_HEAD, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_NECK);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_NECK, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_LEFT_HAND);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_HAND, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_RIGHT_HAND);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_HAND, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_TORSO);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_TORSO, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_LEFT_HIP);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_HIP, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_LEFT_FOOT);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_FOOT, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
-        currentJoint = getJointPos(SimpleOpenNI.SKEL_RIGHT_FOOT);
+        currentJoint = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_FOOT, context, user);
         parent.point(currentJoint.x, currentJoint.y, 0);
         parent.popStyle();
     }
@@ -123,19 +126,11 @@ public class Body {
         }
     }
 
-    // Devuelve un PVector que contiene las coordenadas en RealWorld del jointPos solicitado
-    public PVector getJointPos(int jointId) {
-        PVector jointPos = new PVector();
-        context.getJointPositionSkeleton(user.getUserId(), jointId, jointPos);
-        PVector jointPosRW = new PVector();
-        context.convertRealWorldToProjective(jointPos, jointPosRW);
-        return jointPosRW;
-
-    }
+    
 
     private void updateMembers() {
+        /*updateTorsoMember();
         updateHeadMember();
-        updateTorsoMember();
         updateLeftForearmMember();
         updateLeftArmMember();
         updateRightForearmMember();
@@ -143,13 +138,13 @@ public class Body {
         updateLeftThighMember();
         updateLeftLegMember();
         updateRightThighMember();
-        updateRightLegMember();
-
+        updateRightLegMember();*/
+        this.buildingSkeletonVolumeStrategy.updateVolume(this);
     }
 
-    private void updateHeadMember() {
+    /*private void updateHeadMember() {
         Ball head = (Ball) bodyMembers.get("HEAD");
-        PVector headPosition = getJointPos(SimpleOpenNI.SKEL_HEAD);
+        PVector headPosition = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_HEAD, context, user);
         // a 200 pixel diameter head
         float headsize = 100;
 
@@ -164,11 +159,10 @@ public class Body {
 
     private void updateTorsoMember() {
         RectangularPrism torso = (RectangularPrism) bodyMembers.get("TORSO");
-        this.positionOffset = getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER).z;
-        PVector leftUpperJointPos = getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER);
-        PVector rightUpperJointPos = getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER);
-        PVector leftLowerJointPos = getJointPos(SimpleOpenNI.SKEL_LEFT_HIP);
-        PVector rightLowerJointPos = getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP);
+        PVector leftUpperJointPos = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER, context, user);
+        PVector rightUpperJointPos = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER, context, user);
+        PVector leftLowerJointPos = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_HIP, context, user);
+        PVector rightLowerJointPos = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP, context, user);
 
         //Calculate Middle Points
         leftLowerJointPos.z = leftUpperJointPos.z;
@@ -194,8 +188,8 @@ public class Body {
         PVector aux = new PVector(upperMiddlePoint.x - lowerMiddlePoint.x, -(upperMiddlePoint.y - lowerMiddlePoint.y), 0);
         //_parent.println("aux = " + aux);
         rotationZ = parent.atan2(aux.x, aux.y);
-        /*_parent.println("rotationZ ini = " + rotationZ);
-         _parent.println("rotationZ ini degrees = " + degrees(rotationZ));*/
+        _parent.println("rotationZ ini = " + rotationZ);
+         _parent.println("rotationZ ini degrees = " + degrees(rotationZ));
         if (rotationZ < 0) {
             rotationZ = parent.TWO_PI + rotationZ;
         }
@@ -225,8 +219,8 @@ public class Body {
 
 
         updateTorsoGeometricFigure(torso, position, rotationZ, rotationY, memberWidth, memberHeight);
-        /*defaultDimensionsTorso.x = memberWidth;
-         defaultDimensionsTorso.y = memberHeight;*/
+        //defaultDimensionsTorso.x = memberWidth;
+         //defaultDimensionsTorso.y = memberHeight;
 
         //torso.setDimensions(defaultDimensionsTorso);
 
@@ -289,46 +283,46 @@ public class Body {
 
     private void updateLeftForearmMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("LEFT_FOREARM");
-        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW), getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER));
+        updateLimbMember(limb, CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW, context, user), CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER, context, user));
     }
 
     private void updateLeftArmMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("LEFT_ARM");
-        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_HAND), getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW));
+        updateLimbMember(limb, CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_HAND, context, user), CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_ELBOW, context, user));
     }
 
     private void updateRightForearmMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("RIGHT_FOREARM");
-        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW), getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER));
+        updateLimbMember(limb, CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW, context, user), CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER, context, user));
     }
 
     private void updateRightArmMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("RIGHT_ARM");
-        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_HAND), getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW));
+        updateLimbMember(limb, CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_HAND, context, user), CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_ELBOW, context, user));
 
     }
 
     private void updateLeftThighMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("LEFT_THIGH");
-        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE), getJointPos(SimpleOpenNI.SKEL_LEFT_HIP));
+        updateLimbMember(limb, CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE, context, user), CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_HIP, context, user));
 
     }
 
     private void updateLeftLegMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("LEFT_LEG");
-        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_LEFT_FOOT), getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE));
+        updateLimbMember(limb, CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_FOOT, context, user), CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_KNEE, context, user));
 
     }
 
     private void updateRightThighMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("RIGHT_THIGH");
-        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE), getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP));
+        updateLimbMember(limb, CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE, context, user), CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP, context, user));
     }
 
     private void updateRightLegMember() {
         RectangularPrism limb = (RectangularPrism) bodyMembers.get("RIGHT_LEG");
-        updateLimbMember(limb, getJointPos(SimpleOpenNI.SKEL_RIGHT_FOOT), getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE));
-    }
+        updateLimbMember(limb, CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_FOOT, context, user), CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_KNEE, context, user));
+    }*/
 
     public float getPositionOffset() {
         return positionOffset;
@@ -371,4 +365,48 @@ public class Body {
         //_parent.sphere(10);
         parent.popMatrix();
     }
+    
+    private void calculatePositionOffset(){
+        this.positionOffset = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER, context, user).z;
+    }
+
+    public Map<String, GeometricFigure> getBodyMembers() {
+        return bodyMembers;
+    }
+
+    public PApplet getParent() {
+        return parent;
+    }
+
+    public SimpleOpenNI getContext() {
+        return context;
+    }
+
+    public int getBodyColor() {
+        return bodyColor;
+    }
+
+    public float getDefaultMass() {
+        return defaultMass;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public float getDefaultHeight() {
+        return defaultHeight;
+    }
+
+    public float getDefaultDepth() {
+        return defaultDepth;
+    }
+
+    public void setBuildingSkeletonVolumeStrategy(BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy) {
+        this.buildingSkeletonVolumeStrategy = buildingSkeletonVolumeStrategy;
+    }
+    
+    
+    
+    
 }

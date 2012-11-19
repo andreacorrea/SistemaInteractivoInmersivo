@@ -136,6 +136,7 @@ public class RectangularPrism extends GeometricFigure {
 
             }
         }
+        }
     
     @Override
     public GeometricFigure cloneFig(){
@@ -193,4 +194,5 @@ public class RectangularPrism extends GeometricFigure {
     public void setDimensions(PVector dimensions) {
         this.dimensions = dimensions;
     }
+
 }

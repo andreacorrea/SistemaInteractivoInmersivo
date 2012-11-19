@@ -113,7 +113,7 @@ public class UsersManager {
     }
 
     public void updateAndPaintUsers() {
-        parent.camera(parent.width / 2.0f, parent.height / 2.0f, 750, parent.width / 2.0f, parent.height / 2.0f, 0, 0, 1, 0);
+        //parent.camera(parent.width / 2.0f, parent.height / 2.0f, 750, parent.width / 2.0f, parent.height / 2.0f, 0, 0, 1, 0);
         //_parent.scale(0.35f);
         User currentUser;
 
