@@ -30,8 +30,8 @@ public class Body {
         this.context = user.getContext();
         this.bodyColor = bodyColor;
         this.bodyMembers = new HashMap<String, GeometricFigure>();
-        this.buildingSkeletonVolumeStrategy = new CubesSkeletonVolume();
-        //this.buildingSkeletonVolumeStrategy = new SpheresSkeletonVolume();
+        //this.buildingSkeletonVolumeStrategy = new CubesSkeletonVolume();
+        this.buildingSkeletonVolumeStrategy = new SpheresSkeletonVolume();
         createSkeleton();
     }
 

@@ -23,16 +23,16 @@ public class CubesSkeletonVolume implements BuildingSkeletonVolumeStrategy{
 
     @Override
     public void createSkeleton(Body body) {
-        body.getBodyMembers().put("HEAD", new Ball(body.getParent(), "HEAD", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("TORSO", new RectangularPrism(body.getParent(), "TORSO", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_FOREARM", new RectangularPrism(body.getParent(), "LEFT_FOREARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_ARM", new RectangularPrism(body.getParent(), "LEFT_ARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_FOREARM", new RectangularPrism(body.getParent(), "RIGHT_FOREARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_ARM", new RectangularPrism(body.getParent(), "RIGHT_ARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_THIGH", new RectangularPrism(body.getParent(), "LEFT_THIGH", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_LEG", new RectangularPrism(body.getParent(), "LEFT_LEG", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_THIGH", new RectangularPrism(body.getParent(), "RIGHT_THIGH", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_LEG", new RectangularPrism(body.getParent(), "RIGHT_LEG", body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("HEAD", new Ball(body.getParent(), "HEAD" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("TORSO", new RectangularPrism(body.getParent(), "TORSO" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_FOREARM", new RectangularPrism(body.getParent(), "LEFT_FOREARM" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_ARM", new RectangularPrism(body.getParent(), "LEFT_ARM" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_FOREARM", new RectangularPrism(body.getParent(), "RIGHT_FOREARM" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_ARM", new RectangularPrism(body.getParent(), "RIGHT_ARM" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_THIGH", new RectangularPrism(body.getParent(), "LEFT_THIGH" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_LEG", new RectangularPrism(body.getParent(), "LEFT_LEG" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_THIGH", new RectangularPrism(body.getParent(), "RIGHT_THIGH" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_LEG", new RectangularPrism(body.getParent(), "RIGHT_LEG" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
     }
     
     private void updateMembers(Body body) {
@@ -172,9 +172,11 @@ public class CubesSkeletonVolume implements BuildingSkeletonVolumeStrategy{
     }
 
     private void updateTorsoGeometricFigure(RectangularPrism torso, PVector position, float rotationZ, float rotationY, float memberWidth, float memberHeight) {
+        
         torso.setPos(position);
         torso.setRotationZ(rotationZ);
         torso.setRotationY(rotationY);
+        
         torso.setDimensionX(memberWidth);
         torso.setDimensionY(memberHeight);
         torso.setDimensionZ(rotationY);
@@ -183,9 +185,11 @@ public class CubesSkeletonVolume implements BuildingSkeletonVolumeStrategy{
 
     private void updateLimbGeometricFigure(Body body, RectangularPrism limb, PVector position, float rotationZ, float rotationY, float memberWidth) {
          //update features
+        position.z =0;
+        limb.setRotationY(0);
         limb.setPos(position);
         limb.setRotationZ(rotationZ);
-        limb.setRotationY(rotationY);
+        //limb.setRotationY(rotationY);
         limb.setDimensionX(memberWidth);
         limb.setDimensionY(body.getDefaultHeight());
         limb.setDimensionZ(body.getDefaultDepth());

@@ -25,32 +25,32 @@ public class SpheresSkeletonVolume implements BuildingSkeletonVolumeStrategy {
 
     @Override
     public void createSkeleton(Body body) {
-        body.getBodyMembers().put("HEAD", new Ball(body.getParent(), "HEAD", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("TORSO", new RectangularPrism(body.getParent(), "TORSO", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_FOREARM_S1", new Ball(body.getParent(), "LEFT_FOREARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_FOREARM_S2", new Ball(body.getParent(), "LEFT_FOREARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_FOREARM_S3", new Ball(body.getParent(), "LEFT_FOREARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_ARM_S1", new Ball(body.getParent(), "LEFT_ARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_ARM_S2", new Ball(body.getParent(), "LEFT_ARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_ARM_S3", new Ball(body.getParent(), "LEFT_ARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_FOREARM_S1", new Ball(body.getParent(), "RIGHT_FOREARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_FOREARM_S2", new Ball(body.getParent(), "RIGHT_FOREARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_FOREARM_S3", new Ball(body.getParent(), "RIGHT_FOREARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_ARM_S1", new Ball(body.getParent(), "RIGHT_ARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_ARM_S2", new Ball(body.getParent(), "RIGHT_ARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_ARM_S3", new Ball(body.getParent(), "RIGHT_ARM", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_THIGH_S1", new Ball(body.getParent(), "LEFT_THIGH", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_THIGH_S2", new Ball(body.getParent(), "LEFT_THIGH", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_THIGH_S3", new Ball(body.getParent(), "LEFT_THIGH", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_LEG_S1", new Ball(body.getParent(), "LEFT_LEG", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_LEG_S2", new Ball(body.getParent(), "LEFT_LEG", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("LEFT_LEG_S3", new Ball(body.getParent(), "LEFT_LEG", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_THIGH_S1", new Ball(body.getParent(), "RIGHT_THIGH", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_THIGH_S2", new Ball(body.getParent(), "RIGHT_THIGH", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_THIGH_S3", new Ball(body.getParent(), "RIGHT_THIGH", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_LEG_S1", new Ball(body.getParent(), "RIGHT_LEG", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_LEG_S2", new Ball(body.getParent(), "RIGHT_LEG", body.getBodyColor(), body.getDefaultMass()));
-        body.getBodyMembers().put("RIGHT_LEG_S3", new Ball(body.getParent(), "RIGHT_LEG", body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("HEAD", new Ball(body.getParent(), "HEAD" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("TORSO", new RectangularPrism(body.getParent(), "TORSO" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_FOREARM_S1", new Ball(body.getParent(), "LEFT_FOREARM_S1" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_FOREARM_S2", new Ball(body.getParent(), "LEFT_FOREARM_S2" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_FOREARM_S3", new Ball(body.getParent(), "LEFT_FOREARM_S3" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_ARM_S1", new Ball(body.getParent(), "LEFT_ARM_S1" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_ARM_S2", new Ball(body.getParent(), "LEFT_ARM_S2" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_ARM_S3", new Ball(body.getParent(), "LEFT_ARM_S3" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_FOREARM_S1", new Ball(body.getParent(), "RIGHT_FOREARM_S1" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_FOREARM_S2", new Ball(body.getParent(), "RIGHT_FOREARM_S2" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_FOREARM_S3", new Ball(body.getParent(), "RIGHT_FOREARM_S3" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_ARM_S1", new Ball(body.getParent(), "RIGHT_ARM_S1" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_ARM_S2", new Ball(body.getParent(), "RIGHT_ARM_S2" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_ARM_S3", new Ball(body.getParent(), "RIGHT_ARM_S3" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_THIGH_S1", new Ball(body.getParent(), "LEFT_THIGH_S1" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_THIGH_S2", new Ball(body.getParent(), "LEFT_THIGH_S2" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_THIGH_S3", new Ball(body.getParent(), "LEFT_THIGH_S3" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_LEG_S1", new Ball(body.getParent(), "LEFT_LEG_S1" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_LEG_S2", new Ball(body.getParent(), "LEFT_LEG_S2" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("LEFT_LEG_S3", new Ball(body.getParent(), "LEFT_LEG_S3" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_THIGH_S1", new Ball(body.getParent(), "RIGHT_THIGH_S1" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_THIGH_S2", new Ball(body.getParent(), "RIGHT_THIGH_S2" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_THIGH_S3", new Ball(body.getParent(), "RIGHT_THIGH_S3" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_LEG_S1", new Ball(body.getParent(), "RIGHT_LEG_S1" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_LEG_S2", new Ball(body.getParent(), "RIGHT_LEG_S2" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
+        body.getBodyMembers().put("RIGHT_LEG_S3", new Ball(body.getParent(), "RIGHT_LEG_S3" + "_" + body.getUser().getUserId(), body.getBodyColor(), body.getDefaultMass()));
     }
     
     private void updateMembers(Body body) {
@@ -180,8 +180,8 @@ public class SpheresSkeletonVolume implements BuildingSkeletonVolumeStrategy {
         
         positionS1.set(aux);
         
-        positionS1.z = -(positionS1.z - body.getPositionOffset());
-        
+        //positionS1.z = -(positionS1.z - body.getPositionOffset());
+        positionS1.z = 0;
         aux.set(orientacion);
         aux.normalize();
         aux.mult(distanciaJoints/4 *2);
@@ -190,7 +190,9 @@ public class SpheresSkeletonVolume implements BuildingSkeletonVolumeStrategy {
         
         positionS2.set(aux);
         
-        positionS2.z = -(positionS2.z - body.getPositionOffset());
+        //positionS2.z = -(positionS2.z - body.getPositionOffset());
+        positionS2.z = 0;
+        
         aux.set(orientacion);
         aux.normalize();
         aux.mult(distanciaJoints/4 *3);
@@ -199,7 +201,8 @@ public class SpheresSkeletonVolume implements BuildingSkeletonVolumeStrategy {
         
         positionS3.set(aux);
         
-        positionS3.z = -(positionS3.z - body.getPositionOffset());
+        //positionS3.z = -(positionS3.z - body.getPositionOffset());
+        positionS3.z = 0;
         
         sphere1.setPos(positionS1);
         sphere1.setRadius(10);
