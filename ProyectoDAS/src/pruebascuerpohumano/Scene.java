@@ -6,7 +6,7 @@ import processing.core.PApplet;
 public class Scene {
     
     private PApplet pApplet;
-    private SimpleOpenNI context;
+    private AdapterSimpleOpenNI context;
     private static Scene instance = null;   
     
     // this object deals with the user callbacks
@@ -28,7 +28,7 @@ public class Scene {
         return instance;
     }
     
-    public void activateUsersManager(SimpleOpenNI context){
+    public void activateUsersManager(AdapterSimpleOpenNI context){
         this.context = context;
         this.context.setMirror(true);
         // setup the callback helper class

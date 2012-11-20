@@ -4,7 +4,6 @@
  */
 package pruebascuerpohumano;
 
-import SimpleOpenNI.SimpleOpenNI;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -26,7 +25,7 @@ public class PruebaGeometricFiguresManager extends PApplet{
         
         float speedX= 3;
         float positionX;
-        float radio=10;
+        float radio=7;
         for(int i=0; i< 10; i++){
             //speed.mult(i+1);
             positionX = width/5*i;

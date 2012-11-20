@@ -6,7 +6,7 @@ import processing.core.*;
 
 public class PruebaVisualRepresentation extends PApplet {
 
-    SimpleOpenNI context;
+    AdapterSimpleOpenNI context;
     VisualRepresentation visualRepresentation;
 
     @Override
@@ -17,7 +17,7 @@ public class PruebaVisualRepresentation extends PApplet {
         // instantiate a new context
         frameRate(24);
         
-        context = new SimpleOpenNI(this);
+        context = new AdapterSimpleOpenNI(this);
         
         visualRepresentation = new VisualRepresentation(this, context);
 

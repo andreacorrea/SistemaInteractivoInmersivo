@@ -4,17 +4,14 @@
  */
 package pruebascuerpohumano;
 
-import SimpleOpenNI.SimpleOpenNI;
 import java.util.HashMap;
-import java.util.Map;
-import processing.core.PApplet;
 import processing.core.PVector;
 
 public class CubesSkeletonVolume implements BuildingSkeletonVolumeStrategy{
 
     @Override
     public void updateVolume(Body body) {
-        if(body.getBodyMembers().size()==0){
+        if(body.getBodyMembers().isEmpty()){
             createSkeleton(body);
         }else{
             updateMembers(body);
@@ -38,20 +35,20 @@ public class CubesSkeletonVolume implements BuildingSkeletonVolumeStrategy{
     private void updateMembers(Body body) {
         updateHeadMember((HashMap)body.getBodyMembers(), body.getContext(), body.getUser());
         updateTorsoMember(body, (HashMap)body.getBodyMembers(), body.getContext(), body.getUser());
-        updateLimbMember(body, "LEFT_FOREARM", SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_SHOULDER);
-        updateLimbMember(body, "LEFT_ARM", SimpleOpenNI.SKEL_LEFT_HAND, SimpleOpenNI.SKEL_LEFT_ELBOW);
-        updateLimbMember(body, "RIGHT_FOREARM", SimpleOpenNI.SKEL_RIGHT_ELBOW, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
-        updateLimbMember(body, "RIGHT_ARM", SimpleOpenNI.SKEL_RIGHT_HAND, SimpleOpenNI.SKEL_RIGHT_ELBOW);
-        updateLimbMember(body, "LEFT_THIGH", SimpleOpenNI.SKEL_LEFT_KNEE, SimpleOpenNI.SKEL_LEFT_HIP);
-        updateLimbMember(body, "LEFT_LEG", SimpleOpenNI.SKEL_LEFT_FOOT, SimpleOpenNI.SKEL_LEFT_KNEE);
-        updateLimbMember(body, "RIGHT_THIGH", SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_HIP);
-        updateLimbMember(body, "RIGHT_LEG", SimpleOpenNI.SKEL_RIGHT_FOOT, SimpleOpenNI.SKEL_RIGHT_KNEE);
+        updateLimbMember(body, "LEFT_FOREARM", AdapterSimpleOpenNI.SKEL_LEFT_ELBOW, AdapterSimpleOpenNI.SKEL_LEFT_SHOULDER);
+        updateLimbMember(body, "LEFT_ARM", AdapterSimpleOpenNI.SKEL_LEFT_HAND, AdapterSimpleOpenNI.SKEL_LEFT_ELBOW);
+        updateLimbMember(body, "RIGHT_FOREARM", AdapterSimpleOpenNI.SKEL_RIGHT_ELBOW, AdapterSimpleOpenNI.SKEL_RIGHT_SHOULDER);
+        updateLimbMember(body, "RIGHT_ARM", AdapterSimpleOpenNI.SKEL_RIGHT_HAND, AdapterSimpleOpenNI.SKEL_RIGHT_ELBOW);
+        updateLimbMember(body, "LEFT_THIGH", AdapterSimpleOpenNI.SKEL_LEFT_KNEE, AdapterSimpleOpenNI.SKEL_LEFT_HIP);
+        updateLimbMember(body, "LEFT_LEG", AdapterSimpleOpenNI.SKEL_LEFT_FOOT, AdapterSimpleOpenNI.SKEL_LEFT_KNEE);
+        updateLimbMember(body, "RIGHT_THIGH", AdapterSimpleOpenNI.SKEL_RIGHT_KNEE, AdapterSimpleOpenNI.SKEL_RIGHT_HIP);
+        updateLimbMember(body, "RIGHT_LEG", AdapterSimpleOpenNI.SKEL_RIGHT_FOOT, AdapterSimpleOpenNI.SKEL_RIGHT_KNEE);
 
     }
 
-    private void updateHeadMember(HashMap <String, GeometricFigure>bodyMembers, SimpleOpenNI context, User user) {
+    private void updateHeadMember(HashMap <String, GeometricFigure>bodyMembers, AdapterSimpleOpenNI context, User user) {
         Ball head = (Ball) bodyMembers.get("HEAD");
-        PVector headPosition = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_HEAD, context, user);
+        PVector headPosition = CalculateVectors.getJointPos(AdapterSimpleOpenNI.SKEL_HEAD, context, user);
         // a 200 pixel diameter head
         float headsize = 100;
 
@@ -64,12 +61,12 @@ public class CubesSkeletonVolume implements BuildingSkeletonVolumeStrategy{
 
     }
 
-    private void updateTorsoMember(Body body, HashMap <String, GeometricFigure>bodyMembers, SimpleOpenNI context, User user) {
+    private void updateTorsoMember(Body body, HashMap <String, GeometricFigure>bodyMembers, AdapterSimpleOpenNI context, User user) {
         RectangularPrism torso = (RectangularPrism) bodyMembers.get("TORSO");
-        PVector leftUpperJointPos = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER, context, user);
-        PVector rightUpperJointPos = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER, context, user);
-        PVector leftLowerJointPos = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_HIP, context, user);
-        PVector rightLowerJointPos = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_HIP, context, user);
+        PVector leftUpperJointPos = CalculateVectors.getJointPos(AdapterSimpleOpenNI.SKEL_LEFT_SHOULDER, context, user);
+        PVector rightUpperJointPos = CalculateVectors.getJointPos(AdapterSimpleOpenNI.SKEL_RIGHT_SHOULDER, context, user);
+        PVector leftLowerJointPos = CalculateVectors.getJointPos(AdapterSimpleOpenNI.SKEL_LEFT_HIP, context, user);
+        PVector rightLowerJointPos = CalculateVectors.getJointPos(AdapterSimpleOpenNI.SKEL_RIGHT_HIP, context, user);
 
         //Calculate Middle Points
         leftLowerJointPos.z = leftUpperJointPos.z;
@@ -185,11 +182,11 @@ public class CubesSkeletonVolume implements BuildingSkeletonVolumeStrategy{
 
     private void updateLimbGeometricFigure(Body body, RectangularPrism limb, PVector position, float rotationZ, float rotationY, float memberWidth) {
          //update features
-        position.z =0;
+        //position.z =0;
         limb.setRotationY(0);
         limb.setPos(position);
         limb.setRotationZ(rotationZ);
-        //limb.setRotationY(rotationY);
+        limb.setRotationY(rotationY);
         limb.setDimensionX(memberWidth);
         limb.setDimensionY(body.getDefaultHeight());
         limb.setDimensionZ(body.getDefaultDepth());

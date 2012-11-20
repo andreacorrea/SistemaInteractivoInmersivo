@@ -1,12 +1,11 @@
 package pruebascuerpohumano;
 
-import SimpleOpenNI.SimpleOpenNI;
 import processing.core.*;
 
 public class VisualRepresentation {
 
     private PApplet pApplet;
-    private SimpleOpenNI context;
+    private AdapterSimpleOpenNI context;
     private int resolution = 0;
     private float zmin = 0, zmax = 0;
     private float zoom = 0;
@@ -22,7 +21,7 @@ public class VisualRepresentation {
     private PImage resRGB = new PImage();
     private boolean[] constrainedImg;
 
-    public VisualRepresentation(PApplet pApplet, SimpleOpenNI context) {
+    public VisualRepresentation(PApplet pApplet, AdapterSimpleOpenNI context) {
         this.pApplet = pApplet;
         resolution = 2;
         zmin = 0;

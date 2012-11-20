@@ -5,7 +5,7 @@
 package pruebascuerpohumano;
 
 //import ixagon.renderer.*;
-import SimpleOpenNI.*;
+
 import java.util.Iterator;
 import java.util.Map;
 import processing.core.*;
@@ -19,7 +19,7 @@ public class PruebaCuerpoHumano extends PApplet {
     // the data from openni comes upside down
     float rotY;*/
     
-    SimpleOpenNI context;
+    AdapterSimpleOpenNI context;
     
     @Override
     public void setup() {
@@ -30,7 +30,7 @@ public class PruebaCuerpoHumano extends PApplet {
         // instantiate a new context
         frameRate(24);
         
-        context = new SimpleOpenNI(this);
+        context = new AdapterSimpleOpenNI(this);
         
         scene = Scene.getInstance(this);
 

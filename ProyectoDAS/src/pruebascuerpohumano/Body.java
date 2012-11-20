@@ -13,7 +13,7 @@ public class Body {
 
     private PApplet parent;
     private User user;
-    private SimpleOpenNI context;
+    private AdapterSimpleOpenNI context;
     private Map<String, GeometricFigure> bodyMembers;
     private int bodyColor;
     private float positionOffset;
@@ -379,7 +379,7 @@ public class Body {
         return parent;
     }
 
-    public SimpleOpenNI getContext() {
+    public AdapterSimpleOpenNI getContext() {
         return context;
     }
 

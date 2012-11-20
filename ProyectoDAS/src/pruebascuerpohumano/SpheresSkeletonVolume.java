@@ -69,7 +69,7 @@ public class SpheresSkeletonVolume implements BuildingSkeletonVolumeStrategy {
         
     }
 
-    private void updateHeadMember(HashMap <String, GeometricFigure>bodyMembers, SimpleOpenNI context, User user) {
+    private void updateHeadMember(HashMap <String, GeometricFigure>bodyMembers, AdapterSimpleOpenNI context, User user) {
         Ball head = (Ball) bodyMembers.get("HEAD");
         PVector headPosition = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_HEAD, context, user);
         // a 200 pixel diameter head
@@ -84,7 +84,7 @@ public class SpheresSkeletonVolume implements BuildingSkeletonVolumeStrategy {
 
     }
 
-    private void updateTorsoMember(Body body, HashMap <String, GeometricFigure>bodyMembers, SimpleOpenNI context, User user) {
+    private void updateTorsoMember(Body body, HashMap <String, GeometricFigure>bodyMembers, AdapterSimpleOpenNI context, User user) {
         RectangularPrism torso = (RectangularPrism) bodyMembers.get("TORSO");
         PVector leftUpperJointPos = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER, context, user);
         PVector rightUpperJointPos = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_RIGHT_SHOULDER, context, user);
@@ -180,8 +180,8 @@ public class SpheresSkeletonVolume implements BuildingSkeletonVolumeStrategy {
         
         positionS1.set(aux);
         
-        //positionS1.z = -(positionS1.z - body.getPositionOffset());
-        positionS1.z = 0;
+        positionS1.z = -(positionS1.z - body.getPositionOffset());
+        
         aux.set(orientacion);
         aux.normalize();
         aux.mult(distanciaJoints/4 *2);
@@ -190,8 +190,7 @@ public class SpheresSkeletonVolume implements BuildingSkeletonVolumeStrategy {
         
         positionS2.set(aux);
         
-        //positionS2.z = -(positionS2.z - body.getPositionOffset());
-        positionS2.z = 0;
+        positionS2.z = -(positionS2.z - body.getPositionOffset());
         
         aux.set(orientacion);
         aux.normalize();
@@ -201,7 +200,10 @@ public class SpheresSkeletonVolume implements BuildingSkeletonVolumeStrategy {
         
         positionS3.set(aux);
         
-        //positionS3.z = -(positionS3.z - body.getPositionOffset());
+        positionS3.z = -(positionS3.z - body.getPositionOffset());
+        
+        positionS1.z = 0;
+        positionS2.z = 0;
         positionS3.z = 0;
         
         sphere1.setPos(positionS1);

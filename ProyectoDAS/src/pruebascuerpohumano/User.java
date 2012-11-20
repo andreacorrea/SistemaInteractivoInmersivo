@@ -8,19 +8,19 @@ import processing.core.*;
  * Esta clase representa a un usuario en el mundo virtual
  */
 public class User {
-    private SimpleOpenNI context;
+    private AdapterSimpleOpenNI context;
     private int userId;
     private Body body;
     private int userColor;
 
-    public User(PApplet p, int userId, SimpleOpenNI context, int userColor) {
+    public User(PApplet p, int userId, AdapterSimpleOpenNI context, int userColor) {
         this.userId = userId;
         this.context = context;
         this.userColor = userColor;
         this.body = new Body(p, this, userColor);
     }
     
-    public SimpleOpenNI getContext() {
+    public AdapterSimpleOpenNI getContext() {
         return context;
     }
     

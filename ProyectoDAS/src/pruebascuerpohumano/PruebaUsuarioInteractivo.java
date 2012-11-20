@@ -1,19 +1,18 @@
 
 package pruebascuerpohumano;
 
-import SimpleOpenNI.SimpleOpenNI;
 import processing.core.PApplet;
 import processing.core.PVector;
 
 public class PruebaUsuarioInteractivo extends PApplet{
     Scene scene;
-    SimpleOpenNI context;
+    AdapterSimpleOpenNI context;
     
     @Override
     public void setup(){
         size(640, 480, P3D);
         frameRate(15);
-        context = new SimpleOpenNI(this);
+        context = new AdapterSimpleOpenNI(this);
         
         scene = Scene.getInstance(this);
         scene.activateGeometricFiguresManager();

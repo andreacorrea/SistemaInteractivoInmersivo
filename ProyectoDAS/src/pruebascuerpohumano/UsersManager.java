@@ -1,6 +1,5 @@
 package pruebascuerpohumano;
 
-import SimpleOpenNI.SimpleOpenNI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -11,21 +10,21 @@ import processing.core.*;
  */
 public class UsersManager {
 
-    private SimpleOpenNI context;
+    private AdapterSimpleOpenNI context;
     private Map<Integer, User> users;
     private Scene scene;
     private PApplet parent;
     private static UsersManager instance = null;
     private Command command;
 
-    private UsersManager(PApplet p, SimpleOpenNI context, Scene scene) {
+    private UsersManager(PApplet p, AdapterSimpleOpenNI context, Scene scene) {
         this.parent = p;
         this.context = context;
         this.scene = scene;
         users = new HashMap<Integer, User>();
     }
     
-    public static UsersManager getInstance(PApplet p, SimpleOpenNI context, Scene scene){
+    public static UsersManager getInstance(PApplet p, AdapterSimpleOpenNI context, Scene scene){
         if(instance == null){
             instance = new UsersManager(p, context, scene);
         } else {

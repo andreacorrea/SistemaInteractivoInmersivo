@@ -12,7 +12,7 @@ import processing.core.PApplet;
  * @author Andrea
  */
 public class  CheckKinect {
-    public static void checkDepthCam(PApplet pApplet, SimpleOpenNI context){
+    public static void checkDepthCam(PApplet pApplet, AdapterSimpleOpenNI context){
         // enable depthMap generation 
         if (context.enableDepth() == false) {
             pApplet.println("Can't open the depthMap, maybe the camera is not connected!");
@@ -21,7 +21,7 @@ public class  CheckKinect {
         }
     }
     
-    public static void checkRGBCam(PApplet pApplet, SimpleOpenNI context){
+    public static void checkRGBCam(PApplet pApplet, AdapterSimpleOpenNI context){
         // enable RGB generation
         if (context.enableRGB() == false) {
             pApplet.println("Can't setup RGB");
@@ -30,7 +30,7 @@ public class  CheckKinect {
         }
     }
 
-    public static void checkScene(PApplet pApplet, SimpleOpenNI context) {
+    public static void checkScene(PApplet pApplet, AdapterSimpleOpenNI context) {
         // enable scene analyser
         if (context.enableScene() == false) {
             pApplet.println("Can't setup scene");

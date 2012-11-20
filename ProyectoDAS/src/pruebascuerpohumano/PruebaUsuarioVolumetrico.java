@@ -4,7 +4,6 @@
  */
 package pruebascuerpohumano;
 
-import SimpleOpenNI.SimpleOpenNI;
 import processing.core.PApplet;
 
 /**
@@ -13,7 +12,7 @@ import processing.core.PApplet;
  */
 public class PruebaUsuarioVolumetrico extends PApplet {
 
-    SimpleOpenNI context;
+    AdapterSimpleOpenNI context;
     VisualRepresentation visualRepresentation;
     Scene scene;
 
@@ -26,7 +25,7 @@ public class PruebaUsuarioVolumetrico extends PApplet {
         // instantiate a new context
         frameRate(24);
 
-        context = new SimpleOpenNI(this);
+        context = new AdapterSimpleOpenNI(this);
 
         scene = Scene.getInstance(this);
 
@@ -38,7 +37,7 @@ public class PruebaUsuarioVolumetrico extends PApplet {
     
     @Override
     public void draw() {
-        background(200);
+        //background(200);
         //pushMatrix();
         // update the camera
         context.update();
@@ -63,8 +62,9 @@ public class PruebaUsuarioVolumetrico extends PApplet {
         popStyle();
         
         if(scene.hasUsers()){
-            visualRepresentation.update();
+            
             scene.paint();
+            visualRepresentation.update();
         }else{
             // draw scene Image
             image(context.sceneImage(), 0, 0);
