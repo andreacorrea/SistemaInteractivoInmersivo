@@ -76,11 +76,7 @@ public class Ball extends GeometricFigure {
         float dy = b.getPos().y - pos.y;
         float dist = parent.sqrt(dx * dx + dy * dy);
         float minDist = radius + b.getRadius();
-
         return dist < minDist;
-        /*if(dist < minDist){
-         bounceBall(dy, dx, b);
-         }*/
     }
 
     @Override
@@ -90,11 +86,7 @@ public class Ball extends GeometricFigure {
         float dy = parent.abs(p.getPos().y - pos.y);
         float dxmin = radius + p.getDimensions().x / 2;
         float dymin = radius + p.getDimensions().y / 2;
-
         return dx < dxmin && dy < dymin;
-        /*if(dx < dxmin && dy < dymin){
-         bounceRectangularPrism(dy, dx, p);
-         } */
     }
 
     @Override
@@ -118,25 +110,10 @@ public class Ball extends GeometricFigure {
         return clonedFig;
     }
 
-    /**
-     * @return the r
-     */
-    public float getRadius() {
-        return radius;
-    }
-
-    /**
-     * @param r the r to set
-     */
-    public void setRadius(float r) {
-        this.radius = r;
-    }
-
     @Override
     public void bounce(GeometricFigure gf) {
         if (gf instanceof Ball) {
             bounceBall((Ball) gf);
-
         } else {
             bounceRectangularPrism((RectangularPrism) gf);
         }
@@ -258,4 +235,13 @@ public class Ball extends GeometricFigure {
             }
         }
     }
+    
+    public float getRadius() {
+        return radius;
+    }
+
+    public void setRadius(float r) {
+        this.radius = r;
+    }
+    
 }

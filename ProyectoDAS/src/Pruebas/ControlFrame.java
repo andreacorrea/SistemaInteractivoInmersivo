@@ -1,4 +1,4 @@
-package Pruebas;
+/*package Pruebas;
 
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
@@ -93,4 +93,4 @@ public class ControlFrame extends PApplet {
         println("a button event from buttonC: " + theValue);
         myTextarea.setText("Cambia de texto por C");
     }
-}
+}*/

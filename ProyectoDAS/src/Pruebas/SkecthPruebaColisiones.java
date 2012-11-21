@@ -15,7 +15,7 @@ import processing.core.*;
 public class SkecthPruebaColisiones extends PApplet {
     
     protected int framerate = 30;
-    protected float friction = 1f;
+    protected float friction = 0.93f;
     protected float strengthCoef = 0.8f;
     public boolean checar = false;
     
@@ -23,7 +23,6 @@ public class SkecthPruebaColisiones extends PApplet {
     RectangularPrism cubePrototype = new RectangularPrism("c1", color(255,255,255), new PVector(600,600,0), new PVector(70,70,70), new PVector(10,10,0), this);
     
     GeometricFigure[] figs = {
-        //new RectangularPrism("c1", color(255,255,255), new PVector(600,600,0), new PVector(90,90,90), new PVector(20,20,0), this),
         new Ball("b1", color(255,255,255), new PVector(600,100,0), 40f, new PVector(1,2,0), this),
         ballPrototype.cloneFig(),
         ballPrototype.cloneFig(),
@@ -69,7 +68,9 @@ public class SkecthPruebaColisiones extends PApplet {
             figs[i].checkBoundaryCollision();
             for(int j=0; j<figs.length; j++){
                 if(j != i){
-                    figs[i].checkCollision(figs[j]);
+                    if( figs[i].checkCollision(figs[j]) ){
+                        figs[i].bounce(figs[j]);
+                    }
                 }
             }
         }

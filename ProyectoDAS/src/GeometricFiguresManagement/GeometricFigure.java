@@ -19,9 +19,6 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
     protected float deltaPosMax = 1;
     protected Map<String, Object> observers;
     protected boolean belongsUser = false;
-    
-    
-    
 
     public GeometricFigure(String name, int color, PApplet parent, float mass) {
         this.parent = parent;
@@ -32,8 +29,7 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         this.belongsUser = true;
     }
 
-    public GeometricFigure(String name, int color, PVector pos,
-            float m, PVector vel, PApplet parent) {
+    public GeometricFigure(String name, int color, PVector pos, float m, PVector vel, PApplet parent) {
         this.parent = parent;
         this.name = name;
         this.color = color;
@@ -58,6 +54,8 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
     public abstract void bounce(GeometricFigure gf);
 
     public abstract GeometricFigure cloneFig();
+    
+    public abstract void changeColor(GeometricFigure received);
 
     public void calculateVel(PVector finalPos) {
         PVector auxFinalPos = new PVector();
@@ -83,91 +81,7 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         auxP2.add(auxP1);
         return auxP2;
     }
-
-    /**
-     * @return the _name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the _name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return the _color
-     */
-    public int getColor() {
-        return color;
-    }
-
-    /**
-     * @param color the _color to set
-     */
-    public void setColor(int color) {
-        this.color = color;
-    }
-
-    /**
-     * @return the mass
-     */
-    public float getMass() {
-        return mass;
-    }
-
-    /**
-     * @param mass the mass to set
-     */
-    public void setMass(float mass) {
-        this.mass = mass;
-    }
-
-    /**
-     * @return the pos
-     */
-    public PVector getPos() {
-        return pos;
-    }
-
-    /**
-     * @param pos the pos to set
-     */
-    public void setPos(PVector pos) {
-        calculateVel(pos);
-        this.pos = pos;
-    }
-
-    public void setPosX(float x) {
-        this.pos.x = x;
-    }
-
-    public void setPosY(float y) {
-        this.pos.y = y;
-    }
-
-    /**
-     * @return the vel
-     */
-    public PVector getVel() {
-        return vel;
-    }
-
-    public void setVel(PVector vel) {
-        this.vel = vel;
-    }
-
-    public void setVelX(float vx) {
-        this.vel.x = vx;
-    }
-
-    public void setVelY(float vy) {
-        this.vel.y = vy;
-    }
-
+    
     @Override
     public void addObserver(Object obj) {
         getObservers().put(((GeometricFigure) obj).getName(), obj);
@@ -185,7 +99,6 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
             notifyAllObservers(command);
         }
     }
-
     
     @Override
     public void notifyAllObservers(Command command) {
@@ -207,30 +120,75 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         
     }
 
-    /**
-     * @return the posRef
-     */
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public float getMass() {
+        return mass;
+    }
+
+    public void setMass(float mass) {
+        this.mass = mass;
+    }
+
+    public PVector getPos() {
+        return pos;
+    }
+
+    public void setPos(PVector pos) {
+        calculateVel(pos);
+        this.pos = pos;
+    }
+
+    public void setPosX(float x) {
+        this.pos.x = x;
+    }
+
+    public void setPosY(float y) {
+        this.pos.y = y;
+    }
+
+    public PVector getVel() {
+        return vel;
+    }
+
+    public void setVel(PVector vel) {
+        this.vel = vel;
+    }
+
+    public void setVelX(float vx) {
+        this.vel.x = vx;
+    }
+
+    public void setVelY(float vy) {
+        this.vel.y = vy;
+    }
+
     public PVector getPosRef() {
         return posRef;
     }
 
-    /**
-     * @param posRef the posRef to set
-     */
     public void setPosRef(PVector posRef) {
         this.posRef = posRef;
     }
 
-    /**
-     * @return the observers
-     */
     public Map<String, Object> getObservers() {
         return observers;
     }
 
-    /**
-     * @param observers the observers to set
-     */
     public void setObservers(Map<String, Object> observers) {
         this.observers = observers;
     }
@@ -238,6 +196,5 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
     public boolean getBelongsUser() {
         return belongsUser;
     }
-
-    public abstract void changeColor(GeometricFigure received);
+    
 }

@@ -82,11 +82,7 @@ public class RectangularPrism extends GeometricFigure {
         float dy = parent.abs(b.getPos().y - pos.y);
         float dxmin = b.getRadius() + dimensions.x / 2;
         float dymin = b.getRadius() + dimensions.y / 2;
-
         return dx < dxmin && dy < dymin;
-        /*if(dx < dxmin && dy < dymin){
-         bounceBall(dy, dx, b);
-         }*/
     }
 
     @Override
@@ -95,12 +91,7 @@ public class RectangularPrism extends GeometricFigure {
         float dy = parent.abs(p.getPos().y - pos.y);
         float dxmin = p.getDimensions().x / 2 + dimensions.x / 2;
         float dymin = p.getDimensions().y / 2 + dimensions.y / 2;
-
         return dx < dxmin && dy < dymin;
-
-        /*if (dx < dxmin && dy < dymin) {
-         bounceRectangularPrism(dy, dx, p);
-         }*/
     }
 
     @Override
@@ -126,45 +117,10 @@ public class RectangularPrism extends GeometricFigure {
         return clonedFig;
     }
 
-    public void setDimensionX(float x) {
-        this.dimensions.x = x;
-    }
-
-    public void setDimensionY(float y) {
-        this.dimensions.y = y;
-    }
-
-    public void setDimensionZ(float z) {
-        this.dimensions.z = z;
-    }
-
-    public void setRotationZ(float rotationZ) {
-        this.rotationZ = rotationZ;
-    }
-
-    public void setRotationY(float rotationY) {
-        this.rotationY = rotationY;
-    }
-
-    /**
-     * @return the dimensions
-     */
-    public PVector getDimensions() {
-        return dimensions;
-    }
-
-    /**
-     * @param dimensions the dimensions to set
-     */
-    public void setDimensions(PVector dimensions) {
-        this.dimensions = dimensions;
-    }
-
     @Override
     public void bounce(GeometricFigure gf) {
         if (gf instanceof Ball) {
             bounceBall((Ball) gf);
-
         } else {
             bounceRectangularPrism((RectangularPrism) gf);
         }
@@ -241,4 +197,33 @@ public class RectangularPrism extends GeometricFigure {
             }
         }
     }
+    
+    public void setDimensionX(float x) {
+        this.dimensions.x = x;
+    }
+
+    public void setDimensionY(float y) {
+        this.dimensions.y = y;
+    }
+
+    public void setDimensionZ(float z) {
+        this.dimensions.z = z;
+    }
+
+    public void setRotationZ(float rotationZ) {
+        this.rotationZ = rotationZ;
+    }
+
+    public void setRotationY(float rotationY) {
+        this.rotationY = rotationY;
+    }
+
+    public PVector getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(PVector dimensions) {
+        this.dimensions = dimensions;
+    }
+    
 }

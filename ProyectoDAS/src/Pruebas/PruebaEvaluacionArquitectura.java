@@ -1,4 +1,4 @@
-package Pruebas;
+/*package Pruebas;
 
 import controlP5.*;
 import java.awt.Frame;
@@ -45,4 +45,4 @@ public class PruebaEvaluacionArquitectura extends PApplet {
             
         }
     }
-}
+}*/
