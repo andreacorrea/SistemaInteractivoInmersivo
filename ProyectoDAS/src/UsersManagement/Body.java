@@ -3,7 +3,6 @@ package UsersManagement;
 import GeometricFiguresManagement.GeometricFigure;
 import processing.core.*;
 import SimpleOpenNI.*;
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
 import SistemaInteraccionInmersiva.CalculateVectors;
 import Interaction.Command;
 import java.util.HashMap;
@@ -132,14 +131,14 @@ public class Body {
     }
 
     public void addObserverGFBody(GeometricFigure gf) {
-        GeometricFigure currentGeometricFigure;
+        GeometricFigure bodyMember;
 
-        Iterator bodyMember = bodyMembers.values().iterator();
+        Iterator bodyMemberIterator = bodyMembers.values().iterator();
 
-        while (bodyMember.hasNext()) {
-            currentGeometricFigure = ((GeometricFigure) bodyMember.next());
-            currentGeometricFigure.addObserver(gf);
-            gf.addObserver(currentGeometricFigure);
+        while (bodyMemberIterator.hasNext()) {
+            bodyMember = ((GeometricFigure) bodyMemberIterator.next());
+            bodyMember.addObserver(gf);
+            gf.addObserver(bodyMember);
         }
     }
     
@@ -182,7 +181,7 @@ public class Body {
     }
     
     private void calculatePositionOffset(){
-        this.positionOffset = CalculateVectors.getJointPos(SimpleOpenNI.SKEL_LEFT_SHOULDER, context, user).z;
+        this.positionOffset = CalculateVectors.getJointPos(AdapterSimpleOpenNI.SKEL_LEFT_SHOULDER, context, user).z;
     }
 
     public Map<String, GeometricFigure> getBodyMembers() {

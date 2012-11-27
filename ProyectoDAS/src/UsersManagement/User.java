@@ -1,8 +1,5 @@
 package UsersManagement;
 
-import UsersManagement.Body;
-import SimpleOpenNI.*;
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
 import processing.core.*;
 
 /*

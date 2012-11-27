@@ -1,6 +1,5 @@
 package GeometricFiguresManagement;
 
-
 import GeometricFiguresManagement.GeometricFigure;
 import Interaction.Command;
 import SistemaInteraccionInmersiva.Scene;
@@ -8,31 +7,32 @@ import UsersManagement.User;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import processing.core.PApplet;
 
 public class GeometricFiguresManager {
 
-    private Map<Integer, GeometricFigure> geometricFigures;
+    private Map<String, GeometricFigure> geometricFigures;
     private Scene scene;
     protected float friction = 1f;
     private static GeometricFiguresManager instance = null;
     private Command command;
 
-    private GeometricFiguresManager(Scene scene) {
-        geometricFigures = new HashMap<Integer, GeometricFigure>();
-        this.scene = scene;
+    private GeometricFiguresManager(PApplet p) {
+        geometricFigures = new HashMap<String, GeometricFigure>();
+        this.scene = Scene.getInstance(p);
     }
-    
-    public static GeometricFiguresManager getInstance(Scene scene) {
-        if(instance == null){
-            instance = new GeometricFiguresManager(scene);
+
+    public static GeometricFiguresManager getInstance(PApplet p) {
+        if (instance == null) {
+            instance = new GeometricFiguresManager(p);
         } else {
-            instance.scene = scene;
+            instance.scene = Scene.getInstance(p);
         }
         return instance;
     }
 
     public void addGeometricFigure(GeometricFigure gf) {
-        geometricFigures.put(geometricFigures.size(), gf);
+        geometricFigures.put(gf.getName(), gf);
         scene.addGeometricFigure(gf);
     }
 
@@ -40,8 +40,10 @@ public class GeometricFiguresManager {
         return geometricFigures.get(i);
     }
 
-    public GeometricFigure removeGeometricFigure(int i) {
-        return geometricFigures.remove(i);
+    public GeometricFigure removeGeometricFigure(GeometricFigure gf) {
+        geometricFigures.remove(gf.getName());
+        scene.removeGeometricFigure(gf);
+        return gf;
     }
 
     public int getGeometricFiguresSize() {
@@ -61,6 +63,19 @@ public class GeometricFiguresManager {
         }
     }
 
+    public void removeObserverGFMap(GeometricFigure gf) {
+        GeometricFigure currentGeometricFigure;
+        Iterator geometricFigure = geometricFigures.values().iterator();
+
+        while (geometricFigure.hasNext()) {
+            currentGeometricFigure = ((GeometricFigure) geometricFigure.next());
+            if (!currentGeometricFigure.equals(gf)) {
+                currentGeometricFigure.removeObserver(gf);
+                gf.removeObserver(currentGeometricFigure);
+            }
+        }
+    }
+
     public void addObserverUserMap(User user) {
         GeometricFigure currentGeometricFigure;
         Iterator geometricFigure = geometricFigures.values().iterator();
@@ -70,7 +85,7 @@ public class GeometricFiguresManager {
             user.getBody().addObserverGFBody(currentGeometricFigure);
         }
     }
-    
+
     public void removeObserverUserMap(User user) {
         GeometricFigure currentGeometricFigure;
         Iterator geometricFigure = geometricFigures.values().iterator();
@@ -96,4 +111,10 @@ public class GeometricFiguresManager {
     public void setCommand(Command command) {
         this.command = command;
     }
+
+    public Map<String, GeometricFigure> getGeometricFigures() {
+        return geometricFigures;
+    }
+    
+    
 }

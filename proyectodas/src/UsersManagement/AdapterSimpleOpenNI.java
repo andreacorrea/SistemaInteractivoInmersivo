@@ -1,21 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package GeometricFiguresManagement;
+package UsersManagement;
 
 import SimpleOpenNI.SimpleOpenNI;
+import java.util.LinkedList;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
-/**
- *
- * @author Andrea
- */
 public class AdapterSimpleOpenNI {
 
     private SimpleOpenNI adaptee;
+   
     public static int SKEL_HEAD ;
     public static int SKEL_NECK ;
     public static int SKEL_LEFT_SHOULDER;
@@ -30,10 +24,12 @@ public class AdapterSimpleOpenNI {
     public static int SKEL_RIGHT_HIP;
     public static int SKEL_RIGHT_KNEE;
     public static int SKEL_RIGHT_FOOT;
+    public static int SKEL_PROFILE_ALL;
 
     public AdapterSimpleOpenNI(PApplet pApplet) {
         adaptee = new SimpleOpenNI(pApplet);
-    
+        
+        
         SKEL_HEAD = SimpleOpenNI.SKEL_HEAD;
         SKEL_NECK = SimpleOpenNI.SKEL_NECK;
         SKEL_LEFT_SHOULDER = SimpleOpenNI.SKEL_LEFT_SHOULDER;
@@ -48,6 +44,8 @@ public class AdapterSimpleOpenNI {
         SKEL_RIGHT_HIP = SimpleOpenNI.SKEL_RIGHT_HIP;
         SKEL_RIGHT_KNEE = SimpleOpenNI.SKEL_RIGHT_KNEE;
         SKEL_RIGHT_FOOT = SimpleOpenNI.SKEL_RIGHT_FOOT;
+        
+        SKEL_PROFILE_ALL = SimpleOpenNI.SKEL_PROFILE_ALL;
     }
 public void update(){
         adaptee.update();
@@ -112,7 +110,19 @@ public void update(){
     }
     
     public int[] depthMap(){
-        return adaptee.depthMap();
+        int arrayDepth []=adaptee.depthMap();
+        //simula que devuelve una linkedList
+        LinkedList<Integer> ll = new LinkedList<Integer>();
+        for(int i=0; i< arrayDepth.length ; i++){
+            ll.add(arrayDepth[i]);
+        }
+        //lo convierte en arreglo
+        for(int i=0; i< ll.size() ; i++){
+            arrayDepth[i]=(ll.get(i));
+        }
+        
+        //return adaptee.depthMap();
+        return arrayDepth;
     }
     
     public PVector [] depthMapRealWorld(){

@@ -1,6 +1,7 @@
 package GeometricFiguresManagement;
 
 import Interaction.Command;
+import java.io.BufferedWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -27,6 +28,7 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         this.mass = mass;
         this.observers = new HashMap<String, Object>();
         this.belongsUser = true;
+
     }
 
     public GeometricFigure(String name, int color, PVector pos, float m, PVector vel, PApplet parent) {
@@ -50,11 +52,11 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
     public abstract boolean checkCollision(Ball b);
 
     public abstract boolean checkCollision(RectangularPrism p);
-    
+
     public abstract void bounce(GeometricFigure gf);
 
     public abstract GeometricFigure cloneFig();
-    
+
     public abstract void changeColor(GeometricFigure received);
 
     public void calculateVel(PVector finalPos) {
@@ -67,7 +69,7 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
     public boolean checkCollision(GeometricFigure fig) {
         if (fig instanceof Ball) {
             return checkCollision((Ball) fig);
-                
+
         } else {
             return checkCollision((RectangularPrism) fig);
         }
@@ -81,7 +83,7 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         auxP2.add(auxP1);
         return auxP2;
     }
-    
+
     @Override
     public void addObserver(Object obj) {
         getObservers().put(((GeometricFigure) obj).getName(), obj);
@@ -89,17 +91,17 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
 
     @Override
     public void removeObserver(Object obj) {
-        observers.remove(((GeometricFigure)obj).getName());
+        observers.remove(((GeometricFigure) obj).getName());
     }
 
     public void checkChangeState(Command command) {
         checkBoundaryCollision();
-        if(posRef.dist(pos) >= deltaPosMax){
+        if (posRef.dist(pos) >= deltaPosMax) {
             posRef.set(pos);
             notifyAllObservers(command);
         }
     }
-    
+
     @Override
     public void notifyAllObservers(Command command) {
         GeometricFigure currentObserver;
@@ -112,12 +114,12 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
     }
 
     public void inform(GeometricFigure gf, Command command) {
-        if(checkCollision(gf) && command != null){
+        if (checkCollision(gf) && command != null) {
             command.setReceiver(this);
             command.setReceived(gf);
             command.execute();
         }
-        
+
     }
 
     public String getName() {
@@ -196,5 +198,4 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
     public boolean getBelongsUser() {
         return belongsUser;
     }
-    
 }

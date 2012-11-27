@@ -1,18 +1,17 @@
 package SistemaInteraccionInmersiva;
 
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
 import GeometricFiguresManagement.GeometricFigure;
 import GeometricFiguresManagement.GeometricFiguresManager;
 import Interaction.BounceCommand;
 import Interaction.Command;
-import SimpleOpenNI.SimpleOpenNI;
+import UsersManagement.AdapterSimpleOpenNI;
 import UsersManagement.User;
 import UsersManagement.UsersManager;
 import processing.core.PApplet;
 
 public class Scene {
     
-    private PApplet pApplet;
+    private PApplet parent;
     private AdapterSimpleOpenNI context;
     private static Scene instance = null;   
     
@@ -22,15 +21,15 @@ public class Scene {
     
     private Command command = new BounceCommand();
     
-    private Scene(PApplet pApplet){
-        this.pApplet = pApplet;
+    private Scene(PApplet parent){
+        this.parent = parent;
     }
     
     public static Scene getInstance(PApplet p){
         if(instance == null){
             instance = new Scene(p);
         } else {
-            instance.pApplet = p;
+            instance.parent = p;
         }
         return instance;
     }
@@ -39,22 +38,22 @@ public class Scene {
         this.context = context;
         this.context.setMirror(true);
         // setup the callback helper class
-        usersManager = UsersManager.getInstance(pApplet, this.context, this);
+        usersManager = UsersManager.getInstance(parent, this.context);
         usersManager.setCommand(command);
         // enable depthMap generation 
-        CheckKinect.checkDepthCam(pApplet, this.context);
+        CheckKinect.checkDepthCam(parent, this.context);
 
         // enable scene analyser
-        CheckKinect.checkScene(pApplet, this.context);
+        CheckKinect.checkScene(parent, this.context);
         
         // enable skeleton generation for all joints, direct all callback to the helper class
-        this.context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL, usersManager);
+        this.context.enableUser(AdapterSimpleOpenNI.SKEL_PROFILE_ALL, usersManager);
         
         
     }
     
     public void activateGeometricFiguresManager(){
-        geometricFiguresManager = GeometricFiguresManager.getInstance(this);
+        geometricFiguresManager = GeometricFiguresManager.getInstance(this.parent);
         geometricFiguresManager.setCommand(command);
     }
 
@@ -67,7 +66,7 @@ public class Scene {
     }
 
     public void paint() {
-        pApplet.background(pApplet.color(255,0,0));
+        parent.background(parent.color(255,0,0));
         if(hasElements()){
             if(hasUsers()){
                 usersManager.updateAndPaintUsers();
@@ -115,6 +114,12 @@ public class Scene {
             geometricFiguresManager.removeObserverUserMap(user);
         }
     }
+    
+    public void removeGeometricFigure(GeometricFigure gf){
+        if(hasGeometricFigures()){
+            geometricFiguresManager.removeObserverGFMap(gf);
+        }
+    }
 
     public void setCommand(Command command) {
         this.command = command;
@@ -129,5 +134,4 @@ public class Scene {
         
         
     }
-
 }

@@ -4,17 +4,15 @@
  */
 package UsersManagement;
 
-import UsersManagement.Body;
+import GeometricFiguresManagement.Ball;
 import GeometricFiguresManagement.GeometricFigure;
 import GeometricFiguresManagement.RectangularPrism;
-import GeometricFiguresManagement.Ball;
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
 import SistemaInteraccionInmersiva.CalculateVectors;
 import java.util.HashMap;
 import processing.core.PVector;
 
 public class CubesSkeletonVolume implements BuildingSkeletonVolumeStrategy{
-
+    
     @Override
     public void updateVolume(Body body) {
         if(body.getBodyMembers().isEmpty()){

@@ -4,7 +4,7 @@
  */
 package SistemaInteraccionInmersiva;
 
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
+import UsersManagement.AdapterSimpleOpenNI;
 import SimpleOpenNI.SimpleOpenNI;
 import processing.core.PApplet;
 

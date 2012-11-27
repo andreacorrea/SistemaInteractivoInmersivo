@@ -4,7 +4,7 @@
  */
 package Pruebas;
 
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
+import UsersManagement.AdapterSimpleOpenNI;
 import SistemaInteraccionInmersiva.Scene;
 import SistemaInteraccionInmersiva.VisualRepresentation;
 import processing.core.PApplet;

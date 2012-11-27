@@ -1,14 +1,16 @@
 package Pruebas;
 
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
-import GeometricFiguresManagement.RectangularPrism;
 import GeometricFiguresManagement.Ball;
+import GeometricFiguresManagement.RectangularPrism;
 import Interaction.BounceCommand;
 import Interaction.ChangeColorCommand;
 import Interaction.Command;
 import SistemaInteraccionInmersiva.Scene;
+import UsersManagement.AdapterSimpleOpenNI;
 import UsersManagement.BuildingSkeletonVolumeStrategy;
+import UsersManagement.Cubes5SkeletonVolume;
 import UsersManagement.CubesSkeletonVolume;
+import UsersManagement.Spheres5SkeletonVolume;
 import UsersManagement.SpheresSkeletonVolume;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -65,14 +67,22 @@ public class PruebaUsuarioInteractivo extends PApplet{
                 break;
 
             case '2':
-                changeStrategyToCubes();
+                changeStrategyTo5Spheres();
                 break;
                 
             case '3':
+                changeStrategyToCubes();
+                break;
+            
+            case '4':
+                changeStrategyTo5Cubes();
+                break;
+                        
+            case '5':
                 changeCommandToBounce();
                 break;    
                 
-            case '4':
+            case '6':
                 changeCommandToChangeColor();
                 break;    
         }
@@ -81,6 +91,16 @@ public class PruebaUsuarioInteractivo extends PApplet{
 
     public void changeStrategyToSpheres() {
         BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy = new SpheresSkeletonVolume();
+        scene.getUsersManager().setbuildingSkeletonVolumeStrategy(buildingSkeletonVolumeStrategy);
+    }
+    
+    private void changeStrategyTo5Spheres() {
+        BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy = new Spheres5SkeletonVolume();
+        scene.getUsersManager().setbuildingSkeletonVolumeStrategy(buildingSkeletonVolumeStrategy);
+    }
+    
+    private void changeStrategyTo5Cubes() {
+        BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy = new Cubes5SkeletonVolume();
         scene.getUsersManager().setbuildingSkeletonVolumeStrategy(buildingSkeletonVolumeStrategy);
     }
 
@@ -99,4 +119,5 @@ public class PruebaUsuarioInteractivo extends PApplet{
         Command command = new ChangeColorCommand();
         scene.setCommand(command);
     }
+
 }

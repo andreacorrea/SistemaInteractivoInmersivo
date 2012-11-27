@@ -1,6 +1,6 @@
 package SistemaInteraccionInmersiva;
 
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
+import UsersManagement.AdapterSimpleOpenNI;
 import processing.core.*;
 
 public class VisualRepresentation {

@@ -5,7 +5,7 @@
 package Pruebas;
 
 //import ixagon.renderer.*;
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
+import UsersManagement.AdapterSimpleOpenNI;
 import Interaction.BounceCommand;
 import Interaction.ChangeColorCommand;
 import Interaction.Command;

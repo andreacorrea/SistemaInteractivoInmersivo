@@ -1,6 +1,6 @@
 package Pruebas;
 
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
+import UsersManagement.AdapterSimpleOpenNI;
 import SimpleOpenNI.SimpleOpenNI;
 import SistemaInteraccionInmersiva.VisualRepresentation;
 import java.util.Iterator;

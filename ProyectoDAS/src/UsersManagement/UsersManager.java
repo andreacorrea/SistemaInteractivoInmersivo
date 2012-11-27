@@ -1,7 +1,6 @@
 package UsersManagement;
 
 import GeometricFiguresManagement.GeometricFigure;
-import GeometricFiguresManagement.AdapterSimpleOpenNI;
 import Interaction.Command;
 import SistemaInteraccionInmersiva.Scene;
 import java.util.HashMap;
@@ -21,20 +20,20 @@ public class UsersManager {
     private static UsersManager instance = null;
     private Command command;
 
-    private UsersManager(PApplet p, AdapterSimpleOpenNI context, Scene scene) {
+    private UsersManager(PApplet p, AdapterSimpleOpenNI context) {
         this.parent = p;
         this.context = context;
-        this.scene = scene;
+        this.scene = Scene.getInstance(p);
         users = new HashMap<Integer, User>();
     }
     
-    public static UsersManager getInstance(PApplet p, AdapterSimpleOpenNI context, Scene scene){
+    public static UsersManager getInstance(PApplet p, AdapterSimpleOpenNI context){
         if(instance == null){
-            instance = new UsersManager(p, context, scene);
+            instance = new UsersManager(p, context);
         } else {
             instance.parent = p;
             instance.context = context;
-            instance.scene = scene;
+            instance.scene = Scene.getInstance(p);
         }
         return instance;
     }
