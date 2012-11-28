@@ -23,7 +23,7 @@ public class PruebaUsuarioInteractivo extends PApplet{
     public void setup(){
         //size(640, 480, P3D);
         size(1000, 800, P3D);
-        frameRate(15);
+        frameRate(30);
         context = new AdapterSimpleOpenNI(this);
         
         scene = Scene.getInstance(this);

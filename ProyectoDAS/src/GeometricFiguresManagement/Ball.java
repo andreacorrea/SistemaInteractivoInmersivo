@@ -46,9 +46,11 @@ public class Ball extends GeometricFigure {
     }
 
     @Override
-    public void update(float friction) {
-        vel.x *= friction;
-        vel.y *= friction;
+    public void update(float friction, float gravity) {
+        if(vel.x > minSpeed){
+            vel.x *= friction;
+        }
+        vel.y += gravity;
         pos.x += vel.x;
         pos.y += vel.y;
     }
@@ -63,7 +65,7 @@ public class Ball extends GeometricFigure {
             vel.x *= -1;
         } else if (pos.y > parent.height - radius) {
             pos.y = parent.height - radius;
-            vel.y *= -1;
+            vel.y = 0;
         } else if (pos.y < radius) {
             pos.y = radius;
             vel.y *= -1;

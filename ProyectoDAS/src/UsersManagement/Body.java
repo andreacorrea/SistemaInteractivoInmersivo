@@ -22,7 +22,7 @@ public class Body {
     private float positionOffset;
     private float defaultHeight = 20;
     private float defaultDepth = 20;
-    private float defaultMass = 1;
+    private float defaultMass = 800;
     
     BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy;
     
