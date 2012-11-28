@@ -21,6 +21,7 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
     protected float deltaPosMax = 1;
     protected Map<String, Object> observers;
     protected boolean belongsUser = false;
+    protected int minSpeed;
 
     public GeometricFigure(String name, int color, PApplet parent, float mass) {
         this.parent = parent;
@@ -29,7 +30,7 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         this.mass = mass;
         this.observers = new HashMap<String, Object>();
         this.belongsUser = true;
-
+        this.minSpeed = 1;
     }
 
     public GeometricFigure(String name, int color, PVector pos, float m, PVector vel, PApplet parent) {
@@ -42,11 +43,12 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         this.vel = vel;
         this.observers = new HashMap<String, Object>();
         this.belongsUser = false;
+        this.minSpeed = 1;
     }
 
     public abstract void paint();
 
-    public abstract void update(float friction);
+    public abstract void update(float friction, float gravity);
 
     public abstract void checkBoundaryCollision();
 
@@ -203,5 +205,13 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
 
     public boolean getBelongsUser() {
         return belongsUser;
+    }
+
+    public int getMinSpeed() {
+        return minSpeed;
+    }
+
+    public void setMinSpeed(int minSpeed) {
+        this.minSpeed = minSpeed;
     }
 }

@@ -16,6 +16,7 @@ public class SkecthPruebaColisiones extends PApplet {
     
     protected int framerate = 30;
     protected float friction = 0.93f;
+    protected float gravity = 0.1f;
     protected float strengthCoef = 0.8f;
     public boolean checar = false;
     
@@ -62,7 +63,7 @@ public class SkecthPruebaColisiones extends PApplet {
                 figs[0].setVelX( (vHistPos[1].x - vHistPos[0].x) * strengthCoef );
                 figs[0].setVelY( (vHistPos[1].y - vHistPos[0].y) * strengthCoef );
             } else {
-                figs[i].update(friction);
+                figs[i].update(friction, gravity);
             }
             figs[i].paint();
             figs[i].checkBoundaryCollision();

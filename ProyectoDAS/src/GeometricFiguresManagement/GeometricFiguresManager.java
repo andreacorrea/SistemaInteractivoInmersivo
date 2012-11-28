@@ -13,6 +13,7 @@ public class GeometricFiguresManager {
     private Map<String, GeometricFigure> geometricFigures;
     private Scene scene;
     protected float friction = 1f;
+    protected float gravity = 0.1f;
     private static GeometricFiguresManager instance = null;
     private Command command;
 
@@ -116,7 +117,7 @@ public class GeometricFiguresManager {
 
         while (geometricFigure.hasNext()) {
             currentGeometricFigure = ((GeometricFigure) geometricFigure.next());
-            currentGeometricFigure.update(friction);
+            currentGeometricFigure.update(friction, gravity);
             currentGeometricFigure.checkChangeState(command);
             currentGeometricFigure.paint();
         }
