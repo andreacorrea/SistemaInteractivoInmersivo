@@ -1,6 +1,5 @@
 package GeometricFiguresManagement;
 
-import GeometricFiguresManagement.GeometricFigure;
 import Interaction.Command;
 import SistemaInteraccionInmersiva.Scene;
 import UsersManagement.User;
@@ -44,6 +43,21 @@ public class GeometricFiguresManager {
         geometricFigures.remove(gf.getName());
         scene.removeGeometricFigure(gf);
         return gf;
+    }
+    
+    public void clear(){
+        GeometricFigure currentGeometricFigure;
+        Iterator geometricFigure = geometricFigures.values().iterator();
+
+        /*while (geometricFigure.hasNext()) {
+            currentGeometricFigure = ((GeometricFigure) geometricFigure.next());
+            removeGeometricFigure(currentGeometricFigure);
+        }*/
+        while (geometricFigure.hasNext()) {
+            currentGeometricFigure = ((GeometricFigure) geometricFigure.next());
+            scene.removeGeometricFigure(currentGeometricFigure);
+        }
+        geometricFigures.clear();
     }
 
     public int getGeometricFiguresSize() {

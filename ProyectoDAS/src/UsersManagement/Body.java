@@ -34,7 +34,7 @@ public class Body {
         this.bodyColor = bodyColor;
         this.bodyMembers = new HashMap<String, GeometricFigure>();
         //this.buildingSkeletonVolumeStrategy = new CubesSkeletonVolume();
-        this.buildingSkeletonVolumeStrategy = new SpheresSkeletonVolume();
+        this.buildingSkeletonVolumeStrategy = new Spheres5SkeletonVolume();
         createSkeleton();
     }
 

@@ -2,6 +2,7 @@ package GeometricFiguresManagement;
 
 import Interaction.Command;
 import java.io.BufferedWriter;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -108,8 +109,13 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         Iterator observer = getObservers().values().iterator();
 
         while (observer.hasNext()) {
-            currentObserver = ((GeometricFigure) observer.next());
-            currentObserver.inform(this, command);
+            try{
+                currentObserver = ((GeometricFigure) observer.next());
+                currentObserver.inform(this, command);
+            }catch(ConcurrentModificationException e){
+                System.out.println(e.toString());
+                return;
+            }
         }
     }
 

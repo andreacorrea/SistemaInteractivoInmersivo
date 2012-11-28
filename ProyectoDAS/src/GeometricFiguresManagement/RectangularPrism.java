@@ -4,7 +4,6 @@
  */
 package GeometricFiguresManagement;
 
-import GeometricFiguresManagement.Ball;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;

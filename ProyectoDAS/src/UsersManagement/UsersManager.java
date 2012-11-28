@@ -26,9 +26,9 @@ public class UsersManager {
         this.scene = Scene.getInstance(p);
         users = new HashMap<Integer, User>();
     }
-    
-    public static UsersManager getInstance(PApplet p, AdapterSimpleOpenNI context){
-        if(instance == null){
+
+    public static UsersManager getInstance(PApplet p, AdapterSimpleOpenNI context) {
+        if (instance == null) {
             instance = new UsersManager(p, context);
         } else {
             instance.parent = p;
@@ -55,10 +55,14 @@ public class UsersManager {
 
     public void onExitUser(int userId) {
         parent.println("onExitUser - userId: " + userId);
+        removeUser(userId);
     }
 
     public void onReEnterUser(int userId) {
         parent.println("onReEnterUser - userId: " + userId);
+        User user = new User(parent, userId, context, parent.color(0, 255, 0));
+        users.put(userId, user);
+        scene.addUser(user);
     }
 
     // when a user begins a pose
@@ -141,8 +145,11 @@ public class UsersManager {
             currentUser = ((User) user.next());
             //currentUser.getBody().drawSkeletonLines();
             //currentUser.getBody().drawJoints();
+
             currentUser.getBody().update();
             currentUser.getBody().paintSkeletonMembers(command);
+
+
             //currentUser.getBody().circleForAHead();
         }
     }
@@ -157,13 +164,23 @@ public class UsersManager {
         }
     }
 
+    public void removeObserverGFUsers(GeometricFigure gf) {
+        User currentUser;
+        Iterator user = users.values().iterator();
+
+        while (user.hasNext()) {
+            currentUser = ((User) user.next());
+            currentUser.getBody().removeObserverGFBody(gf);
+        }
+    }
+
     public void setCommand(Command command) {
         this.command = command;
     }
-    
-    public void setbuildingSkeletonVolumeStrategy(BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy){
+
+    public void setbuildingSkeletonVolumeStrategy(BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy) {
         User currentUser;
-        
+
         // draw the skeleton of user1
         Iterator user = users.values().iterator();
 
@@ -173,10 +190,6 @@ public class UsersManager {
             currentUser.getBody().setBuildingSkeletonVolumeStrategy(buildingSkeletonVolumeStrategy);
             scene.addUser(currentUser);
         }
-        
-    }
-    
-    
 
-    
+    }
 }

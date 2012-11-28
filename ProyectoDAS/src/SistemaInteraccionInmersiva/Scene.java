@@ -116,8 +116,14 @@ public class Scene {
     }
     
     public void removeGeometricFigure(GeometricFigure gf){
-        if(hasGeometricFigures()){
-            geometricFiguresManager.removeObserverGFMap(gf);
+
+        if(hasElements()){
+            if(hasUsers()){
+                usersManager.removeObserverGFUsers(gf);
+            }
+            if(hasGeometricFigures()){
+                geometricFiguresManager.removeObserverGFMap(gf);
+            }
         }
     }
 
@@ -133,5 +139,9 @@ public class Scene {
         }
         
         
+    }
+
+    public PApplet getParent() {
+        return parent;
     }
 }
