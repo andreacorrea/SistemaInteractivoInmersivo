@@ -7,6 +7,7 @@ import Interaction.Command;
 import UsersManagement.AdapterSimpleOpenNI;
 import UsersManagement.User;
 import UsersManagement.UsersManager;
+import java.util.Map;
 import processing.core.PApplet;
 
 public class Scene {
@@ -19,7 +20,8 @@ public class Scene {
     private UsersManager usersManager;
     private GeometricFiguresManager geometricFiguresManager;
     
-    private Command command = new BounceCommand();
+    
+    private Command collisionCommand = new BounceCommand();
     
     private Scene(PApplet parent){
         this.parent = parent;
@@ -39,7 +41,7 @@ public class Scene {
         this.context.setMirror(true);
         // setup the callback helper class
         usersManager = UsersManager.getInstance(parent, this.context);
-        usersManager.setCommand(command);
+        usersManager.setCollisionCommand(collisionCommand);
         // enable depthMap generation 
         CheckKinect.checkDepthCam(parent, this.context);
 
@@ -54,7 +56,7 @@ public class Scene {
     
     public void activateGeometricFiguresManager(){
         geometricFiguresManager = GeometricFiguresManager.getInstance(this.parent);
-        geometricFiguresManager.setCommand(command);
+        geometricFiguresManager.setCollisionCommand(collisionCommand);
     }
 
     public UsersManager getUsersManager() {
@@ -66,7 +68,8 @@ public class Scene {
     }
 
     public void paint() {
-        parent.background(parent.color(255,0,0));
+        parent.lights();
+        parent.background(parent.color(230));
         if(hasElements()){
             if(hasUsers()){
                 usersManager.updateAndPaintUsers();
@@ -127,21 +130,20 @@ public class Scene {
         }
     }
 
-    public void setCommand(Command command) {
-        this.command = command;
+    public void setCollisionCommand(Command collisionCommand) {
+        this.collisionCommand = collisionCommand;
         if(hasElements()){
             if(hasUsers()){
-                this.usersManager.setCommand(command);
+                this.usersManager.setCollisionCommand(collisionCommand);
             }
             if(hasGeometricFigures()){
-                this.geometricFiguresManager.setCommand(command);
+                this.geometricFiguresManager.setCollisionCommand(collisionCommand);
             }
         }
-        
-        
     }
 
     public PApplet getParent() {
         return parent;
     }
+
 }

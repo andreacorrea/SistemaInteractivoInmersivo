@@ -12,21 +12,11 @@ import GeometricFiguresManagement.GeometricFigure;
  */
 public class BounceCommand implements Command{
 
-    private GeometricFigure receiver;
     private GeometricFigure received;
     
     @Override
-    public void execute() {
+    public void execute(GeometricFigure receiver) {
         receiver.bounce(received);
-    }
-
-    /**
-     *
-     * @param receiver
-     */
-    @Override
-    public void setReceiver(GeometricFigure receiver) {
-        this.receiver = receiver;
     }
 
     public void setReceived(GeometricFigure received) {

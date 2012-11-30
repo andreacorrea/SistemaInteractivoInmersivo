@@ -1,15 +1,13 @@
 package Pruebas;
 
+import SistemaInteraccionInmersiva.VirtualRepresentation;
 import UsersManagement.AdapterSimpleOpenNI;
-import SimpleOpenNI.SimpleOpenNI;
-import SistemaInteraccionInmersiva.VisualRepresentation;
-import java.util.Iterator;
 import processing.core.*;
 
 public class PruebaVisualRepresentation extends PApplet {
 
     AdapterSimpleOpenNI context;
-    VisualRepresentation visualRepresentation;
+    VirtualRepresentation visualRepresentation;
 
     @Override
     public void setup() {
@@ -21,7 +19,7 @@ public class PruebaVisualRepresentation extends PApplet {
         
         context = new AdapterSimpleOpenNI(this);
         
-        visualRepresentation = new VisualRepresentation(this, context);
+        visualRepresentation = new VirtualRepresentation(this, context);
 
     }
 

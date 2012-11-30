@@ -1,7 +1,6 @@
 package GeometricFiguresManagement;
 
 import Interaction.Command;
-import java.io.BufferedWriter;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,9 +47,23 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
 
     public abstract void paint();
 
-    public abstract void update(float friction, float gravity);
-
     public abstract void checkBoundaryCollision();
+
+    public abstract boolean checkLowerBoundary();
+
+    public abstract boolean checkRightBoundary();
+
+    public abstract boolean checkLeftBoundary();
+
+    public abstract boolean checkUpperBoundary();
+
+    public abstract void bounceLowerBoundary();
+
+    public abstract void bounceRightBoundary();
+
+    public abstract void bounceLeftBoundary();
+
+    public abstract void bounceUpperBoundary();
 
     public abstract boolean checkCollision(Ball b);
 
@@ -61,6 +74,15 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
     public abstract GeometricFigure cloneFig();
 
     public abstract void changeColor(GeometricFigure received);
+    
+    public void update(float friction, float gravity){
+        if (vel.x > minSpeed) {
+            vel.x *= friction;
+        }
+        vel.y += gravity;
+        pos.x += vel.x;
+        pos.y += vel.y;
+    }
 
     public void calculateVel(PVector finalPos) {
         PVector auxFinalPos = new PVector();
@@ -76,15 +98,6 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         } else {
             return checkCollision((RectangularPrism) fig);
         }
-    }
-
-    public PVector calculateMiddlePoint(PVector p1, PVector p2) {
-        PVector auxP1 = p1.get();
-        PVector auxP2 = p2.get();
-        auxP1.sub(auxP2);
-        auxP1.div(2);
-        auxP2.add(auxP1);
-        return auxP2;
     }
 
     @Override
@@ -111,10 +124,10 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         Iterator observer = getObservers().values().iterator();
 
         while (observer.hasNext()) {
-            try{
+            try {
                 currentObserver = ((GeometricFigure) observer.next());
                 currentObserver.inform(this, command);
-            }catch(ConcurrentModificationException e){
+            } catch (ConcurrentModificationException e) {
                 System.out.println(e.toString());
                 return;
             }
@@ -123,9 +136,8 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
 
     public void inform(GeometricFigure gf, Command command) {
         if (checkCollision(gf) && command != null) {
-            command.setReceiver(this);
             command.setReceived(gf);
-            command.execute();
+            command.execute(this);
         }
 
     }
@@ -214,4 +226,5 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
     public void setMinSpeed(int minSpeed) {
         this.minSpeed = minSpeed;
     }
+
 }

@@ -7,11 +7,9 @@ import Interaction.ChangeColorCommand;
 import Interaction.Command;
 import SistemaInteraccionInmersiva.Scene;
 import UsersManagement.AdapterSimpleOpenNI;
-import UsersManagement.BuildingSkeletonVolumeStrategy;
-import UsersManagement.Cubes5SkeletonVolume;
-import UsersManagement.CubesSkeletonVolume;
-import UsersManagement.Spheres5SkeletonVolume;
-import UsersManagement.SpheresSkeletonVolume;
+import UsersManagement.VolumeGeneration.BuildingSkeletonVolumeStrategy;
+import UsersManagement.VolumeGeneration.Cubes5SkeletonVolume;
+import UsersManagement.VolumeGeneration.Spheres5SkeletonVolume;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -62,36 +60,24 @@ public class PruebaUsuarioInteractivo extends PApplet{
     @Override
     public void keyPressed() {
         switch (key) {
-            case '1':
-                changeStrategyToSpheres();
-                break;
 
-            case '2':
+            case '1':
                 changeStrategyTo5Spheres();
                 break;
-                
-            case '3':
-                changeStrategyToCubes();
-                break;
             
-            case '4':
+            case '2':
                 changeStrategyTo5Cubes();
                 break;
                         
-            case '5':
+            case '3':
                 changeCommandToBounce();
                 break;    
                 
-            case '6':
+            case '4':
                 changeCommandToChangeColor();
                 break;    
         }
 
-    }
-
-    public void changeStrategyToSpheres() {
-        BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy = new SpheresSkeletonVolume();
-        scene.getUsersManager().setbuildingSkeletonVolumeStrategy(buildingSkeletonVolumeStrategy);
     }
     
     private void changeStrategyTo5Spheres() {
@@ -104,20 +90,14 @@ public class PruebaUsuarioInteractivo extends PApplet{
         scene.getUsersManager().setbuildingSkeletonVolumeStrategy(buildingSkeletonVolumeStrategy);
     }
 
-    public void changeStrategyToCubes() {
-        BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy = new CubesSkeletonVolume();
-        scene.getUsersManager().setbuildingSkeletonVolumeStrategy(buildingSkeletonVolumeStrategy);
-
-    }
-
     private void changeCommandToBounce() {
         Command command = new BounceCommand();
-        scene.setCommand(command);
+        scene.setCollisionCommand(command);
     }
 
     private void changeCommandToChangeColor() {
         Command command = new ChangeColorCommand();
-        scene.setCommand(command);
+        scene.setCollisionCommand(command);
     }
 
 }

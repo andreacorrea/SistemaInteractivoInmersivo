@@ -3,9 +3,9 @@ package SistemaInteraccionInmersiva;
 import UsersManagement.AdapterSimpleOpenNI;
 import processing.core.*;
 
-public class VisualRepresentation {
+public class VirtualRepresentation {
 
-    private PApplet pApplet;
+    private PApplet parent;
     private AdapterSimpleOpenNI context;
     private int resolution = 0;
     private float zmin = 0, zmax = 0;
@@ -21,9 +21,10 @@ public class VisualRepresentation {
     private PVector[] resMap3D;
     private PImage resRGB = new PImage();
     private boolean[] constrainedImg;
+    private float maxSep = 90;         // Maxima separacion entre dos puntos consecutivos
 
-    public VisualRepresentation(PApplet pApplet, AdapterSimpleOpenNI context) {
-        this.pApplet = pApplet;
+    public VirtualRepresentation(PApplet pApplet, AdapterSimpleOpenNI context) {
+        this.parent = pApplet;
         resolution = 2;
         zmin = 0;
         zmax = 2000;
@@ -36,10 +37,10 @@ public class VisualRepresentation {
 
         context.setMirror(true);
 
-        // enable depthMap generation 
+        // habilita la generacion del depthMap
         CheckKinect.checkDepthCam(pApplet, context);
 
-        // enable RGB generation
+        // habilita la generacion RGB
         CheckKinect.checkRGBCam(pApplet, context);
     }
 
@@ -58,18 +59,18 @@ public class VisualRepresentation {
 
         positionVisualRepresentation();
 
-        // Lights with real colors doesn't look very nice
+        
         if (!realColor) {
-            pApplet.directionalLight(255, 255, 255, 0, -0.2f, 1);
+            parent.directionalLight(255, 255, 255, 0, -0.2f, 1);
         }
 
-        // Paint the kinect points
+        
 
 
         if (realColor) {
             drawAsBands(resRGB, resMap3D, constrainedImg);
         } else {
-            defaultColor = pApplet.color(50, 50, 255);
+            defaultColor = parent.color(50, 50, 255);
             drawAsBands(defaultColor, resRGB, resMap3D, constrainedImg);
         }
 
@@ -79,13 +80,13 @@ public class VisualRepresentation {
     }
 
     private void positionVisualRepresentation() {
-        // Position the scene
+        // Posiciona la escena
         //pApplet.background(10);
-        pApplet.translate(pApplet.width / 2, pApplet.height / 2, 0);
-        pApplet.rotateX(rotX);
-        pApplet.rotateY(rotY);
-        pApplet.scale(zoom);
-        pApplet.translate(0, 0, -1500);
+        parent.translate(parent.width / 2, parent.height / 2, 0);
+        parent.rotateX(rotX);
+        parent.rotateY(rotY);
+        parent.scale(zoom);
+        parent.translate(0, 0, -1500);
 
     }
 
@@ -124,7 +125,7 @@ public class VisualRepresentation {
         int ySizeOrig = context.depthHeight();
         int xSize = xSizeOrig / resolution;
         int ySize = ySizeOrig / resolution;
-        PImage resRGB = pApplet.createImage(xSize, ySize, pApplet.RGB);
+        PImage resRGB = parent.createImage(xSize, ySize, parent.RGB);
 
         for (int y = 0; y < ySize; y++) {
             for (int x = 0; x < xSize; x++) {
@@ -146,60 +147,60 @@ public class VisualRepresentation {
     }
 
     private void drawAsBands(PImage rgbImg, PVector[] map3D, boolean[] consImg) {
-        pApplet.noStroke();
+        parent.noStroke();
 
         int xSize = rgbImg.width;
         int ySize = rgbImg.height;
-        float maxSep = 90;         // Maximum separation allowed between two consecutive points
-        boolean started = false;   // Controls when a band has been started
+        
+        boolean started = false;
 
         for (int y = 0; y < ySize - 1; y++) {
             for (int x = 0; x < xSize; x++) {
                 int index = x + y * xSize;
                 if (consImg[index]) {
-                    // Upper point
-                    pApplet.fill(rgbImg.pixels[index]);
+                    // Punto superior
+                    parent.fill(rgbImg.pixels[index]);
                     PVector p = map3D[index];
                     if (!started) {
-                        pApplet.beginShape(pApplet.TRIANGLE_STRIP);
-                        pApplet.vertex(p.x, p.y, p.z);
+                        parent.beginShape(parent.TRIANGLE_STRIP);
+                        parent.vertex(p.x, p.y, p.z);
                         started = true;
                     } else if (p.dist(map3D[index - 1]) < maxSep) {
-                        pApplet.vertex(p.x, p.y, p.z);
+                        parent.vertex(p.x, p.y, p.z);
                     } else {
-                        pApplet.endShape();
+                        parent.endShape();
                         started = false;
-                        x--;  // Is a good point, use it in the next loop as starting point for a new band
+                        x--;  // Es un punto válido, se debe usar en el siguiente ciclo como punto de inicio para un nuevo triángulo
                         continue;
                     }
-                    // Lower point        
+                    // Punto inferior      
                     if (consImg[index + xSize]) {
                         PVector lp = map3D[index + xSize];
                         if (p.dist(lp) < maxSep) {
-                            pApplet.fill(rgbImg.pixels[index + xSize]);
-                            pApplet.vertex(lp.x, lp.y, lp.z);
+                            parent.fill(rgbImg.pixels[index + xSize]);
+                            parent.vertex(lp.x, lp.y, lp.z);
                         } else {
-                            pApplet.vertex(p.x, p.y, p.z);
+                            parent.vertex(p.x, p.y, p.z);
                         }
                     } else {
-                        pApplet.vertex(p.x, p.y, p.z);
+                        parent.vertex(p.x, p.y, p.z);
                     }
-                    // Finish the band if is the last point in the row
+                    // Cierra el triángulo si es el último punto en la fila
                     if (x == xSize - 1) {
-                        pApplet.endShape();
+                        parent.endShape();
                         started = false;
                     }
                 } else if (started) {
-                    // Upper point is not valid, let's see if we can use the lower point
-                    // for the last point in the band
+                    // El punto superior no es válido, se determina si se puede usar el punto 
+                    //inferior como el ultimo punto del triangulo
                     if (consImg[index + xSize]) {
                         PVector lp = map3D[index + xSize];
                         if (lp.dist(map3D[index - 1]) < maxSep) {
-                            pApplet.fill(rgbImg.pixels[index + xSize]);
-                            pApplet.vertex(lp.x, lp.y, lp.z);
+                            parent.fill(rgbImg.pixels[index + xSize]);
+                            parent.vertex(lp.x, lp.y, lp.z);
                         }
                     }
-                    pApplet.endShape();
+                    parent.endShape();
                     started = false;
                 }
             }
@@ -207,12 +208,11 @@ public class VisualRepresentation {
     }
 
     void drawAsBands(int col, PImage rgbImg, PVector[] map3D, boolean[] consImg) {
-        pApplet.noStroke();
-        pApplet.fill(col);
+        parent.noStroke();
+        parent.fill(col);
 
         int xSize = rgbImg.width;
         int ySize = rgbImg.height;
-        float maxSep = 90;         // Maximum separation allowed between two consecutive points
         boolean started = false;   // Controls when a band has been started
 
         for (int y = 0; y < ySize - 1; y++) {
@@ -220,58 +220,58 @@ public class VisualRepresentation {
                 int index = x + y * xSize;
                 try {
                     if (consImg[index]) {
-                        // Upper point
+                        // Punto superior
                         PVector p = map3D[index];
                         if (!started) {
-                            pApplet.beginShape(pApplet.TRIANGLE_STRIP);
-                            pApplet.vertex(p.x, p.y, p.z);
+                            parent.beginShape(parent.TRIANGLE_STRIP);
+                            parent.vertex(p.x, p.y, p.z);
                             started = true;
                         } else if (p.dist(map3D[index - 1]) < maxSep) {
-                            pApplet.vertex(p.x, p.y, p.z);
+                            parent.vertex(p.x, p.y, p.z);
                         } else {
-                            pApplet.endShape();
+                            parent.endShape();
                             started = false;
-                            x--;  // Is a good point, use it in the next loop as starting point for a new band
+                            x--;  // Es un punto válido, se debe usar en el siguiente ciclo como punto de inicio para un nuevo triángulo
                             continue;
                         }
                         try {
-                            // Lower point        
+                            // Punto inferior      
                             if (consImg[index + xSize]) {
                                 PVector lp = map3D[index + xSize];
                                 if (p.dist(lp) < maxSep) {
-                                    pApplet.vertex(lp.x, lp.y, lp.z);
+                                    parent.vertex(lp.x, lp.y, lp.z);
                                 } else {
-                                    pApplet.vertex(p.x, p.y, p.z);
+                                    parent.vertex(p.x, p.y, p.z);
                                 }
                             } else {
-                                pApplet.vertex(p.x, p.y, p.z);
+                                parent.vertex(p.x, p.y, p.z);
                             }
                         } catch (ArrayIndexOutOfBoundsException ex) {
-                            pApplet.println(ex.toString());
+                            parent.println(ex.toString());
                         }
-                        // Finish the band if is the last point in the row
+                        // Cierra el triángulo si es el último punto en la fila
                         if (x == xSize - 1) {
-                            pApplet.endShape();
+                            parent.endShape();
                             started = false;
                         }
                     } else if (started) {
-                        // Upper point is not valid, let's see if we can use the lower point
-                        // as the last point in the band
+                        // El punto superior no es válido, se determina si se puede usar el punto 
+                        //inferior como el ultimo punto del triangulo
                         try {
                             if (consImg[index + xSize]) {
                                 PVector lp = map3D[index + xSize];
                                 if (lp.dist(map3D[index - 1]) < maxSep) {
-                                    pApplet.vertex(lp.x, lp.y, lp.z);
+                                    parent.vertex(lp.x, lp.y, lp.z);
                                 }
                             }
                         } catch (ArrayIndexOutOfBoundsException ex) {
-                            pApplet.println(ex.toString());
+                            parent.println(ex.toString());
                         }
-                        pApplet.endShape();
+                        parent.endShape();
                         started = false;
                     }
                 } catch (ArrayIndexOutOfBoundsException ex) {
-                    pApplet.println(ex.toString());
+                    parent.println(ex.toString());
                 }
             }
         }

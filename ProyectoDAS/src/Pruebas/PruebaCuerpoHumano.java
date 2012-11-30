@@ -10,9 +10,7 @@ import Interaction.BounceCommand;
 import Interaction.ChangeColorCommand;
 import Interaction.Command;
 import SistemaInteraccionInmersiva.Scene;
-import UsersManagement.BuildingSkeletonVolumeStrategy;
-import UsersManagement.CubesSkeletonVolume;
-import UsersManagement.SpheresSkeletonVolume;
+import UsersManagement.VolumeGeneration.BuildingSkeletonVolumeStrategy;
 import UsersManagement.User;
 import processing.core.*;
 

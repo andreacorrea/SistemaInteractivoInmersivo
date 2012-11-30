@@ -6,7 +6,7 @@ package Pruebas;
 
 import UsersManagement.AdapterSimpleOpenNI;
 import SistemaInteraccionInmersiva.Scene;
-import SistemaInteraccionInmersiva.VisualRepresentation;
+import SistemaInteraccionInmersiva.VirtualRepresentation;
 import processing.core.PApplet;
 
 /**
@@ -16,7 +16,7 @@ import processing.core.PApplet;
 public class PruebaUsuarioVolumetrico extends PApplet {
 
     AdapterSimpleOpenNI context;
-    VisualRepresentation visualRepresentation;
+    VirtualRepresentation visualRepresentation;
     Scene scene;
 
     @Override
@@ -34,7 +34,7 @@ public class PruebaUsuarioVolumetrico extends PApplet {
 
         scene.activateUsersManager(context);
         
-        visualRepresentation = new VisualRepresentation(this, context);
+        visualRepresentation = new VirtualRepresentation(this, context);
 
     }
     

@@ -1,4 +1,4 @@
-package UsersManagement;
+package UsersManagement.VolumeGeneration;
 
 public interface BuildingSkeletonVolumeStrategy {
     public void updateVolume(Body body);

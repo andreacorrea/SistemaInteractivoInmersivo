@@ -1,20 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package UsersManagement;
+package UsersManagement.VolumeGeneration;
 
 import GeometricFiguresManagement.Ball;
 import GeometricFiguresManagement.GeometricFigure;
 import GeometricFiguresManagement.RectangularPrism;
 import SistemaInteraccionInmersiva.CalculateVectors;
+import UsersManagement.AdapterSimpleOpenNI;
+import UsersManagement.User;
 import java.util.HashMap;
 import processing.core.PVector;
 
-/**
- *
- * @author Andrea
- */
 public class Cubes5SkeletonVolume implements BuildingSkeletonVolumeStrategy {
     
     private float defaultSize=20;
@@ -93,10 +87,10 @@ public class Cubes5SkeletonVolume implements BuildingSkeletonVolumeStrategy {
     private void updateHeadMember(HashMap <String, GeometricFigure>bodyMembers, AdapterSimpleOpenNI context, User user) {
         Ball head = (Ball) bodyMembers.get("HEAD");
         PVector headPosition = CalculateVectors.getJointPos(AdapterSimpleOpenNI.SKEL_HEAD, context, user);
-        // a 200 pixel diameter head
+        
         float headsize = 100;
 
-        // create a distance scalar related to the depth (z dimension)
+        // crear una distancia escalar relacionada a la profundidad (dimension Z)
         float distanceScalar = (525 / headPosition.z);
 
         headPosition.z = 0;
@@ -116,17 +110,17 @@ public class Cubes5SkeletonVolume implements BuildingSkeletonVolumeStrategy {
         //Calculate Middle Points
         leftLowerJointPos.z = leftUpperJointPos.z;
         rightLowerJointPos.z = rightUpperJointPos.z;
-        PVector upperMiddlePoint = torso.calculateMiddlePoint(leftUpperJointPos, rightUpperJointPos);
-        PVector lowerMiddlePoint = torso.calculateMiddlePoint(leftLowerJointPos, rightLowerJointPos);
+        PVector upperMiddlePoint = CalculateVectors.calculateMiddlePoint(leftUpperJointPos, rightUpperJointPos);
+        PVector lowerMiddlePoint = CalculateVectors.calculateMiddlePoint(leftLowerJointPos, rightLowerJointPos);
 
-        PVector leftMiddlePoint = torso.calculateMiddlePoint(leftUpperJointPos, leftLowerJointPos);
+        PVector leftMiddlePoint = CalculateVectors.calculateMiddlePoint(leftUpperJointPos, leftLowerJointPos);
 
-        PVector rightMiddlePoint = torso.calculateMiddlePoint(rightUpperJointPos, rightLowerJointPos);
+        PVector rightMiddlePoint = CalculateVectors.calculateMiddlePoint(rightUpperJointPos, rightLowerJointPos);
 
         //Calculate Position
         PVector position = new PVector();
-        PVector middlePoint1 = torso.calculateMiddlePoint(leftUpperJointPos, rightLowerJointPos);
-        PVector middlePoint2 = torso.calculateMiddlePoint(rightUpperJointPos, leftLowerJointPos);
+        PVector middlePoint1 = CalculateVectors.calculateMiddlePoint(leftUpperJointPos, rightLowerJointPos);
+        PVector middlePoint2 = CalculateVectors.calculateMiddlePoint(rightUpperJointPos, leftLowerJointPos);
 
         position.set((middlePoint1.x + middlePoint2.x) / 2, (middlePoint1.y + middlePoint2.y) / 2, 0);
 

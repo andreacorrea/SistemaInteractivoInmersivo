@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package GeometricFiguresManagement;
 
 import java.util.HashMap;
@@ -11,10 +7,6 @@ import java.util.logging.Logger;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-/**
- *
- * @author Andrea
- */
 public class RectangularPrism extends GeometricFigure {
 
     private float rotationZ;
@@ -51,29 +43,32 @@ public class RectangularPrism extends GeometricFigure {
     }
 
     @Override
-    public void update(float friction, float gravity) {
-        if(vel.x > minSpeed){
-            vel.x *= friction;
-        }
-        vel.y += gravity;
-        pos.x += vel.x;
-        pos.y += vel.y;
-    }
-
-    @Override
     public void checkBoundaryCollision() {
-        if (pos.x > parent.width - getDimensions().x) {
-            pos.x = parent.width - getDimensions().x;
-            vel.x *= -1;
-        } else if (pos.x < getDimensions().x) {
-            pos.x = getDimensions().x;
-            vel.x *= -1;
-        } else if (pos.y > parent.height - getDimensions().y) {
-            pos.y = parent.height - getDimensions().y;
-            vel.y = 0;
-        } else if (pos.y < getDimensions().y) {
-            pos.y = getDimensions().y;
-            vel.y *= -1;
+        if (checkRightBoundary()) {
+            if(GeometricFiguresManager.getInstance(parent).getCollisionRightBoundaryCommand()!= null){
+                GeometricFiguresManager.getInstance(parent).getCollisionRightBoundaryCommand().execute(this);
+            }else{
+                bounceRightBoundary();
+            }
+        } else if (checkLeftBoundary()) {
+            if(GeometricFiguresManager.getInstance(parent).getCollisionLeftBoundaryCommand()!= null){
+                GeometricFiguresManager.getInstance(parent).getCollisionLeftBoundaryCommand().execute(this);
+            }else{
+                bounceLeftBoundary();
+            }
+        } else if (checkLowerBoundary()) {
+            if(GeometricFiguresManager.getInstance(parent).getCollisionLowerBoundaryCommand()!= null){
+                GeometricFiguresManager.getInstance(parent).getCollisionLowerBoundaryCommand().execute(this);
+            }else{
+                bounceLowerBoundary();
+            }
+        } else if (checkUpperBoundary()) {
+            
+            if(GeometricFiguresManager.getInstance(parent).getCollisionUpperBoundaryCommand()!= null){
+                GeometricFiguresManager.getInstance(parent).getCollisionUpperBoundaryCommand().execute(this);
+            }else{
+                bounceUpperBoundary();
+            }
         }
     }
 
@@ -198,7 +193,7 @@ public class RectangularPrism extends GeometricFigure {
             }
         }
     }
-    
+
     public void setDimensionX(float x) {
         this.dimensions.x = x;
     }
@@ -226,5 +221,51 @@ public class RectangularPrism extends GeometricFigure {
     public void setDimensions(PVector dimensions) {
         this.dimensions = dimensions;
     }
+
+    @Override
+    public boolean checkLowerBoundary() {
+        return pos.y > parent.height - getDimensions().y;
+    }
+
+    @Override
+    public boolean checkRightBoundary() {
+        return pos.x > parent.width - getDimensions().x;
+    }
+
+    @Override
+    public boolean checkLeftBoundary() {
+        return pos.x < getDimensions().x;
+    }
+
+    @Override
+    public boolean checkUpperBoundary() {
+        return pos.y < getDimensions().y-GeometricFiguresManager.getInstance(parent).getUpperLimit();
+    }
+
+    @Override
+    public void bounceLowerBoundary() {
+        pos.y = parent.height - getDimensions().y;
+        vel.y = 0;
+    }
+
+    @Override
+    public void bounceRightBoundary() {
+        pos.x = parent.width - getDimensions().x;
+        vel.x *= -1;
+    }
+
+    @Override
+    public void bounceLeftBoundary() {
+        pos.x = getDimensions().x;
+        vel.x *= -1;
+    }
+
+    @Override
+    public void bounceUpperBoundary() {
+        pos.y = getDimensions().y-GeometricFiguresManager.getInstance(parent).getUpperLimit();
+        vel.y *= -1;
+    }
     
+    
+
 }

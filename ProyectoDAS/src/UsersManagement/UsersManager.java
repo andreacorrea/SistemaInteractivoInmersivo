@@ -1,5 +1,6 @@
 package UsersManagement;
 
+import UsersManagement.VolumeGeneration.BuildingSkeletonVolumeStrategy;
 import GeometricFiguresManagement.GeometricFigure;
 import Interaction.Command;
 import SistemaInteraccionInmersiva.Scene;
@@ -18,7 +19,7 @@ public class UsersManager {
     private Scene scene;
     private PApplet parent;
     private static UsersManager instance = null;
-    private Command command;
+    private Command collisionCommand;
 
     private UsersManager(PApplet p, AdapterSimpleOpenNI context) {
         this.parent = p;
@@ -147,7 +148,7 @@ public class UsersManager {
             //currentUser.getBody().drawJoints();
 
             currentUser.getBody().update();
-            currentUser.getBody().paintSkeletonMembers(command);
+            currentUser.getBody().paintSkeletonMembers(collisionCommand);
 
 
             //currentUser.getBody().circleForAHead();
@@ -174,8 +175,8 @@ public class UsersManager {
         }
     }
 
-    public void setCommand(Command command) {
-        this.command = command;
+    public void setCollisionCommand(Command collisioncommand) {
+        this.collisionCommand = collisioncommand;
     }
 
     public void setbuildingSkeletonVolumeStrategy(BuildingSkeletonVolumeStrategy buildingSkeletonVolumeStrategy) {

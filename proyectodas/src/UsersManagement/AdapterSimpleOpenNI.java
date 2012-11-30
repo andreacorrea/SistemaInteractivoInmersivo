@@ -11,6 +11,7 @@ public class AdapterSimpleOpenNI {
     private SimpleOpenNI adaptee;
    
     public static int SKEL_HEAD ;
+    public static int SKEL_TORSO;
     public static int SKEL_NECK ;
     public static int SKEL_LEFT_SHOULDER;
     public static int SKEL_LEFT_ELBOW;
@@ -31,6 +32,7 @@ public class AdapterSimpleOpenNI {
         
         
         SKEL_HEAD = SimpleOpenNI.SKEL_HEAD;
+        SKEL_TORSO = SimpleOpenNI.SKEL_TORSO;
         SKEL_NECK = SimpleOpenNI.SKEL_NECK;
         SKEL_LEFT_SHOULDER = SimpleOpenNI.SKEL_LEFT_SHOULDER;
         SKEL_LEFT_ELBOW = SimpleOpenNI.SKEL_LEFT_ELBOW;

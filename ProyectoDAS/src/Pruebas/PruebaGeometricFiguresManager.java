@@ -22,6 +22,7 @@ public class PruebaGeometricFiguresManager extends PApplet {
 
         scene = Scene.getInstance(this);
         scene.activateGeometricFiguresManager();
+        scene.getGeometricFiguresManager().setGravity(0);
 
         pruebaGeometriFigures(10, 15, 3);
         

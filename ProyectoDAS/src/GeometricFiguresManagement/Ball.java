@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package GeometricFiguresManagement;
 
 import java.util.HashMap;
@@ -11,10 +7,6 @@ import java.util.logging.Logger;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-/**
- *
- * @author samuel
- */
 public class Ball extends GeometricFigure {
 
     private float radius;
@@ -43,32 +35,34 @@ public class Ball extends GeometricFigure {
         parent.sphere(radius);
         parent.popMatrix();
         //isCollided=false;
-    }
-
-    @Override
-    public void update(float friction, float gravity) {
-        if(vel.x > minSpeed){
-            vel.x *= friction;
-        }
-        vel.y += gravity;
-        pos.x += vel.x;
-        pos.y += vel.y;
-    }
+    }  
 
     @Override
     public void checkBoundaryCollision() {
-        if (pos.x > parent.width - radius) {
-            pos.x = parent.width - radius;
-            vel.x *= -1;
-        } else if (pos.x < radius) {
-            pos.x = radius;
-            vel.x *= -1;
-        } else if (pos.y > parent.height - radius) {
-            pos.y = parent.height - radius;
-            vel.y = 0;
-        } else if (pos.y < radius) {
-            pos.y = radius;
-            vel.y *= -1;
+        if (checkRightBoundary()) {
+            if(GeometricFiguresManager.getInstance(parent).getCollisionRightBoundaryCommand()!= null){
+                GeometricFiguresManager.getInstance(parent).getCollisionRightBoundaryCommand().execute(this);
+            }else{
+                bounceRightBoundary();
+            }
+        } else if (checkLeftBoundary()) {
+            if(GeometricFiguresManager.getInstance(parent).getCollisionLeftBoundaryCommand()!= null){
+                GeometricFiguresManager.getInstance(parent).getCollisionLeftBoundaryCommand().execute(this);
+            }else{
+                bounceLeftBoundary();
+            }
+        } else if (checkLowerBoundary()) {
+            if(GeometricFiguresManager.getInstance(parent).getCollisionLowerBoundaryCommand()!= null){
+                GeometricFiguresManager.getInstance(parent).getCollisionLowerBoundaryCommand().execute(this);
+            }else{
+                bounceLowerBoundary();
+            }
+        } else if (checkUpperBoundary()) {
+            if(GeometricFiguresManager.getInstance(parent).getCollisionUpperBoundaryCommand()!= null){
+                GeometricFiguresManager.getInstance(parent).getCollisionUpperBoundaryCommand().execute(this);
+            }else{
+                bounceUpperBoundary();
+            }
         }
     }
 
@@ -237,7 +231,7 @@ public class Ball extends GeometricFigure {
             }
         }
     }
-    
+
     public float getRadius() {
         return radius;
     }
@@ -245,5 +239,48 @@ public class Ball extends GeometricFigure {
     public void setRadius(float r) {
         this.radius = r;
     }
-    
+
+    @Override
+    public boolean checkLowerBoundary() {
+        return pos.y > parent.height - radius;
+    }
+
+    @Override
+    public boolean checkRightBoundary() {
+        return pos.x > parent.width - radius;
+    }
+
+    @Override
+    public boolean checkLeftBoundary() {
+        return pos.x < radius;
+    }
+
+    @Override
+    public boolean checkUpperBoundary() {
+        return pos.y < radius-GeometricFiguresManager.getInstance(parent).getUpperLimit();
+    }
+
+    @Override
+    public void bounceLowerBoundary() {
+        pos.y = parent.height - radius;
+        vel.y = 0;
+    }
+
+    @Override
+    public void bounceRightBoundary() {
+        pos.x = parent.width - radius;
+        vel.x *= -1;
+    }
+
+    @Override
+    public void bounceLeftBoundary() {
+        pos.x = radius;
+        vel.x *= -1;
+    }
+
+    @Override
+    public void bounceUpperBoundary() {
+        pos.y = radius-GeometricFiguresManager.getInstance(parent).getUpperLimit();
+        vel.y *= -1;
+    }
 }

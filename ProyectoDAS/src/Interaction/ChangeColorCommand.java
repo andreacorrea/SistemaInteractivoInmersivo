@@ -4,18 +4,12 @@ import GeometricFiguresManagement.GeometricFigure;
 
 public class ChangeColorCommand implements Command{
     
-    private GeometricFigure receiver;
     private GeometricFigure received;
     
     @Override
-    public void execute() {
+    public void execute(GeometricFigure receiver) {
         receiver.bounce(received);
         receiver.changeColor(received);
-    }
-
-    @Override
-    public void setReceiver(GeometricFigure receiver) {
-        this.receiver = receiver;
     }
 
     @Override
