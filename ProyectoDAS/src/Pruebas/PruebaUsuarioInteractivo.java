@@ -20,7 +20,7 @@ public class PruebaUsuarioInteractivo extends PApplet{
     @Override
     public void setup(){
         //size(640, 480, P3D);
-        size(1000, 800, P3D);
+        size(640, 800, P3D);
         frameRate(30);
         context = new AdapterSimpleOpenNI(this);
         
@@ -38,9 +38,11 @@ public class PruebaUsuarioInteractivo extends PApplet{
             
             if((int)random(2) == 1){
                 Ball ball= new Ball("ball-" + i, 200, new PVector(positionX, height/2, 0), radio+(10*i), new PVector(speedX, 0,0), this);
+                ball.setMass(20);
                 scene.getGeometricFiguresManager().addGeometricFigure(ball);
             }else{
                 RectangularPrism rectPrism= new RectangularPrism("rect-" + i, 200, new PVector(positionX, height/2, 0), new PVector(radio+(10*i), radio+(10*i), radio+(10*i)), new PVector(speedX, 0,0), this);
+                rectPrism.setMass(20);
                 scene.getGeometricFiguresManager().addGeometricFigure(rectPrism);
             }
         }
@@ -53,7 +55,7 @@ public class PruebaUsuarioInteractivo extends PApplet{
         context.update();
         scene.paint();
         // draw scene Image
-        image(context.sceneImage(), width-100, height-50, 100, 50);
+        image(context.sceneImage(), width-130, height-80, 130, 80);
         //image(context.sceneImage(), 0, 0);
     }
     
@@ -77,7 +79,6 @@ public class PruebaUsuarioInteractivo extends PApplet{
                 changeCommandToChangeColor();
                 break;    
         }
-
     }
     
     private void changeStrategyTo5Spheres() {

@@ -245,7 +245,7 @@ public class RectangularPrism extends GeometricFigure {
     @Override
     public void bounceLowerBoundary() {
         pos.y = parent.height - getDimensions().y;
-        vel.y = 0;
+        vel.y *= -1;
     }
 
     @Override

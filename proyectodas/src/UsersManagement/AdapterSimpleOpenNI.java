@@ -112,19 +112,8 @@ public void update(){
     }
     
     public int[] depthMap(){
-        int arrayDepth []=adaptee.depthMap();
-        //simula que devuelve una linkedList
-        LinkedList<Integer> ll = new LinkedList<Integer>();
-        for(int i=0; i< arrayDepth.length ; i++){
-            ll.add(arrayDepth[i]);
-        }
-        //lo convierte en arreglo
-        for(int i=0; i< ll.size() ; i++){
-            arrayDepth[i]=(ll.get(i));
-        }
-        
-        //return adaptee.depthMap();
-        return arrayDepth;
+        System.out.println("Prueba de Patrón Adapter, incluyendo una funcionalidad extra");
+        return adaptee.depthMap();  
     }
     
     public PVector [] depthMapRealWorld(){

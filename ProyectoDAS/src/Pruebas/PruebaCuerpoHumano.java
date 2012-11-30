@@ -5,12 +5,8 @@
 package Pruebas;
 
 //import ixagon.renderer.*;
-import UsersManagement.AdapterSimpleOpenNI;
-import Interaction.BounceCommand;
-import Interaction.ChangeColorCommand;
-import Interaction.Command;
 import SistemaInteraccionInmersiva.Scene;
-import UsersManagement.VolumeGeneration.BuildingSkeletonVolumeStrategy;
+import UsersManagement.AdapterSimpleOpenNI;
 import UsersManagement.User;
 import processing.core.*;
 

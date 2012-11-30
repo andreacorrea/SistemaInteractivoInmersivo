@@ -263,7 +263,7 @@ public class Ball extends GeometricFigure {
     @Override
     public void bounceLowerBoundary() {
         pos.y = parent.height - radius;
-        vel.y = 0;
+        vel.y *= -1;
     }
 
     @Override

@@ -3,8 +3,6 @@ package Pruebas;
 import GeometricFiguresManagement.Ball;
 import GeometricFiguresManagement.RectangularPrism;
 import SistemaInteraccionInmersiva.Scene;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -22,9 +20,9 @@ public class PruebaGeometricFiguresManager extends PApplet {
 
         scene = Scene.getInstance(this);
         scene.activateGeometricFiguresManager();
-        scene.getGeometricFiguresManager().setGravity(0);
-
-        pruebaGeometriFigures(10, 15, 3);
+        //scene.getGeometricFiguresManager().setGravity(0);
+        
+        pruebaGeometriFigures(10, 35, 3);
         
     }
 
@@ -40,6 +38,7 @@ public class PruebaGeometricFiguresManager extends PApplet {
     public void pruebaGeometriFigures(int num, float radio, float speed) {
         float positionX;
         float positionY;
+        
         for (int i = 0; i < num; i++) {
             //speed.mult(i+1);
             positionX = width / num * i;
@@ -48,10 +47,10 @@ public class PruebaGeometricFiguresManager extends PApplet {
 
             if ((int) random(2) == 1) {
 
-                Ball ball = new Ball("ball-" + i, 0, new PVector(positionX, positionY, 0), radio, new PVector(speed, speed, 0), this);
+                Ball ball = new Ball("ball-" + i, color(255, 255, 0), new PVector(positionX, positionY, 0), radio, new PVector(speed, 0, 0), this);
                 scene.getGeometricFiguresManager().addGeometricFigure(ball);
             } else {
-                RectangularPrism rectPrism = new RectangularPrism("rect-" + i, 0, new PVector(positionX, positionY, 0), new PVector(radio, radio, radio), new PVector(speed, speed, 0), this);
+                RectangularPrism rectPrism = new RectangularPrism("rect-" + i, color(255, 255, 0), new PVector(positionX, positionY, 0), new PVector(radio, radio, radio), new PVector(speed, 0, 0), this);
                 scene.getGeometricFiguresManager().addGeometricFigure(rectPrism);
             }
         }

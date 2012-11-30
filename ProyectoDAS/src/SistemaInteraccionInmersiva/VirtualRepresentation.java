@@ -27,11 +27,10 @@ public class VirtualRepresentation {
         this.parent = pApplet;
         resolution = 2;
         zmin = 0;
-        zmax = 2000;
+        zmax = 2500;
         zoom = 0.5f;
         rotX = pApplet.PI;
         rotY = 0;
-        realColor = true;
 
         this.context = context;
 
@@ -280,4 +279,10 @@ public class VirtualRepresentation {
     public void setDefaultColor(int defaultColor) {
         this.defaultColor = defaultColor;
     }
+
+    public void setRealColor(boolean realColor) {
+        this.realColor = realColor;
+    }
+    
+    
 }

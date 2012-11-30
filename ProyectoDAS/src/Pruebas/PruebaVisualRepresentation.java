@@ -20,6 +20,7 @@ public class PruebaVisualRepresentation extends PApplet {
         context = new AdapterSimpleOpenNI(this);
         
         visualRepresentation = new VirtualRepresentation(this, context);
+        visualRepresentation.setRealColor(true);
 
     }
 

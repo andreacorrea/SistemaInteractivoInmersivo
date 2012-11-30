@@ -110,12 +110,13 @@ public abstract class GeometricFigure implements ObservableGeometricFigure, Clon
         observers.remove(((GeometricFigure) obj).getName());
     }
 
-    public void checkChangeState(Command command) {
+    public boolean checkChangeState(Command command) {
         checkBoundaryCollision();
         if (posRef.dist(pos) >= deltaPosMax) {
             posRef.set(pos);
             notifyAllObservers(command);
         }
+        return posRef.dist(pos) >= deltaPosMax; 
     }
 
     @Override
